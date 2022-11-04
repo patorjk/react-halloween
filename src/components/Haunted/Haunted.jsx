@@ -6,7 +6,7 @@ import { Ghost } from './Ghost';
 /**
  * @component
  */
-const Haunted = ({ animationTime = 1.5, distance = 200, GhostIcon = null, ghostAmount = 6, ghostStyle = {}, children }) => {
+const Haunted = ({ animationTime = 1.5, disableFun = false, distance = 200, GhostIcon = null, ghostAmount = 6, ghostStyle = {}, children }) => {
   const [mouseOver, setMouseOver] = useState(false);
   const container = useRef(null);
   const ghosts = useRef([]);
@@ -40,23 +40,25 @@ const Haunted = ({ animationTime = 1.5, distance = 200, GhostIcon = null, ghostA
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <div style={{
-        zIndex: 0,
-        position: 'absolute',
-      }}>
-        {Array(ghostAmount).fill(0).map((val, index) => (
-          <Ghost
-            key={index}
-            container={container}
-            ref={(el) => ghosts.current[index] = el}
-            animationTimeMax={animationTime}
-            mouseOver={mouseOver}
-            distance={distance}
-            style={ghostStyle}
-            GhostIcon={GhostIcon}
-          />
-        ))}
-      </div>
+      {disableFun === false &&
+        <div style={{
+          zIndex: 0,
+          position: 'absolute',
+        }}>
+          {Array(ghostAmount).fill(0).map((val, index) => (
+            <Ghost
+              key={index}
+              container={container}
+              ref={(el) => ghosts.current[index] = el}
+              animationTimeMax={animationTime}
+              mouseOver={mouseOver}
+              distance={distance}
+              style={ghostStyle}
+              GhostIcon={GhostIcon}
+            />
+          ))}
+        </div>
+      }
       <div style={{zIndex:1, position: 'relative'}}>{children}</div>
     </div>
   );
@@ -74,6 +76,8 @@ Haunted.propTypes = {
   // Override for the ghost icon
   GhostIcon: PropTypes.any,
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
+  // turn off halloween decorations
+  disableFun: PropTypes.bool,
 };
 
 export { Haunted };

@@ -1,2 +1,2 @@
-export * from './Haunted/Haunted.jsx';
+export * from './Haunted/Haunted';
 export * from './Haunted/SkullIcon';

@@ -20,7 +20,9 @@ export default [{
     }
   ],
   plugins: [
-    resolve(),
+    resolve({
+      extensions: ['.mjs', '.js', '.jsx', '.json', '.node']
+    }),
     babel({
       exclude: 'node_modules/**',
       presets: ['@babel/env', '@babel/preset-react']

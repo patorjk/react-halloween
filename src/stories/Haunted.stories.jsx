@@ -35,3 +35,10 @@ CustomGhost.args = {
   }
 };
 
+export const Disable = Template.bind({});
+Disable.args = {
+  disableFun: true,
+  ghostStyle: {
+    color: 'white',
+  }
+};

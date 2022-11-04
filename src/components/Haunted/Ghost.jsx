@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGhost } from '@fortawesome/free-solid-svg-icons'
-import { motion } from 'framer-motion/dist/framer-motion';
+import { motion } from 'framer-motion';
 import { library } from '@fortawesome/fontawesome-svg-core';
 
 function randomNumber(min, max) {

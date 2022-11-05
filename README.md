@@ -10,6 +10,6 @@ This is a repo with some fun Halloween-themed components.
 To use in a project:
 
 ```
+  npm install framer-motion
   npm install react-halloween
-  npm install --save @fortawesome/fontawesome-svg-core @fortawesome/free-solid-svg-icons @fortawesome/react-fontawesome framer-motion
 ```

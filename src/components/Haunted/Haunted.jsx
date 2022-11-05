@@ -1,12 +1,20 @@
 import React, {useEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import { useEvent } from '../../hooks/useEvent';
-import { Ghost } from './Ghost';
+import { GhostAnimator } from './GhostAnimator';
 
 /**
  * @component
  */
-const Haunted = ({ animationTime = 1.5, disableFun = false, distance = 200, GhostIcon = null, ghostAmount = 6, ghostStyle = {}, children }) => {
+const Haunted = ({
+                   animationTime = 1.5,
+                   disableFun = false,
+                   distance = 200,
+                   Ghost = null,
+                   ghostDimensions = {width: 44, height: 44},
+                   numberOfGhosts = 6,
+                   children,
+                 }) => {
   const [mouseOver, setMouseOver] = useState(false);
   const container = useRef(null);
   const ghosts = useRef([]);
@@ -14,8 +22,8 @@ const Haunted = ({ animationTime = 1.5, disableFun = false, distance = 200, Ghos
   const onMouseEnter = useEvent(() => {
     const rect = container.current.getBoundingClientRect();
 
-    const newX = Math.round(rect.width / 2);
-    const newY = Math.round(rect.height / 2);
+    const newX = Math.round(rect.width / 2) - (ghostDimensions.width/2);
+    const newY = Math.round(rect.height / 2) - (ghostDimensions.height/2);
 
     const rotationAmount = 360 / ghosts.current.length;
     let rotation = 0;
@@ -45,16 +53,17 @@ const Haunted = ({ animationTime = 1.5, disableFun = false, distance = 200, Ghos
           zIndex: 0,
           position: 'absolute',
         }}>
-          {Array(ghostAmount).fill(0).map((val, index) => (
-            <Ghost
+          {Array(numberOfGhosts).fill(0).map((val, index) => (
+            <GhostAnimator
               key={index}
+              index={index}
               container={container}
               ref={(el) => ghosts.current[index] = el}
               animationTimeMax={animationTime}
               mouseOver={mouseOver}
               distance={distance}
-              style={ghostStyle}
-              GhostIcon={GhostIcon}
+              Ghost={Ghost}
+              ghostDimensions={ghostDimensions}
             />
           ))}
         </div>
@@ -68,16 +77,19 @@ Haunted.propTypes = {
   // Length of animation
   animationTime: PropTypes.number,
   // Number of ghosts
-  ghostAmount: PropTypes.number,
+  numberOfGhosts: PropTypes.number,
   // Distance a ghost travels in pixels
   distance: PropTypes.number,
-  // styling to apply to ghost
-  ghostStyle: PropTypes.object,
   // Override for the ghost icon
-  GhostIcon: PropTypes.any,
+  Ghost: PropTypes.any,
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
   // turn off halloween decorations
   disableFun: PropTypes.bool,
+  // the size of the ghost
+  ghostDimensions: PropTypes.shape({
+    width: PropTypes.number,
+    height: PropTypes.number
+  })
 };
 
 export { Haunted };

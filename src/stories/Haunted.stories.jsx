@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Haunted } from '../components';
-import { SkullIcon } from '../components';
+import GhostAlt from '../components/Haunted/GhostAlt';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
@@ -15,7 +15,10 @@ export default {
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
 const Template = (args) => (
   <div style={{height: '100%', width:'100%', padding: '200px', backgroundColor: 'black'}}>
-    <Haunted {...args} ><div style={{backgroundColor: 'red', width: '200px', height:'200px'}}>This is a test</div></Haunted>
+    <Haunted {...args} ><div style={{backgroundColor: 'red', width: '200px', height:'200px', display:'inline-block'}}>This is a test</div></Haunted>
+    <div style={{ marginLeft:'40px', display: 'inline-block'}}>
+      <Haunted {...args} ><div style={{backgroundColor: 'red', display:'inline-block'}}>This is a test tes test tests</div></Haunted>
+    </div>
   </div>
 );
 
@@ -29,7 +32,7 @@ Simple.args = {
 
 export const CustomGhost = Template.bind({});
 CustomGhost.args = {
-  GhostIcon: <SkullIcon/>,
+  Ghost: GhostAlt,
   ghostStyle: {
     color: 'white',
   }

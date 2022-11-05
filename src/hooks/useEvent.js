@@ -14,7 +14,7 @@ const useEvent = (fn) => {
     const f = ref.current;
     return f(...args);
   }, []);
-}
+};
 
 export {useEvent};
 export default useEvent;

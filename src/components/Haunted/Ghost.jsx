@@ -1,139 +1,29 @@
-import React, {useEffect, useRef, useState} from 'react';
-import PropTypes from 'prop-types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGhost } from '@fortawesome/free-solid-svg-icons'
-import { motion } from 'framer-motion';
-import { library } from '@fortawesome/fontawesome-svg-core';
-
-function randomNumber(min, max) {
-  return Math.random() * (max - min) + min;
-}
-
-function randomIntFromInterval(min, max) { // min and max included
-  return Math.floor(Math.random() * (max - min + 1) + min)
-}
-
-library.add(faGhost);
+import React from 'react';
 
 /**
  * @component
+ * Component that returns an SVG for the ghost
  */
-const Ghost = React.forwardRef(({animationTimeMax, distance, container, mouseOver, GhostIcon = null, style = {}}, ref) => {
-  const basicStyles = {
-    ...style,
-    position: 'absolute',
-    transformOrigin: 'center',
-    fontSize: '2em',
-  };
-  const [containerStyles, setContainerStyles] = useState(basicStyles);
-  const animationTime = animationTimeMax === 0 ? 0 : randomNumber(animationTimeMax / 2, animationTimeMax);
-  const waveAmount = randomIntFromInterval(5, 10);
-  const waves = [`${waveAmount}px`, `-${waveAmount}px`];
-
-  const waveKeyFrames = new Array(randomIntFromInterval(3,5)).fill(0).reduce((prev, current) => {
-    return [
-      ...prev,
-      ...waves,
-    ]
-  }, []);
-
-  const variants = {
-    opened: () => {
-      const rect = container.current?.getBoundingClientRect() || {width: 0, height: 0};
-      const initY = (Math.round(Math.min(rect.width, rect.height)) * -1) / 2;
-      return {
-        x: waveKeyFrames,
-        y: (distance * -1) + initY,
-        opacity: [0, 1, 0],
-        transition: {
-          x: {
-            duration: animationTime
-          },
-          y: {
-            duration: animationTime
-          },
-          opacity: {
-            duration: animationTime,
-          },
-        },
-      };
-    },
-    closed: () => {
-      const rect = container.current?.getBoundingClientRect() || {width: 0, height: 0};
-      const initY = (Math.round(Math.min(rect.width, rect.height)) * -1) / 2;
-      return {
-        x: 0,
-        y: initY + 'px',
-        opacity: 0,
-        transition: {
-          duration: 0,
-        },
-      }
-    },
-  };
-
-  /*
-    Hide the div after the animation is done. This is to prevent scrollbars on any outer containers.
-    As an aside, for some reason the x animation takes much longer than the others. I can't figure out
-    what's going on with it.
-   */
-  useEffect(() => {
-    if (mouseOver === true) {
-      setContainerStyles({
-        ...basicStyles,
-        display: 'block',
-      });
-
-      const timer = setTimeout(() => {
-        setContainerStyles({
-          ...basicStyles,
-          display: 'none',
-        });
-      }, animationTime * 1000);
-      return () => {
-        window.clearTimeout(timer);
-      }
-    }
-
-  }, [mouseOver, setContainerStyles]);
-
-  const ghostIcon = GhostIcon ? GhostIcon : <FontAwesomeIcon icon="fa-solid fa-ghost" />;
-
-  let initY = 0;
-  if (container.current) {
-    const rect = container.current?.getBoundingClientRect();
-    initY = (Math.round(Math.min(rect.width, rect.height)) * -1) / 2;
-  }
-
-  return (
-    <div
-      ref={ref}
-      style={containerStyles}
-    >
-      <motion.div
-        initial={{ opacity: 0, x: 0, y: initY + 'px' }}
-        variants={variants}
-        animate={mouseOver ? 'opened' : 'closed'}
-      >{ghostIcon}</motion.div>
-    </div>
-  )
-});
-
-Ghost.propTypes = {
-  // length of animation
-  animationTimeMax: PropTypes.number,
-  // distance to travel in pixels
-  distance: PropTypes.number,
-  // Ref to the container
-  container: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.instanceOf(Element) })
-  ]),
-  // If true we run the animation
-  mouseOver: PropTypes.bool,
-  // an override for the ghost icon
-  GhostIcon: PropTypes.any,
-};
+const Ghost = ({dimensions}) => (
+  <svg width={`${dimensions.width}px`} height={`${dimensions.height}px`} version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" style={{enableBackground:'new 0 0 512 512'}} xmlSpace="preserve">
+    <path style={{fill:'#E6E6E6'}} d="M420.607,164.6v303.522c0,20.451-23.636,31.857-39.647,19.119v-0.013
+c-8.906-7.079-21.53-7.079-30.436,0l-24.435,19.449c-8.906,7.092-21.517,7.092-30.423,0l-24.435-19.449
+c-8.906-7.079-21.53-7.079-30.436,0l-24.435,19.462c-8.906,7.079-21.517,7.079-30.423,0l-24.448-19.462
+c-8.906-7.079-21.53-7.079-30.436,0l-0.013,0.013c-15.998,12.738-39.647,1.345-39.647-19.119V164.6
+C91.393,73.686,165.092,0,256.006,0c45.445,0,86.601,18.421,116.39,48.21C402.185,77.987,420.607,119.143,420.607,164.6z"/>
+    <g>
+      <path style={{fill:'#666666'}} d="M327.878,275.928H184.122c0-39.697,32.187-71.884,71.884-71.884S327.878,236.231,327.878,275.928z"
+      />
+      <path style={{fill:'#666666'}} d="M195.084,114.487c17.838,0,32.301,14.45,32.301,32.288s-14.463,32.301-32.301,32.301
+s-32.288-14.463-32.288-32.301S177.246,114.487,195.084,114.487z"/>
+      <path style={{fill:'#666666'}} d="M316.916,114.487c17.838,0,32.288,14.45,32.288,32.288s-14.45,32.301-32.288,32.301
+c-17.838,0-32.288-14.463-32.288-32.301S299.078,114.487,316.916,114.487z"/>
+    </g>
+    <path style={{fill:'#CCCCCC'}} d="M283.918,2.36C274.846,0.812,265.522,0,256.006,0C165.092,0,91.393,73.686,91.393,164.6v303.522
+	c0,20.464,23.648,31.857,39.647,19.119l0.013-0.013c6.014-4.783,13.727-6.331,20.845-4.656c-2.918-3.933-4.681-8.855-4.681-14.45
+	V164.6C147.216,83.201,206.299,15.605,283.918,2.36z"/>
+  </svg>
+);
 
 export {Ghost};
 export default Ghost;

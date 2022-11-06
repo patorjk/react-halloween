@@ -2,33 +2,55 @@ import React, {useEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import { useEvent } from '../../hooks/useEvent';
 import { GhostAnimator } from './GhostAnimator';
+import { motion } from 'framer-motion';
+
+const defaultGlowOptions = {
+  animationTime: 3,
+  boxShadowOff: '0px 0px 0px rgba(255,0,0,0)',
+  boxShadowOn: '0px 0px 40px rgba(255,0,0,1)'
+};
+const defaultCreatureOptions = {
+  animationTime: 1.5,
+  numberOf: 6,
+  distance: 200,
+  dimensions: {width: 44, height: 44},
+};
 
 /**
  * @component
  */
 const Haunted = ({
-                   animationTime = 1.5,
+                   glowOptions = defaultGlowOptions,
+                   creatureOptions = defaultCreatureOptions,
                    disableFun = false,
-                   distance = 200,
-                   Ghost = null,
-                   ghostDimensions = {width: 44, height: 44},
-                   numberOfGhosts = 6,
+                   Creature = null,
                    style = {},
                    children,
                  }) => {
+  const fullGlowOptions = {
+    ...defaultGlowOptions,
+    ...glowOptions,
+  };
+  const fullCreatureOptions = {
+    ...defaultCreatureOptions,
+    ...creatureOptions,
+  };
   const [mouseOver, setMouseOver] = useState(false);
   const container = useRef(null);
-  const ghosts = useRef([]);
+  const creatureRefs = useRef([]);
 
   const onMouseEnter = useEvent(() => {
     const rect = container.current.getBoundingClientRect();
 
-    const newX = Math.round(rect.width / 2) - (ghostDimensions.width/2);
-    const newY = Math.round(rect.height / 2) - (ghostDimensions.height/2);
+    const halfCreatureWidth = (fullCreatureOptions?.dimensions?.width || 0) / 2;
+    const halfCreatureHeight = (fullCreatureOptions?.dimensions?.height || 0) / 2;
 
-    const rotationAmount = 360 / ghosts.current.length;
+    const newX = Math.round(rect.width / 2) - halfCreatureWidth;
+    const newY = Math.round(rect.height / 2) - halfCreatureHeight;
+
+    const rotationAmount = 360 / creatureRefs.current.length;
     let rotation = 0;
-    ghosts.current.forEach(item => {
+    creatureRefs.current.forEach(item => {
       rotation = rotation + rotationAmount;
       item.style.transform = `translateX(${newX}px) translateY(${newY}px) rotate(${Math.round(rotation)}deg)`;
     });
@@ -39,8 +61,34 @@ const Haunted = ({
     setMouseOver(false);
   });
 
+  const variants = {
+    on: () => {
+      return {
+        boxShadow: [fullGlowOptions.boxShadowOff, fullGlowOptions.boxShadowOn, fullGlowOptions.boxShadowOff],
+        transition: {
+          boxShadow: {
+            repeat: Infinity,
+            duration: fullGlowOptions?.animationTime || 0
+          },
+        },
+      };
+    },
+    off: () => {
+      return {
+        boxShadow: fullGlowOptions.boxShadowOff,
+        transition: {
+          boxShadow: {
+            duration: fullGlowOptions?.animationTime || 0
+          },
+        },
+      }
+    },
+  };
+
   return (
-    <div
+    <motion.div
+      variants={variants}
+      animate={(glowOptions && disableFun === false) ? (mouseOver ? 'on' : 'off') : ''}
       ref={container}
       style={{
         ...style,
@@ -55,43 +103,52 @@ const Haunted = ({
           zIndex: 0,
           position: 'absolute',
         }}>
-          {Array(numberOfGhosts).fill(0).map((val, index) => (
+          {creatureOptions && Array(fullCreatureOptions.numberOf).fill(0).map((val, index) => (
             <GhostAnimator
               key={index}
               index={index}
               container={container}
-              ref={(el) => ghosts.current[index] = el}
-              animationTimeMax={animationTime}
+              ref={(el) => creatureRefs.current[index] = el}
+              animationTimeMax={fullCreatureOptions.animationTime}
               mouseOver={mouseOver}
-              distance={distance}
-              Ghost={Ghost}
-              ghostDimensions={ghostDimensions}
+              distance={fullCreatureOptions.distance}
+              Creature={Creature}
+              dimensions={fullCreatureOptions.dimensions}
             />
           ))}
         </div>
       }
       <div style={{zIndex:1, position: 'relative'}}>{children}</div>
-    </div>
+    </motion.div>
   );
 };
 
 Haunted.propTypes = {
-  // Length of animation
-  animationTime: PropTypes.number,
-  // Number of ghosts
-  numberOfGhosts: PropTypes.number,
-  // Distance a ghost travels in pixels
-  distance: PropTypes.number,
+  glowOptions: PropTypes.shape({
+    // glow animation time
+    animationTime: PropTypes.number,
+    // the box shadow at full glow
+    boxShadowOn: PropTypes.string,
+    // the box shadow when its off
+    boxShadowOff: PropTypes.string,
+  }),
+  creatureOptions: PropTypes.shape({
+    // distance the creature/ghost should travel
+    distance: PropTypes.number,
+    // number of creatures/ghosts
+    numberOf: PropTypes.number,
+    animationTime: PropTypes.number,
+    // the size of the ghost svg
+    dimensions: PropTypes.shape({
+      width: PropTypes.number.isRequired,
+      height: PropTypes.number.isRequired,
+    })
+  }),
   // Override for the ghost icon
-  Ghost: PropTypes.any,
+  Creature: PropTypes.any,
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
   // turn off halloween decorations
   disableFun: PropTypes.bool,
-  // the size of the ghost
-  ghostDimensions: PropTypes.shape({
-    width: PropTypes.number,
-    height: PropTypes.number
-  }),
   style: PropTypes.object,
 };
 

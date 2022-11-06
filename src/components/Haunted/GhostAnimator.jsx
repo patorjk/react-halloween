@@ -19,9 +19,9 @@ const GhostAnimator = React.forwardRef(({
                                           distance,
                                           container,
                                           mouseOver,
-                                          Ghost = null,
+                                          Creature = null,
                                           index = 0,
-                                          ghostDimensions,
+                                          dimensions,
                                         }, ref) => {
   const basicStyles = {
     position: 'absolute',
@@ -41,7 +41,7 @@ const GhostAnimator = React.forwardRef(({
   }, []);
 
   const variants = {
-    opened: () => {
+    on: () => {
       const rect = container.current?.getBoundingClientRect() || {width: 0, height: 0};
       const initY = (Math.round(Math.min(rect.width, rect.height)) * -1) / 2;
       return {
@@ -61,7 +61,7 @@ const GhostAnimator = React.forwardRef(({
         },
       };
     },
-    closed: () => {
+    off: () => {
       const rect = container.current?.getBoundingClientRect() || {width: 0, height: 0};
       const initY = (Math.round(Math.min(rect.width, rect.height)) * -1) / 2;
       return {
@@ -69,7 +69,7 @@ const GhostAnimator = React.forwardRef(({
         y: initY + 'px',
         opacity: 0,
         transition: {
-          duration: 0,
+          duration: 0.3,
         },
       }
     },
@@ -100,7 +100,7 @@ const GhostAnimator = React.forwardRef(({
 
   }, [mouseOver, setContainerStyles]);
 
-  const GhostComponent = Ghost ? Ghost : GhostDefault;
+  const GhostComponent = Creature ? Creature : GhostDefault;
 
   let initY = 0;
   if (container.current) {
@@ -116,8 +116,8 @@ const GhostAnimator = React.forwardRef(({
       <motion.div
         initial={{ opacity: 0, x: 0, y: initY + 'px' }}
         variants={variants}
-        animate={mouseOver ? 'opened' : 'closed'}
-      ><GhostComponent dimensions={ghostDimensions} index={index} /></motion.div>
+        animate={mouseOver ? 'on' : 'off'}
+      ><GhostComponent dimensions={dimensions} index={index} /></motion.div>
     </div>
   )
 });
@@ -134,10 +134,10 @@ GhostAnimator.propTypes = {
   ]),
   // If true we run the animation
   mouseOver: PropTypes.bool,
-  // an override for the ghost icon
-  GhostIcon: PropTypes.any,
+  // an override for the ghost component/svg
+  Creature: PropTypes.any,
   // size of the ghost
-  ghostDimensions: PropTypes.shape({
+  dimensions: PropTypes.shape({
     width: PropTypes.number,
     height: PropTypes.number,
   })
@@ -145,23 +145,3 @@ GhostAnimator.propTypes = {
 
 export {GhostAnimator};
 export default GhostAnimator;
-
-/*
-    extends: [
-      'eslint:recommended',
-      'plugin:react/recommended'
-    ],
-    'env': {
-      'browser': true,
-      'es2021': true
-    },
-    'overrides': [
-    ],
-    'parserOptions': {
-      'ecmaVersion': 'latest',
-      'sourceType': 'module'
-    },
-    'plugins': [
-      'react'
-    ],
- */

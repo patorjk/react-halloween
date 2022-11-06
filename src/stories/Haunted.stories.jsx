@@ -25,23 +25,33 @@ const Template = (args) => (
 export const Simple = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 Simple.args = {
-  ghostStyle: {
-    color: 'white',
-  }
 };
 
 export const CustomGhost = Template.bind({});
 CustomGhost.args = {
-  Ghost: GhostAlt,
-  ghostStyle: {
-    color: 'white',
+  Creature: GhostAlt,
+};
+
+export const CustomGlow = Template.bind({});
+CustomGlow.args = {
+  glowOptions: {
+    animationTime: 4,
+    boxShadowOff: '0px 0px 0px rgba(0,255,0,0)',
+    boxShadowOn: '0px 0px 60px rgba(0,255,0,1)'
   }
+};
+
+export const NoGhosts = Template.bind({});
+NoGhosts.args = {
+  creatureOptions: null,
+};
+
+export const NoGlow = Template.bind({});
+NoGlow.args = {
+  glowOptions: null,
 };
 
 export const Disable = Template.bind({});
 Disable.args = {
   disableFun: true,
-  ghostStyle: {
-    color: 'white',
-  }
 };

@@ -13,6 +13,7 @@ const Haunted = ({
                    Ghost = null,
                    ghostDimensions = {width: 44, height: 44},
                    numberOfGhosts = 6,
+                   style = {},
                    children,
                  }) => {
   const [mouseOver, setMouseOver] = useState(false);
@@ -42,6 +43,7 @@ const Haunted = ({
     <div
       ref={container}
       style={{
+        ...style,
         display: 'inline-block',
         position: 'relative',
       }}
@@ -89,7 +91,8 @@ Haunted.propTypes = {
   ghostDimensions: PropTypes.shape({
     width: PropTypes.number,
     height: PropTypes.number
-  })
+  }),
+  style: PropTypes.object,
 };
 
 export { Haunted };

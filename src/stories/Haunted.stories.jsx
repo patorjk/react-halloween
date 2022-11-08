@@ -17,7 +17,7 @@ const Template = (args) => (
   <div style={{height: '100%', width:'100%', padding: '200px', backgroundColor: 'black'}}>
     <Haunted {...args} ><div style={{backgroundColor: 'red', width: '200px', height:'200px', display:'inline-block'}}>This is a test</div></Haunted>
     <div style={{ marginLeft:'40px', display: 'inline-block'}}>
-      <Haunted {...args} ><div style={{backgroundColor: 'red', display:'inline-block'}}>This is a test tes test tests</div></Haunted>
+      <Haunted {...args} ><div style={{backgroundColor: 'red', display:'inline-block'}}>This is a test</div></Haunted>
     </div>
   </div>
 );

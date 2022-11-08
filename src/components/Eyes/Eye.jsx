@@ -1,15 +1,29 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {motion} from "framer-motion";
 import useEvent from "../../hooks/useEvent";
 
-const Eye = ({animationTime, open, openedClipPath, closedClipPath, width}) => {
+const Eye = ({
+               animationTime,
+               open,
+               openedClipPath,
+               closedClipPath,
+               irisColor,
+               eyeBallColor,
+               pupilColor,
+               pupilSize,
+               follow,
+               width,
+             }) => {
   const pupilRef = useRef(null);
   const eyeContainerRef = useRef(null);
   const irisRef = useRef(null);
   const groupRef = useRef(null);
+  const [eyeMaskId] = useState('eyemask_' + Math.random());
 
   useEffect(() => {
+    if (follow === false) return;
 
+    // based on https://buipalsulich.com/post/gopher-eyes/
     const onMouseMove = (evt) => {
       const pupil = pupilRef.current;
       const iris = irisRef.current;
@@ -43,12 +57,12 @@ const Eye = ({animationTime, open, openedClipPath, closedClipPath, width}) => {
     return () => {
       document.removeEventListener('mousemove', onMouseMove);
     };
-  }, [pupilRef])
+  }, [pupilRef, follow])
 
   const variants = {
     opened: () => {
       return {
-        clipPath: openedClipPath,
+        clipPath: `path('${openedClipPath}')`,
         transition: {
           clipPath: {
             duration: animationTime
@@ -58,7 +72,7 @@ const Eye = ({animationTime, open, openedClipPath, closedClipPath, width}) => {
     },
     closed: () => {
       return {
-        clipPath: closedClipPath,
+        clipPath: `path('${closedClipPath}')`,
         transition: {
           clipPath: {
             duration: animationTime
@@ -70,16 +84,21 @@ const Eye = ({animationTime, open, openedClipPath, closedClipPath, width}) => {
 
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" width={width}>
+      <mask id={eyeMaskId}>
+        <rect width="10" height="14" fill="black" />
+        <path d={openedClipPath} fill={'white'}/>
+      </mask>
       <motion.g
         variants={variants}
-        initial={{clipPath: closedClipPath}}
+        initial={{clipPath: `path('${closedClipPath}')`}}
         animate={open ? 'opened' : 'closed'}
         ref={groupRef}
+        mask={`url(#${eyeMaskId})`}
       >
-        <rect width="10" height="14" fill="white" />
-        <circle id="inner-eye" cx="5" cy="4.5" r="2" fill="white" ref={eyeContainerRef} />
-        <circle id="inner-eye" cx="5" cy="4.5" r="2" fill="#333" ref={irisRef} />
-        <circle id="inner-eye" cx="5" cy="4.5" r="1" fill="black" ref={pupilRef} />
+        <rect width="10" height="14" fill={eyeBallColor} />
+        <circle cx="5" cy="4.5" r="2" fill={eyeBallColor} ref={eyeContainerRef} />
+        <circle cx="5" cy="4.5" r="2" fill={irisColor} ref={irisRef} />
+        <circle cx="5" cy="4.5" r={pupilSize} fill={pupilColor} ref={pupilRef} />
       </motion.g>
     </svg>
   )

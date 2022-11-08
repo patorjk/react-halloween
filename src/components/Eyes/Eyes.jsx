@@ -19,10 +19,10 @@ const eyeVariants = [
 ]
 
 const Eyes = ({
-                open,
+                open = true,
                 variant = 0,
                 animationTime = 0.75,
-                width = 400,
+                width = 200,
                 irisColor = '#333',
                 eyeBallColor = 'white',
                 pupilColor = 'black',

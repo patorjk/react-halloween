@@ -20,7 +20,7 @@ const Template = (args) => {
   };
 
   return (
-    <div style={{height: '100%', width: '100%', padding: '100px', backgroundColor: 'black'}}>
+    <div style={{height: '100%', width: '100%', padding: '300px', backgroundColor: 'black'}}>
       <Eyes open={open} {...args} />
       <button onClick={toggleOpen}>{open ? 'Close' : 'Open'}</button>
     </div>
@@ -30,13 +30,13 @@ const Template = (args) => {
 export const Simple = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 Simple.args = {
-  width: 400
+  width: 200
 };
 
 export const Variant1 = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 Variant1.args = {
-  width: 400,
+  width: 200,
   irisColor: 'crimson',
   eyeBallColor: 'rgb(255,220,220)',
   pupilColor: 'rgb(70,0,0)',

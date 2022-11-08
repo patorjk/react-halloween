@@ -1,2 +1,2 @@
 export * from './Haunted/Haunted';
-export * from './Eyes/Eyes';
+export * from './Eyes';

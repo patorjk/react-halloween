@@ -2,17 +2,23 @@ import React, {useEffect, useRef, useState} from 'react';
 import {motion} from "framer-motion";
 import useEvent from "../../hooks/useEvent";
 
+// https://yqnn.github.io/svg-path-editor/
+
+const simpleOpenedPath = 'M 0 4 C 3 7 7 7 10 4 C 7 1 3 1 0 4';
+const simpleClosedPath = 'M 0 4 C 3 4 7 4 10 4 C 7 4 3 4 0 4';
+
 const Eye = ({
-               animationTime,
-               open,
-               openedClipPath,
-               closedClipPath,
-               irisColor,
-               eyeBallColor,
-               pupilColor,
-               pupilSize,
-               follow,
-               width,
+               animationTime = 0.75,
+               open = true,
+               openedClipPath = simpleOpenedPath,
+               closedClipPath = simpleClosedPath,
+               irisColor = '#333',
+               eyeBallColor = 'white',
+               pupilColor = 'black',
+               pupilSize = 1,
+               follow = true,
+               pupilCoords = {cx: 5, cy: 4},
+               width = 50,
              }) => {
   const pupilRef = useRef(null);
   const eyeContainerRef = useRef(null);
@@ -83,7 +89,7 @@ const Eye = ({
   };
 
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" width={width}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 8" width={width}>
       <mask id={eyeMaskId}>
         <rect width="10" height="14" fill="black" />
         <path d={openedClipPath} fill={'white'}/>
@@ -96,9 +102,9 @@ const Eye = ({
         mask={`url(#${eyeMaskId})`}
       >
         <rect width="10" height="14" fill={eyeBallColor} />
-        <circle cx="5" cy="4.5" r="2" fill={eyeBallColor} ref={eyeContainerRef} />
-        <circle cx="5" cy="4.5" r="2" fill={irisColor} ref={irisRef} />
-        <circle cx="5" cy="4.5" r={pupilSize} fill={pupilColor} ref={pupilRef} />
+        <circle cx={pupilCoords.cx} cy={pupilCoords.cy} r="2" fill={eyeBallColor} ref={eyeContainerRef} />
+        <circle cx={pupilCoords.cx} cy={pupilCoords.cy} r="2" fill={irisColor} ref={irisRef} />
+        <circle cx={pupilCoords.cx} cy={pupilCoords.cy} r={pupilSize} fill={pupilColor} ref={pupilRef} />
       </motion.g>
     </svg>
   )

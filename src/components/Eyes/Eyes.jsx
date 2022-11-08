@@ -3,24 +3,40 @@ import Eye from "./Eye";
 import PropTypes from 'prop-types';
 
 // design path with: https://yqnn.github.io/svg-path-editor/
-const eyeVariants = [
-  {
-    leftOpened: 'M 0 4 C 3 6 6 7 10 4 C 6 3 3 3 0 4',
-    leftClosed: 'M 0 4 C 4 4 7 4 10 4 C 7 4 4 4 0 4',
-    rightOpened: 'M 0 4 C 4 7 7 6 10 4 C 7 3 4 3 0 4',
-    rightClosed: 'M 0 4 C 4 4 7 4 10 4 C 7 4 4 4 0 4',
+const eyeLayoutVariants = {
+  'unfriendly': {
+    left: {
+      opened: 'M 0 4 C 3 6 6 7 10 4 C 6 3 3 3 0 4',
+      closed: 'M 0 4 C 4 4 7 4 10 4 C 7 4 4 4 0 4',
+    },
+    right: {
+      opened: 'M 0 4 C 4 7 7 6 10 4 C 7 3 4 3 0 4',
+      closed: 'M 0 4 C 4 4 7 4 10 4 C 7 4 4 4 0 4',
+    },
+    pupil: {
+      cx: 5,
+      cy: 4.5
+    },
   },
-  {
-    leftOpened: 'M 0 4 C 3 7 6 7 10 4 C 6 3 3 2 0 4',
-    leftClosed: 'M 0 4 C 4 4 7 4 10 4 C 7 4 4 4 0 4',
-    rightOpened: 'M 0 4 C 4 7 7 7 10 4 C 7 2 4 3 0 4',
-    rightClosed: 'M 0 4 C 4 4 7 4 10 4 C 7 4 4 4 0 4',
+  'menacing': {
+    left: {
+      opened: 'M 0 4 C 3 7 6 7 10 4 C 6 3 3 2 0 4',
+      closed: 'M 0 4 C 4 4 7 4 10 4 C 7 4 4 4 0 4',
+    },
+    right: {
+      opened: 'M 0 4 C 4 7 7 7 10 4 C 7 2 4 3 0 4',
+      closed: 'M 0 4 C 4 4 7 4 10 4 C 7 4 4 4 0 4',
+    },
+    pupil: {
+      cx: 5,
+      cy: 4.5
+    },
   }
-]
+}
 
 const Eyes = ({
                 open = true,
-                variant = 0,
+                eyeLayout = 'unfriendly',
                 animationTime = 0.75,
                 width = 200,
                 irisColor = '#333',
@@ -35,17 +51,19 @@ const Eyes = ({
   if (pupilSize < 0 || pupilSize > 2) throw new Error('pupilSize must be between 0 and 2');
 
   let eyeVariant;
-  if (typeof variant === 'number') {
-    eyeVariant = eyeVariants[variant];
+  if (typeof eyeLayout === 'string') {
+    eyeVariant = eyeLayoutVariants[eyeLayout];
   } else {
-    eyeVariant = variant;
+    eyeVariant = {
+      ...eyeLayoutVariants['unfriendly'],
+      ...eyeLayout,
+    };
   }
 
   const {
-    leftOpened,
-    leftClosed,
-    rightOpened,
-    rightClosed
+    left,
+    right,
+    pupil
   } = eyeVariant;
 
   const containerStyles = {
@@ -63,25 +81,27 @@ const Eyes = ({
         open={open}
         width={width/10 * 4.5}
         animationTime={animationTime}
-        openedClipPath={leftOpened}
-        closedClipPath={leftClosed}
+        openedClipPath={left.opened}
+        closedClipPath={left.closed}
         irisColor={irisColor}
         eyeBallColor={eyeBallColor}
         pupilColor={pupilColor}
         pupilSize={pupilSize}
         follow={follow}
+        pupilCoords={pupil}
       />
       <Eye
         open={open}
         width={width/10 * 4.5}
         animationTime={animationTime}
-        openedClipPath={rightOpened}
-        closedClipPath={rightClosed}
+        openedClipPath={right.opened}
+        closedClipPath={right.closed}
         irisColor={irisColor}
         eyeBallColor={eyeBallColor}
         pupilColor={pupilColor}
         pupilSize={pupilSize}
         follow={follow}
+        pupilCoords={pupil}
       />
     </div>
   );
@@ -91,13 +111,17 @@ Eyes.propTypes = {
   // if the eyes are open or closed
   open: PropTypes.bool,
   // The shape of the eye. There are numbers that represent various varients, or a custom object can be passed in
-  variant: PropTypes.oneOf([
-    PropTypes.number,
+  eyeLayout: PropTypes.oneOfType([
+    PropTypes.oneOf(['unfriendly', 'menacing']),
     PropTypes.shape({
-      leftOpened: PropTypes.string,
-      leftClosed: PropTypes.string,
-      rightOpened: PropTypes.string,
-      rightClosed: PropTypes.string,
+      left: PropTypes.shape({
+        opened: PropTypes.string,
+        closed: PropTypes.string,
+      }),
+      right: PropTypes.shape({
+        opened: PropTypes.string,
+        closed: PropTypes.string,
+      }),
     })
   ]),
   // time of the open/close animation in seconds

@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 
-import { Eyes } from '../components';
+import { Eye } from '../components';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: 'Decorations/Eyes',
-  component: Eyes,
+  title: 'Decorations/Eye',
+  component: Eye,
   parameters: {
     layout: 'fullscreen'
   }
@@ -21,7 +21,7 @@ const Template = (args) => {
 
   return (
     <div style={{height: '100%', width: '100%', padding: '300px', backgroundColor: 'black'}}>
-      <Eyes open={open} {...args} />
+      <Eye open={open} {...args} />
       <button onClick={toggleOpen}>{open ? 'Close' : 'Open'}</button>
     </div>
   )
@@ -33,15 +33,15 @@ Simple.args = {
   width: 200
 };
 
-export const MenacingLayout = Template.bind({});
+export const Variant1 = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
-MenacingLayout.args = {
+Variant1.args = {
   width: 200,
   irisColor: 'crimson',
   eyeBallColor: 'rgb(255,220,220)',
   pupilColor: 'rgb(70,0,0)',
   pupilSize: 0.7,
-  eyeLayout: 'menacing',
+  eyeShape: 1,
 };
 
 export const CustomEyeLayout = Template.bind({});

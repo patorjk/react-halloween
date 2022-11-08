@@ -1,6 +1,6 @@
 {
   "name": "react-halloween",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Halloween themed components for React",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",

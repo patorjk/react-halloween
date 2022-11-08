@@ -29,7 +29,7 @@ const Eye = ({animationTime, open, openedClipPath, closedClipPath, width}) => {
       let theta = Math.atan2(y, x);
       let angle = theta*180/Math.PI + 360;
 
-      let max = 400.0;
+      let max = width * 5;
       if (d > max) d = max;
       let t = d / max * (eyeR - pupilR);
 

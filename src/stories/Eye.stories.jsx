@@ -33,9 +33,9 @@ Simple.args = {
   width: 200
 };
 
-export const Variant1 = Template.bind({});
+export const CustomEye = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
-Variant1.args = {
+CustomEye.args = {
   width: 200,
   irisColor: 'crimson',
   eyeBallColor: 'rgb(255,220,220)',

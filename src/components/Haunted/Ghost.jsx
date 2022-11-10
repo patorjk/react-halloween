@@ -3,6 +3,7 @@ import React from 'react';
 /**
  * @component
  * Component that returns an SVG for the ghost
+ * source: https://www.svgrepo.com/svg/202851/ghost
  */
 const Ghost = ({dimensions}) => (
   <svg width={`${dimensions.width}px`} height={`${dimensions.height}px`} version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" style={{enableBackground:'new 0 0 512 512'}} xmlSpace="preserve">

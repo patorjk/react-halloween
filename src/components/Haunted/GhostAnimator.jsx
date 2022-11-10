@@ -2,14 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Ghost as GhostDefault } from './Ghost';
-
-function randomNumber(min, max) {
-  return Math.random() * (max - min) + min;
-}
-
-function randomIntFromInterval(min, max) { // min and max included
-  return Math.floor(Math.random() * (max - min + 1) + min)
-}
+import { randomIntFromInterval, randomNumber } from '../utils';
 
 /**
  * @component

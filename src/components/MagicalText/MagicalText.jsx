@@ -9,9 +9,19 @@ import {MagicStar} from './MagicStar';
  *
  */
 
-const defaultColors = ['purple', 'violet'];
+const defaultColors = ['darkorange', 'purple'];
 
-const MagicalText = ({text, animationTime = 5, colors = defaultColors, style = {}}) => {
+const MagicalText = ({
+                       text,
+                       animationTime = 5,
+                       colors = defaultColors,
+                       style = {},
+                       disableFun = false,
+                       Adornment = MagicStar,
+                       showAdornments = true,
+                       adornmentDuration = 1,
+                       numberOfAdornments = 3,
+                     }) => {
 
   const containerRef = useRef(null);
   const backgroundSize = '200%';
@@ -56,20 +66,16 @@ const MagicalText = ({text, animationTime = 5, colors = defaultColors, style = {
         variants={variants}
         animate={'on'}
       >{text}</motion.div>
-      <MagicStar
-        colors={colors}
-        container={containerRef}
-      />
-      <MagicStar
-        colors={colors}
-        container={containerRef}
-        delay={0.3334}
-      />
-      <MagicStar
-        colors={colors}
-        container={containerRef}
-        delay={0.6667}
-      />
+
+      {!disableFun && showAdornments && Array(numberOfAdornments).fill(0).map((item, idx) => (
+        <Adornment
+          colors={colors}
+          duration={adornmentDuration}
+          container={containerRef}
+          delay={idx * (adornmentDuration/numberOfAdornments)}
+        />
+      ))}
+
     </div>
   );
 };

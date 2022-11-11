@@ -32,3 +32,10 @@ Simple.args = {
   text: 'This is so magical!'
 };
 
+export const VerySparkly = Template.bind({});
+// More on args: https://storybook.js.org/docs/react/writing-stories/args
+VerySparkly.args = {
+  text: 'This is so magical! Oh wow is this a lot of sparkles...',
+  colors: ['red', 'orange', 'yellow', 'green', 'blue', 'purple', 'violet'],
+  numberOfAdornments: 10
+};

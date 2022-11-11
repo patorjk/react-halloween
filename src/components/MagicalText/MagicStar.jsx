@@ -3,26 +3,25 @@ import {motion} from 'framer-motion';
 import useEvent from "../../hooks/useEvent";
 import { randomIntFromInterval } from '../utils';
 
-const MagicStar = ({container, colors, delay = 0, width = 16, height = 16}) => {
+const MagicStar = ({container, colors, delay = 0, duration = 1, width = 16, height = 16}) => {
   const starRef = useRef(null);
   const pathRef = useRef(null)
 
   const variants = {
     on: () => {
-      console.log('boo!')
       return {
         rotate: [0, 180],
         scale: [0, 1, 0],
         transition: {
           rotate: {
             repeat: Infinity,
-            duration: 1,
+            duration,
             ease: 'linear',
             delay,
           },
           scale: {
             animationFillMode: 'forwards',
-            duration: 1,
+            duration,
             repeat: Infinity,
             delay,
           }

@@ -1,10 +1,10 @@
 import React from 'react';
 
-// alternative svg for the Ghost
+// alternative svg for the GhostSVG
 // source: https://www.svgrepo.com/svg/400277/ghost
-const GhostAlt = ({dimensions}) => {
+const GhostAltSVG = ({width, height}) => {
   return (
-    <svg width={`${dimensions.width}px`} height={`${dimensions.height}px`} viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg"
+    <svg width={`${width}`} height={`${height}`} viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg"
          xmlnsXlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" className="iconify iconify--fxemoji"
          preserveAspectRatio="xMidYMid meet">
       <path fill="#D1CFC3"
@@ -21,5 +21,5 @@ const GhostAlt = ({dimensions}) => {
   )
 }
 
-export { GhostAlt };
-export default GhostAlt;
+export { GhostAltSVG };
+export default GhostAltSVG;

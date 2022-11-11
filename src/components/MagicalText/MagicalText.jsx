@@ -1,6 +1,6 @@
-import React, {useRef} from 'react';
-import {motion} from 'framer-motion';
-import {MagicStar} from './MagicStar';
+import React, {useEffect, useRef, useState} from 'react';
+import {AnimatePresence, motion} from 'framer-motion';
+import {MagicalTextStarAnimator} from './animators/MagicalTextStarAnimator';
 
 /**
  * Inspiration:
@@ -17,7 +17,7 @@ const MagicalText = ({
                        colors = defaultColors,
                        style = {},
                        disableFun = false,
-                       Adornment = MagicStar,
+                       Adornment = MagicalTextStarAnimator,
                        showAdornments = true,
                        adornmentDuration = 1,
                        numberOfAdornments = 3,
@@ -26,6 +26,11 @@ const MagicalText = ({
   const containerRef = useRef(null);
   const backgroundSize = '200%';
   const completeColors = [...colors, colors[0]];
+  const [adornmentKey, setAdornmentKey] = useState('_akey'+Math.random());
+
+  useEffect(() => {
+    setAdornmentKey('_akey'+Math.random());
+  }, [showAdornments]);
 
   const divStyle = {
     display: 'inline-block',
@@ -61,20 +66,28 @@ const MagicalText = ({
         ...style,
       }}
     >
-      <motion.div
-        style={divStyle}
-        variants={variants}
-        animate={'on'}
-      >{text}</motion.div>
+      {disableFun ? (
+          <span>{text}</span>
+      )
+      :
+        <motion.div
+          style={divStyle}
+          variants={variants}
+          animate={'on'}
+        >{text}</motion.div>
+      }
 
-      {!disableFun && showAdornments && Array(numberOfAdornments).fill(0).map((item, idx) => (
-        <Adornment
-          colors={colors}
-          duration={adornmentDuration}
-          container={containerRef}
-          delay={idx * (adornmentDuration/numberOfAdornments)}
-        />
-      ))}
+      <AnimatePresence>
+        {!disableFun && showAdornments && Array(numberOfAdornments).fill(0).map((item, idx) => (
+          <Adornment
+            key={`${adornmentKey}_${idx}`}
+            colors={colors}
+            duration={adornmentDuration}
+            container={containerRef}
+            delay={idx * (adornmentDuration/numberOfAdornments)}
+          />
+        ))}
+      </AnimatePresence>
 
     </div>
   );

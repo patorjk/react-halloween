@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
-import { Ghost as GhostDefault } from './Ghost';
+import { GhostSVG as GhostDefault } from '../svgs/GhostSVG';
 import { randomIntFromInterval, randomNumber } from '../utils';
 
 /**
@@ -110,7 +110,7 @@ const GhostAnimator = React.forwardRef(({
         initial={{ opacity: 0, x: 0, y: initY + 'px' }}
         variants={variants}
         animate={mouseOver ? 'on' : 'off'}
-      ><GhostComponent dimensions={dimensions} index={index} /></motion.div>
+      ><GhostComponent width={dimensions.width} height={dimensions.height} index={index} /></motion.div>
     </div>
   )
 });

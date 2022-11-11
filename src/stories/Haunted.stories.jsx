@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Haunted } from '../components';
-import GhostAlt from '../components/Haunted/GhostAlt';
+import GhostAltSVG from '../components/svgs/GhostAltSVG';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
@@ -29,7 +29,7 @@ Simple.args = {
 
 export const CustomGhost = Template.bind({});
 CustomGhost.args = {
-  Creature: GhostAlt,
+  Creature: GhostAltSVG,
 };
 
 export const CustomGlow = Template.bind({});

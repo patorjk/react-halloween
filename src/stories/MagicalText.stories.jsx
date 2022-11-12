@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 
-import { MagicalText } from '../components';
-import { MagicalTextScaleAnimator } from '../components';
+import {GhostSVG, HeartSVG, MagicalText} from '../components';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
@@ -17,11 +16,9 @@ const Template = ({notes, ...args}) => {
   const [hover, setHover] = useState(false);
 
   const onMouseEnter = () => {
-    console.log('show adornments');
     setHover(true);
   };
   const onMouseLeave = () => {
-    console.log('hide adornments');
     setHover(false);
   };
 
@@ -84,6 +81,19 @@ export const Ghost = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 Ghost.args = {
   text: 'This is kind of spooky!',
-  Adornment: MagicalTextScaleAnimator,
+  Adornment: GhostSVG,
+  adornmentType: 'scale',
   adornmentDuration: 2,
 };
+
+export const Heart = Template.bind({});
+// More on args: https://storybook.js.org/docs/react/writing-stories/args
+Heart.args = {
+  text: 'I feel so loved...',
+  Adornment: HeartSVG,
+  adornmentType: 'scale',
+  adornmentDuration: 2,
+  adornmentWidth: 12,
+  adornmentHeight: 12,
+};
+

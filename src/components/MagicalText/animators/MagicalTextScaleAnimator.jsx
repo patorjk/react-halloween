@@ -1,23 +1,25 @@
 import React, {useCallback, useMemo, useRef} from 'react';
 import useEvent from "../../../hooks/useEvent";
 import { randomIntFromInterval } from '../../utils';
-import {GhostSVG as GhostSvg} from '../../svgs/GhostSVG';
+import {GhostSVG} from '../../svgs/GhostSVG';
 import {motion} from 'framer-motion';
 
 const MagicalTextScaleAnimator = ({
-                            container, colors,
-                            delay = 0,
-                            duration = 1,
-                            width = 16,
-                            height = 16,
-                          }) => {
+                                    Adornment = GhostSVG,
+                                    container,
+                                    delay = 0,
+                                    duration = 1,
+                                    opacity = 0.7,
+                                    width = 16,
+                                    height = 16,
+                                  }) => {
   const ghostRef = useRef(null);
 
   const variants = {
     on: () => {
       return {
         scale: [0, 1, 0],
-        opacity: 0.7,
+        opacity,
         transition: {
           scale: {
             animationFillMode: 'forwards',
@@ -35,7 +37,7 @@ const MagicalTextScaleAnimator = ({
   };
 
   const setPosition = useCallback(() => {
-    if (container.current) {
+    if (container?.current) {
       const rect = container.current.getBoundingClientRect();
 
       const halfWidth = width / 2;
@@ -78,7 +80,7 @@ const MagicalTextScaleAnimator = ({
       onAnimationStart={setup}
       xmlSpace="preserve"
     >
-    <GhostSvg
+    <Adornment
       width={width}
       height={height}
     />

@@ -1,12 +1,22 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 // alternative svg for the GhostSVG
 // source: https://www.svgrepo.com/svg/400277/ghost
-const GhostAltSVG = ({width, height}) => {
+const GhostAltSVG = ({width, height, style = {}}) => {
   return (
-    <svg width={`${width}`} height={`${height}`} viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg"
-         xmlnsXlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" className="iconify iconify--fxemoji"
-         preserveAspectRatio="xMidYMid meet">
+    <svg
+      width={`${width}`}
+      height={`${height}`}
+      style={style}
+      viewBox="0 0 72 72"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      aria-hidden="true"
+      role="img"
+      className="iconify iconify--fxemoji"
+      preserveAspectRatio="xMidYMid meet"
+    >
       <path fill="#D1CFC3"
   d="M22.541 39.677c-8.687 0-16.824-3.548-21.238-9.26a5.384 5.384 0 1 1 8.519-6.584c2.383 3.083 7.375 5.075 12.72 5.075a5.385 5.385 0 0 1-.001 10.769zm48.323-9.26a5.384 5.384 0 1 0-8.519-6.584c-2.383 3.083-7.375 5.075-12.72 5.075a5.383 5.383 0 1 0 0 10.768c8.687.001 16.825-3.546 21.239-9.259z"/>
       <path fill="#E5E4DF"
@@ -20,6 +30,12 @@ const GhostAltSVG = ({width, height}) => {
     </svg>
   )
 }
+
+GhostAltSVG.propTypes = {
+  width: PropTypes.number,
+  height: PropTypes.number,
+  style: PropTypes.object,
+};
 
 export { GhostAltSVG };
 export default GhostAltSVG;

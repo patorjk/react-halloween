@@ -1,5 +1,5 @@
 import React from 'react';
-import {motion} from 'framer-motion';
+import PropTypes from "prop-types";
 
 /**
  * @component
@@ -49,6 +49,12 @@ c-17.838,0-32.288-14.463-32.288-32.301S299.078,114.487,316.916,114.487z"/>
     </svg>
   );
 })
+
+GhostSVG.propTypes = {
+  width: PropTypes.number,
+  height: PropTypes.number,
+  style: PropTypes.object,
+};
 
 export {GhostSVG};
 export default GhostSVG;

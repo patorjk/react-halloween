@@ -2,8 +2,18 @@ import React, {useCallback, useMemo, useRef} from 'react';
 import {motion} from 'framer-motion';
 import useEvent from "../../../hooks/useEvent";
 import { randomIntFromInterval } from '../../utils';
+import StarCrossSVG from "../../svgs/StarCrossSVG";
 
-const MagicalTextStarAnimator = ({container, colors, delay = 0, duration = 1, width = 16, height = 16}) => {
+const MagicalTextSparkleAnimator = ({
+                                      Adornment = StarCrossSVG,
+                                      container,
+                                      colors,
+                                      delay = 0,
+                                      duration = 1,
+                                      getColor = () => null,
+                                      width = 16,
+                                      height = 16,
+                                    }) => {
   const starRef = useRef(null);
   const pathRef = useRef(null)
 
@@ -41,11 +51,16 @@ const MagicalTextStarAnimator = ({container, colors, delay = 0, duration = 1, wi
 
       const halfWidth = width / 2;
       const halfHeight = height / 2;
+      const leftStart = -halfWidth;
+      const leftEnd = rect.width - halfWidth;
+      const left = randomIntFromInterval(leftStart, leftEnd);
+      const top = randomIntFromInterval(-halfHeight, rect.height - halfHeight);
 
-      starRef.current.style.left = randomIntFromInterval(-halfWidth, rect.width - halfWidth) + 'px';
-      starRef.current.style.top = randomIntFromInterval(-halfHeight, rect.height - halfHeight) + 'px';
+      starRef.current.style.left = left + 'px';
+      starRef.current.style.top = top + 'px';
 
-      pathRef.current.style.fill = colors[randomIntFromInterval(0,colors.length - 1)];
+      const color = getColor((left - leftStart)/(leftEnd - leftStart));
+      if (pathRef.current) pathRef.current.style.fill = color;
     }
   }, [container, starRef, pathRef]);
 
@@ -63,7 +78,7 @@ const MagicalTextStarAnimator = ({container, colors, delay = 0, duration = 1, wi
   });
 
   return (
-    <motion.svg
+    <motion.div
       style={{
         position: 'absolute',
       }}
@@ -72,29 +87,16 @@ const MagicalTextStarAnimator = ({container, colors, delay = 0, duration = 1, wi
       variants={variants}
       animate={'on'}
       exit={{opacity: 0, scale: 0, transition:{duration: 1}}}
-      width={width}
-      height={height}
-      viewBox="0 0 16 16"
-      version="1.1"
-      xmlns="http://www.w3.org/2000/svg"
-      xmlnsSvg="http://www.w3.org/2000/svg"
       onAnimationStart={setup}
       onUpdate={onUpdate}
     >
-      <g
-        stroke="none"
-        strokeWidth="1"
-        fill="none"
-        fillRule="evenodd"
-      >
-        <path
-          ref={pathRef}
-          d="M 9.601,6.4 8,0 6.398,6.4 0,8 6.398,9.601 8,16 9.601,9.601 16,8 Z"
-          fill={colors[0]}
-        />
-      </g>
-    </motion.svg>
+      <Adornment
+        pathRef={pathRef}
+        width={width}
+        height={height}
+      />
+    </motion.div>
   )
 }
-export {MagicalTextStarAnimator};
-export default MagicalTextStarAnimator;
+export {MagicalTextSparkleAnimator};
+export default MagicalTextSparkleAnimator;

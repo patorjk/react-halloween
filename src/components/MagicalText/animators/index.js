@@ -1,2 +1,2 @@
 export * from './MagicalTextScaleAnimator';
-export * from './MagicalTextStarAnimator';
+export * from './MagicalTextSparkleAnimator';

@@ -1,8 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-// alternative svg for the GhostSVG
-// source: https://www.svgrepo.com/svg/400277/ghost
+/**
+ * @component
+ * A component that returns an SVG component that can be used with several of the components in this library.
+ * Original SVG was CC0 (source: https://www.svgrepo.com/svg/400277/ghost)
+ */
 const GhostAltSVG = ({width, height, style = {}}) => {
   return (
     <svg

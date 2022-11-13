@@ -3,8 +3,8 @@ import PropTypes from "prop-types";
 
 /**
  * @component
- * Component that returns an SVG for the ghost
- * source: https://www.svgrepo.com/svg/202851/ghost
+ * A component that returns an SVG component that can be used with several of the components in this library.
+ * Original SVG was CC0 (source: https://www.svgrepo.com/svg/400277/ghost)
  */
 const GhostSVG = React.forwardRef(({
                                   width,

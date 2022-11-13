@@ -5,16 +5,20 @@ import StarCrossSVG from "../svgs/StarCrossSVG";
 import {MagicalTextScaleAnimator} from "./animators";
 import useEvent from "../../hooks/useEvent";
 import {multiColorFade, parseCSSColor} from "../utils";
-
-/**
- * Inspiration:
- * https://linear.app/readme
- * https://www.youtube.com/watch?v=yu0Cm4BqQv0
- *
- */
+import PropTypes from 'prop-types';
 
 const defaultColors = ['darkorange', 'purple'];
 
+/**
+ * @component
+ * This is a component that displays text in a faded fashion with optional adornments (such as sparkles or hearts).
+ *
+ * Inspiration:
+ * https://patorjk.com/text-color-fader - Initial goal
+ * https://www.youtube.com/watch?v=yu0Cm4BqQv0 - Idea for the sparkles and movement of the color fade
+ * https://linear.app/readme - What inspired the above youtube video
+ *
+ */
 const MagicalText = ({
                        text,
                        animationTime = 10,
@@ -31,7 +35,7 @@ const MagicalText = ({
                        numberOfAdornments = 3,
                      }) => {
 
-  const rgbColors = useMemo(() => colors.map(color => parseCSSColor(color)), [colors]);
+  const rgbColors = useMemo(() => colors.map(color => parseCSSColor(color)).concat(parseCSSColor(colors[0])), [colors]);
   const fadeReference = useMemo(() => multiColorFade(rgbColors, 200), [rgbColors]);
   const [fadeOffset, setFadeOffset] = useState(0);
 
@@ -135,6 +139,28 @@ const MagicalText = ({
     </div>
   );
 };
+
+MagicalText.propTypes = {
+  // the text to display
+  text: PropTypes.string,
+  // duration for the fading of the text
+  animationTime: PropTypes.number,
+  colors: PropTypes.arrayOf(PropTypes.string),
+  // CSS styles to spread onto the containing div
+  style: PropTypes.object,
+  // true to disable the effect
+  disableFun: PropTypes.bool,
+  adornmentType: PropTypes.oneOf([PropTypes.string, PropTypes.elementType]),
+  // component to use as the adornment
+  Adornment: PropTypes.elementType,
+  // boolean variable that governs if the adornments should be shown
+  showAdornments: PropTypes.bool,
+  adornmentWidth: PropTypes.number,
+  adornmentHeight: PropTypes.number,
+  adornmentOpacity: PropTypes.number,
+  adornmentDuration: PropTypes.number,
+  numberOfAdornments: PropTypes.number,
+}
 
 export {MagicalText};
 export default MagicalText;

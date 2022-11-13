@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from "prop-types";
 
+/**
+ * A component that returns an SVG component that can be used with several of the components in this library.
+ * Original SVG was CC0 (source: https://www.svgrepo.com/svg/141727/heart)
+ */
 const HeartSVG = React.forwardRef(({width, height, style = {},}, ref) => {
   const svgStyle = {
     enableBackground:'0 0 230 230',

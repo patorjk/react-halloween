@@ -3,6 +3,7 @@ import useEvent from "../../../hooks/useEvent";
 import { randomIntFromInterval } from '../../utils';
 import {GhostSVG} from '../../svgs/GhostSVG';
 import {motion} from 'framer-motion';
+import PropTypes from 'prop-types';
 
 const MagicalTextScaleAnimator = ({
                                     Adornment = GhostSVG,
@@ -87,5 +88,21 @@ const MagicalTextScaleAnimator = ({
     </motion.div>
   )
 }
+
+MagicalTextScaleAnimator.propTypes = {
+  Adornment: PropTypes.elementType,
+  container: PropTypes.oneOfType([
+    // Either a function
+    PropTypes.func,
+    // Or the instance of a DOM native element (see the note about SSR)
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) })
+  ]),
+  delay: PropTypes.number,
+  duration: PropTypes.number,
+  opacity: PropTypes.number,
+  width: PropTypes.number,
+  height: PropTypes.number,
+};
+
 export {MagicalTextScaleAnimator};
 export default MagicalTextScaleAnimator;

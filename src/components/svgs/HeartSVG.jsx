@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 /**
  * A component that returns an SVG component that can be used with several of the components in this library.
- * Original SVG was CC0 (source: https://www.svgrepo.com/svg/141727/heart)
+ * Original SVG was CC0 (source: https://www.svgrepo.com/svg/165566/heart)
  */
 const HeartSVG = React.forwardRef(({width, height, style = {},}, ref) => {
   const svgStyle = {

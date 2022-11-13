@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 import { Eyes } from '../components';
 
@@ -7,12 +7,12 @@ export default {
   title: 'Decorations/Eyes',
   component: Eyes,
   parameters: {
-    layout: 'fullscreen'
-  }
+    layout: 'fullscreen',
+  },
 };
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template = (args) => {
+function Template(args) {
   const [open, setOpen] = useState(true);
 
   const toggleOpen = () => {
@@ -20,17 +20,20 @@ const Template = (args) => {
   };
 
   return (
-    <div style={{height: '100%', width: '100%', padding: '300px', backgroundColor: 'black'}}>
+    <div style={{
+      height: '100%', width: '100%', padding: '300px', backgroundColor: 'black',
+    }}
+    >
       <Eyes open={open} {...args} />
       <button onClick={toggleOpen}>{open ? 'Close' : 'Open'}</button>
     </div>
-  )
-};
+  );
+}
 
 export const Simple = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 Simple.args = {
-  width: 200
+  width: 200,
 };
 
 export const MenacingLayout = Template.bind({});
@@ -60,8 +63,8 @@ CustomEyeLayout.args = {
     },
     pupil: {
       cx: 5,
-      cy: 4.5
-    }
+      cy: 4.5,
+    },
   },
   irisColor: 'steelblue',
 };

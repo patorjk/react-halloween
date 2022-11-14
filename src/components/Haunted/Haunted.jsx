@@ -85,7 +85,7 @@ function Haunted({
   return (
     <motion.div
       variants={variants}
-      animate={(glowOptions && disableFun === false) ? (mouseOver ? 'on' : 'off') : ''}
+      animate={glowOptions && disableFun === false ? (mouseOver ? 'on' : 'off') : ''}
       ref={container}
       style={{
         ...style,
@@ -95,28 +95,31 @@ function Haunted({
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      {disableFun === false
-        && (
-        <div style={{
-          zIndex: 0,
-          position: 'absolute',
-        }}
+      {disableFun === false && (
+        <div
+          style={{
+            zIndex: 0,
+            position: 'absolute',
+          }}
         >
-          {creatureOptions && Array(fullCreatureOptions.numberOf).fill(0).map((val, index) => (
-            <GhostAnimator
-              key={index}
-              index={index}
-              container={container}
-              ref={(el) => (creatureRefs.current[index] = el)}
-              animationTimeMax={fullCreatureOptions.animationTime}
-              mouseOver={mouseOver}
-              distance={fullCreatureOptions.distance}
-              Creature={Creature}
-              dimensions={fullCreatureOptions.dimensions}
-            />
-          ))}
+          {creatureOptions &&
+            Array(fullCreatureOptions.numberOf)
+              .fill(0)
+              .map((val, index) => (
+                <GhostAnimator
+                  key={index}
+                  index={index}
+                  container={container}
+                  ref={(el) => (creatureRefs.current[index] = el)}
+                  animationTimeMax={fullCreatureOptions.animationTime}
+                  mouseOver={mouseOver}
+                  distance={fullCreatureOptions.distance}
+                  Creature={Creature}
+                  dimensions={fullCreatureOptions.dimensions}
+                />
+              ))}
         </div>
-        )}
+      )}
       <div style={{ zIndex: 1, position: 'relative' }}>{children}</div>
     </motion.div>
   );

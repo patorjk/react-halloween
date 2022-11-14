@@ -31,7 +31,6 @@ const HeartSVG = React.forwardRef(({ width, height, style = {} }, ref) => {
         C235.26,57.99,236.537,96.466,213.588,120.982z"
       />
     </svg>
-
   );
 });
 

@@ -59,11 +59,7 @@ function Eyes({
     };
   }
 
-  const {
-    left,
-    right,
-    pupil,
-  } = eyeVariant;
+  const { left, right, pupil } = eyeVariant;
 
   const containerStyles = {
     display: 'flex',
@@ -73,9 +69,7 @@ function Eyes({
   };
 
   return (
-    <div
-      style={containerStyles}
-    >
+    <div style={containerStyles}>
       <Eye
         open={open}
         width={(width / 10) * 4.5}

@@ -2,7 +2,8 @@ export function randomNumber(min, max) {
   return Math.random() * (max - min) + min;
 }
 
-export function randomIntFromInterval(min, max) { // min and max included
+export function randomIntFromInterval(min, max) {
+  // min and max included
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
@@ -210,12 +211,14 @@ function parseCSSColor(color) {
     retColor.g = parseInt(lookup.substring(3, 5), 16);
     retColor.b = parseInt(lookup.substring(5, 7), 16);
     return retColor;
-  } if (color.match(/^#[0-9a-fA-F]{3}$/)) {
+  }
+  if (color.match(/^#[0-9a-fA-F]{3}$/)) {
     retColor.r = parseInt(color.substring(1, 2) + color.substring(1, 2), 16);
     retColor.g = parseInt(color.substring(2, 3) + color.substring(2, 3), 16);
     retColor.b = parseInt(color.substring(3, 4) + color.substring(3, 4), 16);
     return retColor;
-  } if (color.match(/^#[0-9a-fA-F]{6}$/)) {
+  }
+  if (color.match(/^#[0-9a-fA-F]{6}$/)) {
     retColor.r = parseInt(color.substring(1, 3), 16);
     retColor.g = parseInt(color.substring(3, 5), 16);
     retColor.b = parseInt(color.substring(5, 7), 16);

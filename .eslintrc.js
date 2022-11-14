@@ -25,5 +25,7 @@ module.exports = {
     "react/forbid-prop-types": "off",
     "react/require-default-props": "off",
     "no-return-assign": ["error", "except-parens"],
+    "object-curly-newline": "off",
+    "operator-linebreak": "off"
   }
 }

@@ -1,6 +1,4 @@
-import React, {
-  useEffect, useMemo, useRef, useState,
-} from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { MagicalTextSparkleAnimator } from './animators/MagicalTextSparkleAnimator';
@@ -36,7 +34,10 @@ function MagicalText({
   adornmentDuration = 1,
   numberOfAdornments = 3,
 }) {
-  const rgbColors = useMemo(() => colors.map((color) => parseCSSColor(color)).concat(parseCSSColor(colors[0])), [colors]);
+  const rgbColors = useMemo(
+    () => colors.map((color) => parseCSSColor(color)).concat(parseCSSColor(colors[0])),
+    [colors],
+  );
   const fadeReference = useMemo(() => multiColorFade(rgbColors, 200), [rgbColors]);
   const [fadeOffset, setFadeOffset] = useState(0);
 
@@ -77,13 +78,11 @@ function MagicalText({
         },
       },
     }),
-    off: () => ({
-
-    }),
+    off: () => ({}),
   };
 
   const getColor = useEvent((pos) => {
-    let offsetPos = Math.round((200 - fadeOffset) + (pos * 100));
+    let offsetPos = Math.round(200 - fadeOffset + pos * 100);
     if (offsetPos >= 200) {
       offsetPos -= 200;
     }
@@ -110,35 +109,37 @@ function MagicalText({
     >
       {disableFun ? (
         <span>{text}</span>
-      )
-        : (
-          <motion.div
-            style={divStyle}
-            variants={variants}
-            animate="on"
-            onUpdate={adornmentType === 'sparkle' ? onUpdate : null}
-          >
-            {text}
-          </motion.div>
-        )}
+      ) : (
+        <motion.div
+          style={divStyle}
+          variants={variants}
+          animate="on"
+          onUpdate={adornmentType === 'sparkle' ? onUpdate : null}
+        >
+          {text}
+        </motion.div>
+      )}
 
       <AnimatePresence>
-        {!disableFun && showAdornments && Array(numberOfAdornments).fill(0).map((item, idx) => (
-          <AdornmentAnimator
-            Adornment={Adornment}
-            key={`${adornmentKey}_${idx}`}
-            getColor={getColor}
-            duration={adornmentDuration}
-            container={containerRef}
-            colors={colors}
-            delay={idx * (adornmentDuration / numberOfAdornments)}
-            width={adornmentWidth}
-            height={adornmentHeight}
-            opacity={adornmentOpacity}
-          />
-        ))}
+        {!disableFun &&
+          showAdornments &&
+          Array(numberOfAdornments)
+            .fill(0)
+            .map((item, idx) => (
+              <AdornmentAnimator
+                Adornment={Adornment}
+                key={`${adornmentKey}_${idx}`}
+                getColor={getColor}
+                duration={adornmentDuration}
+                container={containerRef}
+                colors={colors}
+                delay={idx * (adornmentDuration / numberOfAdornments)}
+                width={adornmentWidth}
+                height={adornmentHeight}
+                opacity={adornmentOpacity}
+              />
+            ))}
       </AnimatePresence>
-
     </div>
   );
 }

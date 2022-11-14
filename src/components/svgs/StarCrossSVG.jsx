@@ -6,9 +6,7 @@ import PropTypes from 'prop-types';
  * A component that returns an SVG component that can be used with several of the components in this library.
  * It takes in a pathRef component which is used in the MagicalTextSparkleAnimator (for MagicalText).
  */
-const StarCrossSVG = React.forwardRef(({
-  pathRef, width, height, style = {},
-}, ref) => (
+const StarCrossSVG = React.forwardRef(({ pathRef, width, height, style = {} }, ref) => (
   <svg
     ref={ref}
     width={width}
@@ -19,10 +17,7 @@ const StarCrossSVG = React.forwardRef(({
     xmlns="http://www.w3.org/2000/svg"
   >
     <g>
-      <path
-        ref={pathRef}
-        d="M 9.5, 6.5 8, 0 6.5, 6.5 0, 8 6.5, 9.5 8, 16 9.5, 9.5 16, 8 Z"
-      />
+      <path ref={pathRef} d="M 9.5, 6.5 8, 0 6.5, 6.5 0, 8 6.5, 9.5 8, 16 9.5, 9.5 16, 8 Z" />
     </g>
   </svg>
 ));

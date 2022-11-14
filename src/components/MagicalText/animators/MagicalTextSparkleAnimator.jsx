@@ -1,6 +1,4 @@
-import React, {
-  useCallback, useRef, useState,
-} from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { useEvent } from '../../../hooks/useEvent';
@@ -42,8 +40,7 @@ function MagicalTextSparkleAnimator({
         },
       },
     }),
-    off: () => ({
-    }),
+    off: () => ({}),
   };
 
   const setPosition = useCallback(() => {
@@ -94,11 +91,7 @@ function MagicalTextSparkleAnimator({
       onAnimationStart={setup}
       onUpdate={onUpdate}
     >
-      <Adornment
-        pathRef={pathRef}
-        width={width}
-        height={height}
-      />
+      <Adornment pathRef={pathRef} width={width} height={height} />
     </motion.div>
   );
 }

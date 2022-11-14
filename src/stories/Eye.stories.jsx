@@ -20,13 +20,19 @@ function Template(args) {
   };
 
   return (
-    <div style={{
-      height: '100%', width: '100%', padding: '300px', backgroundColor: 'black',
-    }}
+    <div
+      style={{
+        height: '100%',
+        width: '100%',
+        padding: '300px',
+        backgroundColor: 'black',
+      }}
     >
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <Eye open={open} {...args} />
-      <button type="button" onClick={toggleOpen}>{open ? 'Close' : 'Open'}</button>
+      <button type="button" onClick={toggleOpen}>
+        {open ? 'Close' : 'Open'}
+      </button>
     </div>
   );
 }

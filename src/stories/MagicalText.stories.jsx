@@ -24,13 +24,14 @@ function Template({ notes = '', ...args }) {
   };
 
   return (
-    <div style={{
-      height: '100%',
-      width: '100%',
-      padding: '20px',
-      backgroundColor: 'black',
-      color: '#eee',
-    }}
+    <div
+      style={{
+        height: '100%',
+        width: '100%',
+        padding: '20px',
+        backgroundColor: 'black',
+        color: '#eee',
+      }}
     >
       <div>
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
@@ -40,15 +41,17 @@ function Template({ notes = '', ...args }) {
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
         style={{
-          display: 'inline-block', border: '1px solid grey', marginTop: '20px', borderRadius: '10px', padding: '10px',
+          display: 'inline-block',
+          border: '1px solid grey',
+          marginTop: '20px',
+          borderRadius: '10px',
+          padding: '10px',
         }}
       >
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <MagicalText showAdornments={hover} {...args} />
       </div>
-      {notes && (
-        <div style={{ marginTop: '20px' }}>{notes}</div>
-      )}
+      {notes && <div style={{ marginTop: '20px' }}>{notes}</div>}
     </div>
   );
 }
@@ -73,7 +76,8 @@ VerySparkly.args = {
   colors: ['red', 'orange', 'yellow', 'green', 'blue', 'purple', 'violet'],
   numberOfAdornments: 10,
   // eslint-disable-next-line max-len
-  notes: 'The more colors there are, the bigger the chance the sparkle color will clash with the text color. This is not that noticeable when there is just 2 colors.',
+  notes:
+    'The more colors there are, the bigger the chance the sparkle color will clash with the text color. This is not that noticeable when there is just 2 colors.',
 };
 
 export const NoAdnornments = Template.bind({});

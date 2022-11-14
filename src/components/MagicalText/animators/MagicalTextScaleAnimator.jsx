@@ -29,8 +29,7 @@ function MagicalTextScaleAnimator({
         },
       },
     }),
-    off: () => ({
-    }),
+    off: () => ({}),
   };
 
   const setPosition = useCallback(() => {
@@ -79,10 +78,7 @@ function MagicalTextScaleAnimator({
       onAnimationStart={setup}
       xmlSpace="preserve"
     >
-      <Adornment
-        width={width}
-        height={height}
-      />
+      <Adornment width={width} height={height} />
     </motion.div>
   );
 }

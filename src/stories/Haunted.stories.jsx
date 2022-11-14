@@ -15,22 +15,32 @@ export default {
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
 function Template(args) {
   return (
-    <div style={{
-      height: '100%', width: '100%', padding: '200px', backgroundColor: 'black',
-    }}
+    <div
+      style={{
+        height: '100%',
+        width: '100%',
+        padding: '200px',
+        backgroundColor: 'black',
+      }}
     >
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <Haunted {...args}>
-        <div style={{
-          backgroundColor: 'red', width: '200px', height: '200px', display: 'inline-block',
-        }}
+        <div
+          style={{
+            backgroundColor: 'red',
+            width: '200px',
+            height: '200px',
+            display: 'inline-block',
+          }}
         >
           This is a test
         </div>
       </Haunted>
       <div style={{ marginLeft: '40px', display: 'inline-block' }}>
         {/* eslint-disable-next-line react/jsx-props-no-spreading,max-len */}
-        <Haunted {...args}><div style={{ backgroundColor: 'red', display: 'inline-block' }}>This is a test</div></Haunted>
+        <Haunted {...args}>
+          <div style={{ backgroundColor: 'red', display: 'inline-block' }}>This is a test</div>
+        </Haunted>
       </div>
     </div>
   );
@@ -38,8 +48,7 @@ function Template(args) {
 
 export const Simple = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
-Simple.args = {
-};
+Simple.args = {};
 
 export const CustomGhost = Template.bind({});
 CustomGhost.args = {

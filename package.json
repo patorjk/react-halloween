@@ -10,7 +10,9 @@
     "rollup": "rollup -c --bundleConfigAsCjs",
     "test": "jest",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "prepare": "husky install",
+    "prettier": "prettier --write ."
   },
   "repository": {
     "type": "git",
@@ -53,11 +55,17 @@
     "eslint-plugin-react": "^7.31.10",
     "eslint-plugin-react-hooks": "^4.6.0",
     "framer-motion": "^7.6.4",
+    "husky": "^8.0.2",
     "jest": "^29.2.2",
     "jest-environment-jsdom": "^29.2.2",
+    "lint-staged": "^13.0.3",
+    "prettier": "2.7.1",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rollup": "^3.2.5"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
   }
 }

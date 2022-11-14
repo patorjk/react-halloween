@@ -5,8 +5,8 @@
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "scripts": {
-    "lint": "eslint ./src/**/*.{js,jsx}",
-    "lint:fix": "eslint --fix ./src/**/*.{js,jsx}",
+    "lint": "eslint './src/**/*.{js,jsx}'",
+    "lint:fix": "eslint --fix './src/**/*.{js,jsx}'",
     "rollup": "rollup -c --bundleConfigAsCjs",
     "test": "jest",
     "storybook": "start-storybook -p 6006",

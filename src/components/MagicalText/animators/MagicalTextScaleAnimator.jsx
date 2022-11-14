@@ -1,40 +1,36 @@
-import React, {useCallback, useMemo, useRef} from 'react';
-import useEvent from "../../../hooks/useEvent";
-import { randomIntFromInterval } from '../../utils';
-import {GhostSVG} from '../../svgs/GhostSVG';
-import {motion} from 'framer-motion';
+import React, { useCallback, useRef } from 'react';
+import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
+import { useEvent } from '../../../hooks/useEvent';
+import { randomIntFromInterval } from '../../utils';
+import { GhostSVG } from '../../svgs/GhostSVG';
 
-const MagicalTextScaleAnimator = ({
-                                    Adornment = GhostSVG,
-                                    container,
-                                    delay = 0,
-                                    duration = 1,
-                                    opacity = 0.7,
-                                    width = 16,
-                                    height = 16,
-                                  }) => {
+function MagicalTextScaleAnimator({
+  Adornment = GhostSVG,
+  container,
+  delay = 0,
+  duration = 1,
+  opacity = 0.7,
+  width = 16,
+  height = 16,
+}) {
   const ghostRef = useRef(null);
 
   const variants = {
-    on: () => {
-      return {
-        scale: [0, 1, 0],
-        opacity,
-        transition: {
-          scale: {
-            animationFillMode: 'forwards',
-            duration,
-            repeat: Infinity,
-            delay,
-          }
+    on: () => ({
+      scale: [0, 1, 0],
+      opacity,
+      transition: {
+        scale: {
+          animationFillMode: 'forwards',
+          duration,
+          repeat: Infinity,
+          delay,
         },
-      };
-    },
-    off: () => {
-      return {
-      }
-    },
+      },
+    }),
+    off: () => ({
+    }),
   };
 
   const setPosition = useCallback(() => {
@@ -44,8 +40,8 @@ const MagicalTextScaleAnimator = ({
       const halfWidth = width / 2;
       const halfHeight = height / 2;
 
-      ghostRef.current.style.left = randomIntFromInterval(-halfWidth, rect.width - halfWidth) + 'px';
-      ghostRef.current.style.top = randomIntFromInterval(-halfHeight, rect.height - halfHeight) + 'px';
+      ghostRef.current.style.left = `${randomIntFromInterval(-halfWidth, rect.width - halfWidth)}px`;
+      ghostRef.current.style.top = `${randomIntFromInterval(-halfHeight, rect.height - halfHeight)}px`;
     }
   }, [ghostRef, container]);
 
@@ -53,10 +49,10 @@ const MagicalTextScaleAnimator = ({
     if (variant === 'on') {
       setPosition();
     }
-  })
+  });
 
   const onUpdate = useEvent((latest) => {
-    const {scale} = latest;
+    const { scale } = latest;
     if (scale === 0) {
       setPosition();
     }
@@ -66,27 +62,29 @@ const MagicalTextScaleAnimator = ({
     <motion.div
       ref={ghostRef}
       variants={variants}
-      initial={{opacity: 0}}
-      exit={{opacity: 0, scale: 0, transition:{duration: 1}}}
-      animate={'on'}
+      initial={{ opacity: 0 }}
+      exit={{ opacity: 0, scale: 0, transition: { duration: 1 } }}
+      animate="on"
       width={`${width}`}
       height={`${height}`}
-      version="1.1" id="Layer_1"
+      version="1.1"
+      id="Layer_1"
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      x="0px" y="0px"
+      x="0px"
+      y="0px"
       viewBox="0 0 512 512"
-      style={{position:'absolute', pointerEvents: 'none'}}
+      style={{ position: 'absolute', pointerEvents: 'none' }}
       onUpdate={onUpdate}
       onAnimationStart={setup}
       xmlSpace="preserve"
     >
-    <Adornment
-      width={width}
-      height={height}
-    />
+      <Adornment
+        width={width}
+        height={height}
+      />
     </motion.div>
-  )
+  );
 }
 
 MagicalTextScaleAnimator.propTypes = {
@@ -95,7 +93,7 @@ MagicalTextScaleAnimator.propTypes = {
     // Either a function
     PropTypes.func,
     // Or the instance of a DOM native element (see the note about SSR)
-    PropTypes.shape({ current: PropTypes.instanceOf(Element) })
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   ]),
   delay: PropTypes.number,
   duration: PropTypes.number,
@@ -104,5 +102,5 @@ MagicalTextScaleAnimator.propTypes = {
   height: PropTypes.number,
 };
 
-export {MagicalTextScaleAnimator};
+export { MagicalTextScaleAnimator };
 export default MagicalTextScaleAnimator;

@@ -1,32 +1,32 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import { motion } from 'framer-motion';
 import { useEvent } from '../../hooks/useEvent';
 import { GhostAnimator } from './GhostAnimator';
-import { motion } from 'framer-motion';
 
 const defaultGlowOptions = {
   animationTime: 3,
   boxShadowOff: '0px 0px 0px rgba(255,0,0,0)',
-  boxShadowOn: '0px 0px 40px rgba(255,0,0,1)'
+  boxShadowOn: '0px 0px 40px rgba(255,0,0,1)',
 };
 const defaultCreatureOptions = {
   animationTime: 1.5,
   numberOf: 6,
   distance: 200,
-  dimensions: {width: 44, height: 44},
+  dimensions: { width: 44, height: 44 },
 };
 
 /**
  * @component
  */
-const Haunted = ({
-                   glowOptions = defaultGlowOptions,
-                   creatureOptions = defaultCreatureOptions,
-                   disableFun = false,
-                   Creature = null,
-                   style = {},
-                   children,
-                 }) => {
+function Haunted({
+  glowOptions = defaultGlowOptions,
+  creatureOptions = defaultCreatureOptions,
+  disableFun = false,
+  Creature = null,
+  style = {},
+  children,
+}) {
   const fullGlowOptions = {
     ...defaultGlowOptions,
     ...glowOptions,
@@ -50,8 +50,9 @@ const Haunted = ({
 
     const rotationAmount = 360 / creatureRefs.current.length;
     let rotation = 0;
-    creatureRefs.current.forEach(item => {
-      rotation = rotation + rotationAmount;
+    creatureRefs.current.forEach((item) => {
+      rotation += rotationAmount;
+      // eslint-disable-next-line no-param-reassign
       item.style.transform = `translateX(${newX}px) translateY(${newY}px) rotate(${Math.round(rotation)}deg)`;
     });
 
@@ -62,27 +63,23 @@ const Haunted = ({
   });
 
   const variants = {
-    on: () => {
-      return {
-        boxShadow: [fullGlowOptions.boxShadowOff, fullGlowOptions.boxShadowOn, fullGlowOptions.boxShadowOff],
-        transition: {
-          boxShadow: {
-            repeat: Infinity,
-            duration: fullGlowOptions?.animationTime || 0
-          },
+    on: () => ({
+      boxShadow: [fullGlowOptions.boxShadowOff, fullGlowOptions.boxShadowOn, fullGlowOptions.boxShadowOff],
+      transition: {
+        boxShadow: {
+          repeat: Infinity,
+          duration: fullGlowOptions?.animationTime || 0,
         },
-      };
-    },
-    off: () => {
-      return {
-        boxShadow: fullGlowOptions.boxShadowOff,
-        transition: {
-          boxShadow: {
-            duration: fullGlowOptions?.animationTime || 0
-          },
+      },
+    }),
+    off: () => ({
+      boxShadow: fullGlowOptions.boxShadowOff,
+      transition: {
+        boxShadow: {
+          duration: fullGlowOptions?.animationTime || 0,
         },
-      }
-    },
+      },
+    }),
   };
 
   return (
@@ -98,17 +95,19 @@ const Haunted = ({
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      {disableFun === false &&
+      {disableFun === false
+        && (
         <div style={{
           zIndex: 0,
           position: 'absolute',
-        }}>
+        }}
+        >
           {creatureOptions && Array(fullCreatureOptions.numberOf).fill(0).map((val, index) => (
             <GhostAnimator
               key={index}
               index={index}
               container={container}
-              ref={(el) => creatureRefs.current[index] = el}
+              ref={(el) => (creatureRefs.current[index] = el)}
               animationTimeMax={fullCreatureOptions.animationTime}
               mouseOver={mouseOver}
               distance={fullCreatureOptions.distance}
@@ -117,11 +116,11 @@ const Haunted = ({
             />
           ))}
         </div>
-      }
-      <div style={{zIndex:1, position: 'relative'}}>{children}</div>
+        )}
+      <div style={{ zIndex: 1, position: 'relative' }}>{children}</div>
     </motion.div>
   );
-};
+}
 
 Haunted.propTypes = {
   glowOptions: PropTypes.shape({
@@ -142,15 +141,15 @@ Haunted.propTypes = {
     dimensions: PropTypes.shape({
       width: PropTypes.number.isRequired,
       height: PropTypes.number.isRequired,
-    })
+    }),
   }),
   // Override for the ghost icon
   Creature: PropTypes.any,
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
   // turn off halloween decorations
   disableFun: PropTypes.bool,
+  // eslint-disable-next-line react/forbid-prop-types
   style: PropTypes.object,
 };
 
 export { Haunted };
-export default Haunted;

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { GhostSVG as GhostDefault } from '../svgs/GhostSVG';
@@ -8,34 +8,33 @@ import { randomIntFromInterval, randomNumber } from '../utils';
  * @component
  */
 const GhostAnimator = React.forwardRef(({
-                                          animationTimeMax,
-                                          distance,
-                                          container,
-                                          mouseOver,
-                                          Creature = null,
-                                          index = 0,
-                                          dimensions,
-                                        }, ref) => {
+  animationTimeMax,
+  distance,
+  container,
+  mouseOver,
+  Creature = null,
+  index = 0,
+  dimensions,
+}, ref) => {
   const basicStyles = {
     position: 'absolute',
     transformOrigin: 'center',
     fontSize: '2em',
   };
   const [containerStyles, setContainerStyles] = useState(basicStyles);
+  // eslint-disable-next-line max-len
   const animationTime = animationTimeMax === 0 ? 0 : randomNumber(animationTimeMax / 2, animationTimeMax);
   const waveAmount = randomIntFromInterval(5, 10);
   const waves = [`${waveAmount}px`, `-${waveAmount}px`];
 
-  const waveKeyFrames = new Array(randomIntFromInterval(3,5)).fill(0).reduce((prev, current) => {
-    return [
-      ...prev,
-      ...waves,
-    ]
-  }, []);
+  const waveKeyFrames = new Array(randomIntFromInterval(3, 5)).fill(0).reduce((prev) => [
+    ...prev,
+    ...waves,
+  ], []);
 
   const variants = {
     on: () => {
-      const rect = container.current?.getBoundingClientRect() || {width: 0, height: 0};
+      const rect = container.current?.getBoundingClientRect() || { width: 0, height: 0 };
       const initY = (Math.round(Math.min(rect.width, rect.height)) * -1) / 2;
       return {
         x: waveKeyFrames,
@@ -43,10 +42,10 @@ const GhostAnimator = React.forwardRef(({
         opacity: [0, 1, 0],
         transition: {
           x: {
-            duration: animationTime
+            duration: animationTime,
           },
           y: {
-            duration: animationTime
+            duration: animationTime,
           },
           opacity: {
             duration: animationTime,
@@ -55,16 +54,16 @@ const GhostAnimator = React.forwardRef(({
       };
     },
     off: () => {
-      const rect = container.current?.getBoundingClientRect() || {width: 0, height: 0};
+      const rect = container.current?.getBoundingClientRect() || { width: 0, height: 0 };
       const initY = (Math.round(Math.min(rect.width, rect.height)) * -1) / 2;
       return {
         x: 0,
-        y: initY + 'px',
+        y: `${initY}px`,
         opacity: 0,
         transition: {
           duration: 0.3,
         },
-      }
+      };
     },
   };
 
@@ -88,12 +87,12 @@ const GhostAnimator = React.forwardRef(({
       }, animationTime * 1000);
       return () => {
         window.clearTimeout(timer);
-      }
+      };
     }
-
+    return undefined;
   }, [mouseOver, setContainerStyles]);
 
-  const GhostComponent = Creature ? Creature : GhostDefault;
+  const GhostComponent = Creature || GhostDefault;
 
   let initY = 0;
   if (container.current) {
@@ -107,34 +106,38 @@ const GhostAnimator = React.forwardRef(({
       style={containerStyles}
     >
       <motion.div
-        initial={{ opacity: 0, x: 0, y: initY + 'px' }}
+        initial={{ opacity: 0, x: 0, y: `${initY}px` }}
         variants={variants}
         animate={mouseOver ? 'on' : 'off'}
-      ><GhostComponent width={dimensions.width} height={dimensions.height} index={index} /></motion.div>
+      >
+        <GhostComponent width={dimensions.width} height={dimensions.height} index={index} />
+      </motion.div>
     </div>
-  )
+  );
 });
 
 GhostAnimator.propTypes = {
   // length of animation
-  animationTimeMax: PropTypes.number,
+  animationTimeMax: PropTypes.number.isRequired,
   // distance to travel in pixels
-  distance: PropTypes.number,
+  distance: PropTypes.number.isRequired,
   // Ref to the container
   container: PropTypes.oneOfType([
     PropTypes.func,
-    PropTypes.shape({ current: PropTypes.instanceOf(Element) })
-  ]),
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  ]).isRequired,
   // If true we run the animation
-  mouseOver: PropTypes.bool,
+  mouseOver: PropTypes.bool.isRequired,
   // an override for the ghost component/svg
+  // eslint-disable-next-line react/forbid-prop-types
   Creature: PropTypes.any,
   // size of the ghost
   dimensions: PropTypes.shape({
     width: PropTypes.number,
     height: PropTypes.number,
-  })
+  }).isRequired,
+  index: PropTypes.number,
 };
 
-export {GhostAnimator};
+export { GhostAnimator };
 export default GhostAnimator;

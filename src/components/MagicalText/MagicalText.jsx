@@ -1,11 +1,13 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {AnimatePresence, motion} from 'framer-motion';
-import {MagicalTextSparkleAnimator} from './animators/MagicalTextSparkleAnimator';
-import StarCrossSVG from "../svgs/StarCrossSVG";
-import {MagicalTextScaleAnimator} from "./animators";
-import useEvent from "../../hooks/useEvent";
-import {multiColorFade, parseCSSColor} from "../utils";
+import React, {
+  useEffect, useMemo, useRef, useState,
+} from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import PropTypes from 'prop-types';
+import { MagicalTextSparkleAnimator } from './animators/MagicalTextSparkleAnimator';
+import { StarCrossSVG } from '../svgs/StarCrossSVG';
+import { MagicalTextScaleAnimator } from './animators';
+import { useEvent } from '../../hooks/useEvent';
+import { multiColorFade, parseCSSColor } from '../utils';
 
 const defaultColors = ['darkorange', 'purple'];
 
@@ -19,30 +21,29 @@ const defaultColors = ['darkorange', 'purple'];
  * https://linear.app/readme - What inspired the above youtube video
  *
  */
-const MagicalText = ({
-                       text,
-                       animationTime = 10,
-                       colors = defaultColors,
-                       style = {},
-                       disableFun = false,
-                       adornmentType = 'sparkle',
-                       Adornment = StarCrossSVG,
-                       showAdornments = true,
-                       adornmentWidth,
-                       adornmentHeight,
-                       adornmentOpacity,
-                       adornmentDuration = 1,
-                       numberOfAdornments = 3,
-                     }) => {
-
-  const rgbColors = useMemo(() => colors.map(color => parseCSSColor(color)).concat(parseCSSColor(colors[0])), [colors]);
+function MagicalText({
+  text,
+  animationTime = 10,
+  colors = defaultColors,
+  style = {},
+  disableFun = false,
+  adornmentType = 'sparkle',
+  Adornment = StarCrossSVG,
+  showAdornments = true,
+  adornmentWidth,
+  adornmentHeight,
+  adornmentOpacity,
+  adornmentDuration = 1,
+  numberOfAdornments = 3,
+}) {
+  const rgbColors = useMemo(() => colors.map((color) => parseCSSColor(color)).concat(parseCSSColor(colors[0])), [colors]);
   const fadeReference = useMemo(() => multiColorFade(rgbColors, 200), [rgbColors]);
   const [fadeOffset, setFadeOffset] = useState(0);
 
   const containerRef = useRef(null);
   const backgroundSize = '200%';
   const completeColors = [...colors, colors[0]];
-  const [adornmentKey, setAdornmentKey] = useState('_akey'+Math.random());
+  const [adornmentKey, setAdornmentKey] = useState(`_akey${Math.random()}`);
   let AdornmentAnimator = null;
   if (typeof adornmentType === 'string') {
     AdornmentAnimator = adornmentType === 'sparkle' ? MagicalTextSparkleAnimator : MagicalTextScaleAnimator;
@@ -53,7 +54,7 @@ const MagicalText = ({
   }
 
   useEffect(() => {
-    setAdornmentKey('_akey'+Math.random());
+    setAdornmentKey(`_akey${Math.random()}`);
   }, [showAdornments]);
 
   const divStyle = {
@@ -73,27 +74,27 @@ const MagicalText = ({
           repeat: Infinity,
           ease: 'linear',
           duration: animationTime,
-        }
-      }
+        },
+      },
     }),
     off: () => ({
 
-    })
+    }),
   };
 
   const getColor = useEvent((pos) => {
     let offsetPos = Math.round((200 - fadeOffset) + (pos * 100));
     if (offsetPos >= 200) {
-      offsetPos = offsetPos - 200;
+      offsetPos -= 200;
     }
-    let color = fadeReference[offsetPos];
+    const color = fadeReference[offsetPos];
     return `rgb(${Math.round(color.r)},${Math.round(color.g)},${Math.round(color.b)})`;
-  })
+  });
 
   const onUpdate = useEvent((param) => {
-    let matches = param.backgroundPosition.match(/[0-9]+/);
+    const matches = param.backgroundPosition.match(/[0-9]+/);
     if (matches) {
-      let val = parseInt(matches[0]);
+      const val = parseInt(matches[0], 10);
       setFadeOffset(val);
     }
   });
@@ -108,16 +109,18 @@ const MagicalText = ({
       }}
     >
       {disableFun ? (
-          <span>{text}</span>
+        <span>{text}</span>
       )
-      :
-        <motion.div
-          style={divStyle}
-          variants={variants}
-          animate={'on'}
-          onUpdate={adornmentType === 'sparkle' ? onUpdate : null}
-        >{text}</motion.div>
-      }
+        : (
+          <motion.div
+            style={divStyle}
+            variants={variants}
+            animate="on"
+            onUpdate={adornmentType === 'sparkle' ? onUpdate : null}
+          >
+            {text}
+          </motion.div>
+        )}
 
       <AnimatePresence>
         {!disableFun && showAdornments && Array(numberOfAdornments).fill(0).map((item, idx) => (
@@ -128,7 +131,7 @@ const MagicalText = ({
             duration={adornmentDuration}
             container={containerRef}
             colors={colors}
-            delay={idx * (adornmentDuration/numberOfAdornments)}
+            delay={idx * (adornmentDuration / numberOfAdornments)}
             width={adornmentWidth}
             height={adornmentHeight}
             opacity={adornmentOpacity}
@@ -138,7 +141,7 @@ const MagicalText = ({
 
     </div>
   );
-};
+}
 
 MagicalText.propTypes = {
   // the text to display
@@ -160,7 +163,7 @@ MagicalText.propTypes = {
   adornmentOpacity: PropTypes.number,
   adornmentDuration: PropTypes.number,
   numberOfAdornments: PropTypes.number,
-}
+};
 
-export {MagicalText};
+export { MagicalText };
 export default MagicalText;

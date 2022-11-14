@@ -1,52 +1,49 @@
-import React, {useCallback, useMemo, useRef, useState} from 'react';
-import {motion} from 'framer-motion';
-import useEvent from "../../../hooks/useEvent";
-import { randomIntFromInterval } from '../../utils';
-import StarCrossSVG from "../../svgs/StarCrossSVG";
+import React, {
+  useCallback, useRef, useState,
+} from 'react';
+import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
+import { useEvent } from '../../../hooks/useEvent';
+import { randomIntFromInterval } from '../../utils';
+import { StarCrossSVG } from '../../svgs/StarCrossSVG';
 
-const MagicalTextSparkleAnimator = ({
-                                      Adornment = StarCrossSVG,
-                                      container,
-                                      colors,
-                                      delay = 0,
-                                      duration = 1,
-                                      getColor = () => null,
-                                      width = 16,
-                                      height = 16,
-                                    }) => {
+function MagicalTextSparkleAnimator({
+  Adornment = StarCrossSVG,
+  container,
+  delay = 0,
+  duration = 1,
+  getColor = () => null,
+  width = 16,
+  height = 16,
+}) {
   const starRef = useRef(null);
-  const pathRef = useRef(null)
+  const pathRef = useRef(null);
   const [leftPos, setLeftPos] = useState(0);
   const [leftMax, setLeftMax] = useState(0);
   const [leftMin, setLeftMin] = useState(0);
 
   const variants = {
-    on: () => {
-      return {
-        rotate: [0, 180],
-        scale: [0, 1, 0],
-        opacity: 0.7,
-        transition: {
-          rotate: {
-            repeat: Infinity,
-            duration,
-            ease: 'linear',
-            delay,
-          },
-          scale: {
-            animationFillMode: 'forwards',
-            duration,
-            repeat: Infinity,
-            delay,
-          }
+    on: () => ({
+      rotate: [0, 180],
+      scale: [0, 1, 0],
+      opacity: 0.7,
+      transition: {
+        rotate: {
+          repeat: Infinity,
+          duration,
+          ease: 'linear',
+          delay,
         },
-      };
-    },
-    off: () => {
-      return {
-      }
-    },
+        scale: {
+          animationFillMode: 'forwards',
+          duration,
+          repeat: Infinity,
+          delay,
+        },
+      },
+    }),
+    off: () => ({
+    }),
   };
 
   const setPosition = useCallback(() => {
@@ -60,8 +57,8 @@ const MagicalTextSparkleAnimator = ({
       const left = randomIntFromInterval(leftStart, leftEnd);
       const top = randomIntFromInterval(-halfHeight, rect.height - halfHeight);
 
-      starRef.current.style.left = left + 'px';
-      starRef.current.style.top = top + 'px';
+      starRef.current.style.left = `${left}px`;
+      starRef.current.style.top = `${top}px`;
 
       setLeftPos(left);
       setLeftMin(leftStart);
@@ -73,11 +70,11 @@ const MagicalTextSparkleAnimator = ({
     if (variant === 'on') {
       setPosition();
     }
-  })
+  });
 
   const onUpdate = useEvent((latest) => {
-    const {scale} = latest;
-    const color = getColor((leftPos - leftMin)/(leftMax - leftMin));
+    const { scale } = latest;
+    const color = getColor((leftPos - leftMin) / (leftMax - leftMin));
     if (pathRef.current) pathRef.current.style.fill = color;
     if (scale === 0) {
       setPosition();
@@ -90,10 +87,10 @@ const MagicalTextSparkleAnimator = ({
         position: 'absolute',
       }}
       ref={starRef}
-      initial={{opacity: 0}}
+      initial={{ opacity: 0 }}
       variants={variants}
-      animate={'on'}
-      exit={{opacity: 0, scale: 0, transition:{duration: 1}}}
+      animate="on"
+      exit={{ opacity: 0, scale: 0, transition: { duration: 1 } }}
       onAnimationStart={setup}
       onUpdate={onUpdate}
     >
@@ -103,7 +100,7 @@ const MagicalTextSparkleAnimator = ({
         height={height}
       />
     </motion.div>
-  )
+  );
 }
 
 MagicalTextSparkleAnimator.propTypes = {
@@ -112,15 +109,13 @@ MagicalTextSparkleAnimator.propTypes = {
     // Either a function
     PropTypes.func,
     // Or the instance of a DOM native element (see the note about SSR)
-    PropTypes.shape({ current: PropTypes.instanceOf(Element) })
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   ]),
-  colors: PropTypes.arrayOf(PropTypes.string),
   delay: PropTypes.number,
   duration: PropTypes.number,
   getColor: PropTypes.func,
   width: PropTypes.number,
   height: PropTypes.number,
-}
+};
 
-export {MagicalTextSparkleAnimator};
-export default MagicalTextSparkleAnimator;
+export { MagicalTextSparkleAnimator };

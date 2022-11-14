@@ -1,10 +1,7 @@
 node_modules
-src
-.storybook
-.idea
-.babelrc
-.eslintignore
+dist
 babel.config.js
 eslint.config.js
 jest.config.js
 rollup.config.js
+.eslintrc.js

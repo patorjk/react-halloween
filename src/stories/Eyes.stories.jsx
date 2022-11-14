@@ -24,8 +24,9 @@ function Template(args) {
       height: '100%', width: '100%', padding: '300px', backgroundColor: 'black',
     }}
     >
+      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <Eyes open={open} {...args} />
-      <button onClick={toggleOpen}>{open ? 'Close' : 'Open'}</button>
+      <button type="button" onClick={toggleOpen}>{open ? 'Close' : 'Open'}</button>
     </div>
   );
 }

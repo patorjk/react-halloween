@@ -1,10 +1,10 @@
 import React from 'react';
-import Eye from "./Eye";
 import PropTypes from 'prop-types';
+import { Eye } from './Eye';
 
 // design path with: https://yqnn.github.io/svg-path-editor/
 const eyeLayoutVariants = {
-  'unfriendly': {
+  unfriendly: {
     left: {
       opened: 'M 0 4 C 3 6 6 7 10 4 C 6 3 3 3 0 4',
       closed: 'M 0 4 C 4 4 7 4 10 4 C 7 4 4 4 0 4',
@@ -15,10 +15,10 @@ const eyeLayoutVariants = {
     },
     pupil: {
       cx: 5,
-      cy: 4.5
+      cy: 4.5,
     },
   },
-  'menacing': {
+  menacing: {
     left: {
       opened: 'M 0 4 C 3 7 6 7 10 4 C 6 3 3 2 0 4',
       closed: 'M 0 4 C 4 4 7 4 10 4 C 7 4 4 4 0 4',
@@ -29,24 +29,23 @@ const eyeLayoutVariants = {
     },
     pupil: {
       cx: 5,
-      cy: 4.5
+      cy: 4.5,
     },
-  }
-}
+  },
+};
 
-const Eyes = ({
-                open = true,
-                eyeLayout = 'unfriendly',
-                animationTime = 0.75,
-                width = 200,
-                irisColor = '#333',
-                eyeBallColor = 'white',
-                pupilColor = 'black',
-                style = {},
-                pupilSize = 1,
-                follow = true,
-              }) => {
-
+function Eyes({
+  open = true,
+  eyeLayout = 'unfriendly',
+  animationTime = 0.75,
+  width = 200,
+  irisColor = '#333',
+  eyeBallColor = 'white',
+  pupilColor = 'black',
+  style = {},
+  pupilSize = 1,
+  follow = true,
+}) {
   if (typeof pupilSize !== 'number') throw new Error('pupilSize must be a number');
   if (pupilSize < 0 || pupilSize > 2) throw new Error('pupilSize must be between 0 and 2');
 
@@ -55,7 +54,7 @@ const Eyes = ({
     eyeVariant = eyeLayoutVariants[eyeLayout];
   } else {
     eyeVariant = {
-      ...eyeLayoutVariants['unfriendly'],
+      ...eyeLayoutVariants.unfriendly,
       ...eyeLayout,
     };
   }
@@ -63,7 +62,7 @@ const Eyes = ({
   const {
     left,
     right,
-    pupil
+    pupil,
   } = eyeVariant;
 
   const containerStyles = {
@@ -79,7 +78,7 @@ const Eyes = ({
     >
       <Eye
         open={open}
-        width={width/10 * 4.5}
+        width={(width / 10) * 4.5}
         animationTime={animationTime}
         openedClipPath={left.opened}
         closedClipPath={left.closed}
@@ -92,7 +91,7 @@ const Eyes = ({
       />
       <Eye
         open={open}
-        width={width/10 * 4.5}
+        width={(width / 10) * 4.5}
         animationTime={animationTime}
         openedClipPath={right.opened}
         closedClipPath={right.closed}
@@ -108,9 +107,7 @@ const Eyes = ({
 }
 
 Eyes.propTypes = {
-  // if the eyes are open or closed
   open: PropTypes.bool,
-  // The shape of the eye. There are numbers that represent various varients, or a custom object can be passed in
   eyeLayout: PropTypes.oneOfType([
     PropTypes.oneOf(['unfriendly', 'menacing']),
     PropTypes.shape({
@@ -122,7 +119,7 @@ Eyes.propTypes = {
         opened: PropTypes.string,
         closed: PropTypes.string,
       }),
-    })
+    }),
   ]),
   // time of the open/close animation in seconds
   animationTime: PropTypes.number,
@@ -133,12 +130,13 @@ Eyes.propTypes = {
   // CSS string for pupil color
   pupilColor: PropTypes.string,
   // object styles to spread onto container
+  // eslint-disable-next-line react/forbid-prop-types
   style: PropTypes.object,
   // size of pupil - between 0 and 2
   pupilSize: PropTypes.number,
   // if the eyes should follow the cursor or not
   follow: PropTypes.bool,
-}
+  width: PropTypes.number,
+};
 
-export {Eyes};
-export default Eyes;
+export { Eyes };

@@ -157,7 +157,7 @@ const cssColorLookup = {
   yellowgreen: '#9acd32',
 };
 
-const twoColorFade = function (color1, color2, length) {
+function twoColorFade(color1, color2, length) {
   const rIncr = (color2.r - color1.r) / (length - 1);
   const gIncr = (color2.g - color1.g) / (length - 1);
   const bIncr = (color2.b - color1.b) / (length - 1);
@@ -167,6 +167,7 @@ const twoColorFade = function (color1, color2, length) {
   let { b } = color1;
   let ii;
 
+  // eslint-disable-next-line no-plusplus
   for (ii = 0; ii < length; ii++) {
     colors.push({ r, b, g });
     r += rIncr;
@@ -175,9 +176,9 @@ const twoColorFade = function (color1, color2, length) {
   }
 
   return colors;
-};
+}
 
-const multiColorFade = function (colors, length) {
+function multiColorFade(colors, length) {
   const colorIncr = (length - 1) / (colors.length - 1);
   let ii;
   const len = Math.min(colors.length - 1, length);
@@ -187,6 +188,7 @@ const multiColorFade = function (colors, length) {
   let tmpColors;
   let dist;
 
+  // eslint-disable-next-line no-plusplus
   for (ii = 0; ii < len; ii++) {
     endPos = Math.max(startPos + 2, endPos + colorIncr);
     dist = Math.round(endPos) - Math.round(startPos);
@@ -198,9 +200,9 @@ const multiColorFade = function (colors, length) {
     startPos = Math.round(endPos) - 1;
   }
   return retColors;
-};
+}
 
-const parseCSSColor = (color) => {
+function parseCSSColor(color) {
   const retColor = { r: 255, g: 255, b: 255 };
   const lookup = cssColorLookup[color];
   if (lookup) {
@@ -220,17 +222,16 @@ const parseCSSColor = (color) => {
   } else if (color.indexOf('rgb') !== -1) {
     const matches = color.match(/^rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/i);
     if (matches) {
-      retColor.r = matches[1];
-      retColor.g = matches[2];
-      retColor.b = matches[3];
+      [, retColor.r, retColor.g, retColor.b] = matches;
     } else {
+      // eslint-disable-next-line no-console
       console.warn(`Unknown rgb color: ${color}`);
       return retColor;
     }
-  } else {
-    console.warn(`Unknown color: ${color}`);
-    return retColor;
   }
-};
+  // eslint-disable-next-line no-console
+  console.warn(`Unknown color: ${color}`);
+  return retColor;
+}
 
 export { multiColorFade, parseCSSColor };

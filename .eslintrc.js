@@ -18,5 +18,12 @@ module.exports = {
     "react"
   ],
   "rules": {
+    "import/prefer-default-export": "off",
+    "max-len": "off",
+    "no-nested-ternary": "off",
+    "react/no-array-index-key": "off",
+    "react/forbid-prop-types": "off",
+    "react/require-default-props": "off",
+    "no-return-assign": ["error", "except-parens"],
   }
 }

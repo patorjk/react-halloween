@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import PropTypes from 'prop-types';
 import { GhostSVG, HeartSVG, MagicalText } from '../components';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
@@ -12,7 +13,7 @@ export default {
 };
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-function Template({ notes, ...args }) {
+function Template({ notes = '', ...args }) {
   const [hover, setHover] = useState(false);
 
   const onMouseEnter = () => {
@@ -32,6 +33,7 @@ function Template({ notes, ...args }) {
     }}
     >
       <div>
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <MagicalText {...args} />
       </div>
       <div
@@ -41,6 +43,7 @@ function Template({ notes, ...args }) {
           display: 'inline-block', border: '1px solid grey', marginTop: '20px', borderRadius: '10px', padding: '10px',
         }}
       >
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <MagicalText showAdornments={hover} {...args} />
       </div>
       {notes && (
@@ -49,6 +52,12 @@ function Template({ notes, ...args }) {
     </div>
   );
 }
+Template.propTypes = {
+  notes: PropTypes.string,
+};
+Template.defaultProps = {
+  notes: '',
+};
 
 export const Simple = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
@@ -63,6 +72,7 @@ VerySparkly.args = {
   text: 'This is so magical! Oh wow is this a lot of sparkles...',
   colors: ['red', 'orange', 'yellow', 'green', 'blue', 'purple', 'violet'],
   numberOfAdornments: 10,
+  // eslint-disable-next-line max-len
   notes: 'The more colors there are, the bigger the chance the sparkle color will clash with the text color. This is not that noticeable when there is just 2 colors.',
 };
 

@@ -28,9 +28,9 @@ function MagicalText({
   adornmentType = 'sparkle',
   Adornment = StarCrossSVG,
   showAdornments = true,
-  adornmentWidth,
-  adornmentHeight,
-  adornmentOpacity,
+  adornmentWidth = 16,
+  adornmentHeight = 16,
+  adornmentOpacity = 0.7,
   adornmentDuration = 1,
   numberOfAdornments = 3,
 }) {

@@ -4,9 +4,10 @@ This is a repo with some fun Halloween-themed components. Currently its still in
 
 ## Install
 
+framer-motion is a peer-dependency.
+
 ```
-  npm install framer-motion
-  npm install react-halloween
+  npm install framer-motion react-halloween
 ```
 
 ## Demo
@@ -70,3 +71,28 @@ This component accepts the following props:
 |   **`disableFun`**    | boolean   | false                                                                                               | true to turn off the effects.                                     |
 |   **`glowOptions`**   | object    | [see here](https://github.com/patorjk/react-halloween/blob/main/src/components/Haunted/Haunted.jsx) | Options for the glow effect.                                      |
 |      **`style`**      | object    | {}                                                                                                  | Style props to spread over the container.                         |
+
+### &lt;MagicalText />
+
+Not your granddaddy's color faded text, this component creates a gradient that moves and has (optional) sparkles or
+other adornments (such as ghosts or hearts). Initial idea was inspired by a [Hyperplexed](https://www.youtube.com/watch?v=yu0Cm4BqQv0) video.
+The adornments which appear around the text are simple SVG components. This library
+contains several which can be used with this component. You can see what these
+look like [here](https://github.com/patorjk/react-halloween/tree/main/src/components/svgs).
+
+This component accepts the following props:
+
+|           Name           | Type                                | Default                  | Description                                                                     |
+| :----------------------: | :---------------------------------- | :----------------------- | :------------------------------------------------------------------------------ |
+|        **`text`**        | string                              | ''                       | The text to display.                                                            |
+|   **`animationTime`**    | number                              | 10                       | Length of the fade animation in seconds.                                        |
+|       **`colors`**       | Array<String>                       | ['darkorange', 'purple'] | Array of CSS colors to fade.                                                    |
+|     **`disableFun`**     | boolean                             | false                    | true to disable fade and adornment effects.                                     |
+|       **`style`**        | object                              | {}                       | Style props to spread over the container.                                       |
+|   **`adornmentType`**    | One of: 'sparkle', 'heart', 'ghost' | 'sparkle'                | Type of adornment to display around the text.                                   |
+|     **`Adornment`**      | Component                           | StarCrossSVG             | Component to use as the adornment. Several come from the library. See examples. |
+|   **`adornmentWidth`**   | number                              | 16                       | Width of adornment.                                                             |
+|  **`adornmentHeight`**   | number                              | 16                       | Height of adornment.                                                            |
+|  **`adornmentOpacity`**  | number                              | 0.7                      | Opacity of adornment.                                                           |
+| **`adornmentDuration`**  | number                              | 1                        | Duration of adornment in seconds.                                               |
+| **`numberOfAdornments`** | number                              | 3                        | Number of adornments.                                                           |

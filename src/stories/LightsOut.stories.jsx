@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { LightsOut } from '../components';
 
@@ -13,6 +13,12 @@ export default {
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
 function Template(args) {
+  const [loKey, setLoKey] = useState(0);
+
+  const updateKey = () => {
+    setLoKey(loKey + 1);
+  };
+
   return (
     <div
       style={{
@@ -23,8 +29,11 @@ function Template(args) {
       }}
     >
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-      <LightsOut {...args} />
+      <LightsOut key={loKey} {...args} />
       <button type="button">This button does nothing</button>
+      <button type="button" onClick={updateKey}>
+        Reset
+      </button>
     </div>
   );
 }

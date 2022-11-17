@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useEvent } from '../../hooks/useEvent';
 
 function LightsOut({ size = 300, darkColor = 'rgba(0,0,0,0.9)' }) {
   const svgRef = useRef(null);
@@ -7,6 +8,7 @@ function LightsOut({ size = 300, darkColor = 'rgba(0,0,0,0.9)' }) {
   const eastRef = useRef(null);
   const southRef = useRef(null);
   const westRef = useRef(null);
+  const lightsOn = useRef(false);
 
   const [gradientUrl] = useState(`gradientUrl_${Math.random()}`);
   const [lightStyle] = useState({
@@ -14,8 +16,11 @@ function LightsOut({ size = 300, darkColor = 'rgba(0,0,0,0.9)' }) {
     zIndex: 10000,
     left: -size,
     top: -size,
-    pointerEvents: 'none',
+    // pointerEvents: 'none',
+    cursor: 'pointer',
   });
+
+  //      'url(\'data:image/svg+xml;utf8,\') 24 24 auto',
 
   const [darkStyle] = useState({
     position: 'fixed',
@@ -34,7 +39,10 @@ function LightsOut({ size = 300, darkColor = 'rgba(0,0,0,0.9)' }) {
   const halfSize = size / 2;
 
   useEffect(() => {
+    if (lightsOn.current) return;
     const onMouseMove = (evt) => {
+      if (lightsOn.current) return;
+
       const pageWidth = document.documentElement.scrollWidth;
       const pageHeight = document.documentElement.scrollHeight;
 
@@ -62,10 +70,100 @@ function LightsOut({ size = 300, darkColor = 'rgba(0,0,0,0.9)' }) {
       svgRef.current.style.top = `${evt.clientY - halfSize}px`;
     };
     window.addEventListener('mousemove', onMouseMove);
+    // eslint-disable-next-line consistent-return
     return () => {
       window.removeEventListener('mousemove', onMouseMove);
     };
-  }, [halfSize]);
+  }, [halfSize, lightsOn]);
+
+  // eslint-disable-next-line consistent-return
+  const turnLightsOn = useEvent((evt) => {
+    if (lightsOn.current === true) return false;
+    lightsOn.current = true;
+
+    const pageWidth = document.documentElement.scrollWidth;
+    const pageHeight = document.documentElement.scrollHeight;
+
+    let northHeight = evt.clientY - halfSize;
+
+    let westWidth = evt.clientX - halfSize;
+
+    let eastLeft = evt.clientX + halfSize;
+    let eastWidth = pageWidth - (evt.clientX + halfSize);
+
+    let southTop = evt.clientY + halfSize;
+    let southHeight = pageHeight - (evt.clientY + halfSize);
+
+    let svgTop = evt.clientY - halfSize;
+    let svgLeft = evt.clientX - halfSize;
+    let svgWidth = size;
+    let svgHeight = size;
+
+    // disable pointer-events
+    svgRef.current.style.pointerEvents = 'none';
+    northRef.current.style.pointerEvents = 'none';
+    eastRef.current.style.pointerEvents = 'none';
+    southRef.current.style.oppointerEventsacity = 'none';
+    westRef.current.style.pointerEvents = 'none';
+
+    let count = 0;
+    const countMax = 200;
+    const opacityBreakPoint = 100;
+    const moveSize = 12;
+
+    const timer = setInterval(() => {
+      northHeight -= moveSize;
+      westWidth -= moveSize;
+      eastLeft += moveSize;
+      eastWidth -= moveSize;
+
+      southTop += moveSize;
+      southHeight -= moveSize;
+
+      svgTop -= moveSize;
+      svgLeft -= moveSize;
+      svgWidth += moveSize * 2;
+      svgHeight += moveSize * 2;
+
+      count += 1;
+
+      try {
+        if (count < opacityBreakPoint) {
+          northRef.current.style.height = `${Math.max(0, northHeight)}px`;
+
+          eastRef.current.style.top = `${svgTop}px`;
+          eastRef.current.style.height = `${svgHeight}px`;
+          eastRef.current.style.left = `${eastLeft}px`;
+          eastRef.current.style.width = `${Math.max(0, eastWidth)}px`;
+
+          westRef.current.style.top = `${svgTop}px`;
+          westRef.current.style.height = `${svgHeight}px`;
+          westRef.current.style.width = `${Math.max(0, westWidth)}px`;
+
+          southRef.current.style.top = `${southTop}px`;
+          southRef.current.style.height = `${Math.max(0, southHeight)}px`;
+
+          svgRef.current.style.top = `${svgTop}px`;
+          svgRef.current.style.left = `${svgLeft}px`;
+          svgRef.current.style.width = `${svgWidth}px`;
+          svgRef.current.style.height = `${svgHeight}px`;
+        } else {
+          const opacity = 1 - (count - opacityBreakPoint) / (countMax - opacityBreakPoint);
+          svgRef.current.style.opacity = opacity;
+          northRef.current.style.opacity = opacity;
+          eastRef.current.style.opacity = opacity;
+          southRef.current.style.opacity = opacity;
+          westRef.current.style.opacity = opacity;
+        }
+      } catch (err) {
+        clearInterval(timer);
+      }
+
+      if (count >= countMax) {
+        clearInterval(timer);
+      }
+    }, 10);
+  });
 
   return (
     <>
@@ -82,6 +180,7 @@ function LightsOut({ size = 300, darkColor = 'rgba(0,0,0,0.9)' }) {
         ref={svgRef}
         width={size}
         height={size}
+        onClick={turnLightsOn}
       >
         <defs>
           <radialGradient id={gradientUrl}>

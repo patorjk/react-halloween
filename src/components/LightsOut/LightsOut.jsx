@@ -1,8 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useEvent } from '../../hooks/useEvent';
+import { SpotLight } from './SpotLight';
 
-function LightsOut({ size = 300, darkColor = 'rgba(0,0,0,0.9)' }) {
+// eslint-disable-next-line react/prop-types
+function LightsOut({ size = 300, darkColor = 'rgba(0,0,0,0.9)', clickToTurnOnLights = true, fullscreen = true }) {
+  const containerRef = useRef(null);
   const svgRef = useRef(null);
   const northRef = useRef(null);
   const eastRef = useRef(null);
@@ -10,71 +13,67 @@ function LightsOut({ size = 300, darkColor = 'rgba(0,0,0,0.9)' }) {
   const westRef = useRef(null);
   const lightsOn = useRef(false);
 
-  const [gradientUrl] = useState(`gradientUrl_${Math.random()}`);
-  const [lightStyle] = useState({
+  const darkStyle = {
     position: 'fixed',
-    zIndex: 10000,
-    left: -size,
-    top: -size,
-    // pointerEvents: 'none',
-    cursor: 'pointer',
-  });
-
-  //      'url(\'data:image/svg+xml;utf8,\') 24 24 auto',
-
-  const [darkStyle] = useState({
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: 0,
-    height: 0,
     backgroundColor: darkColor,
-  });
-  const darkNorthStyle = {
-    ...darkStyle,
-    width: `${document.documentElement.scrollWidth}px`,
-    height: `${document.documentElement.scrollHeight}px`,
   };
-
   const halfSize = size / 2;
 
-  useEffect(() => {
-    if (lightsOn.current) return;
-    const onMouseMove = (evt) => {
-      if (lightsOn.current) return;
-
+  const setPositions = useCallback(
+    (clientX = 0, clientY = 0) => {
       const pageWidth = document.documentElement.scrollWidth;
       const pageHeight = document.documentElement.scrollHeight;
 
       northRef.current.style.top = 0;
       northRef.current.style.left = 0;
       northRef.current.style.width = `${pageWidth}px`;
-      northRef.current.style.height = `${Math.max(0, evt.clientY - halfSize)}px`;
+      northRef.current.style.height = `${Math.max(0, clientY - halfSize)}px`;
 
-      southRef.current.style.top = `${evt.clientY + halfSize}px`;
+      southRef.current.style.top = `${clientY + halfSize}px`;
       southRef.current.style.left = 0;
       southRef.current.style.width = `${pageWidth}px`;
-      southRef.current.style.height = `${Math.max(0, pageHeight - (evt.clientY + halfSize))}px`;
+      southRef.current.style.height = `${Math.max(0, pageHeight - (clientY + halfSize))}px`;
 
-      westRef.current.style.top = `${evt.clientY - halfSize}px`;
+      westRef.current.style.top = `${clientY - halfSize}px`;
       westRef.current.style.left = 0;
-      westRef.current.style.width = `${Math.max(0, evt.clientX - halfSize)}px`;
+      westRef.current.style.width = `${Math.max(0, clientX - halfSize)}px`;
       westRef.current.style.height = `${size}px`;
 
-      eastRef.current.style.left = `${evt.clientX + halfSize}px`;
-      eastRef.current.style.top = `${evt.clientY - halfSize}px`;
-      eastRef.current.style.width = `${Math.max(0, pageWidth - (evt.clientX + halfSize))}px`;
+      eastRef.current.style.left = `${clientX + halfSize}px`;
+      eastRef.current.style.top = `${clientY - halfSize}px`;
+      eastRef.current.style.width = `${Math.max(0, pageWidth - (clientX + halfSize))}px`;
       eastRef.current.style.height = `${size}px`;
 
-      svgRef.current.style.left = `${evt.clientX - halfSize}px`;
-      svgRef.current.style.top = `${evt.clientY - halfSize}px`;
+      svgRef.current.style.left = `${clientX - halfSize}px`;
+      svgRef.current.style.top = `${clientY - halfSize}px`;
+    },
+    [northRef, southRef, westRef, eastRef, svgRef, halfSize],
+  );
+
+  useEffect(() => {
+    setPositions();
+  }, []);
+
+  const getContainer = useCallback(
+    () => (fullscreen ? window : containerRef.current || window),
+    [fullscreen, containerRef],
+  );
+
+  useEffect(() => {
+    if (lightsOn.current) return;
+    const onMouseMove = (evt) => {
+      if (lightsOn.current) return;
+
+      setPositions(evt.clientX, evt.clientY);
     };
-    window.addEventListener('mousemove', onMouseMove);
+    const container = getContainer();
+
+    container.addEventListener('mousemove', onMouseMove, true);
     // eslint-disable-next-line consistent-return
     return () => {
-      window.removeEventListener('mousemove', onMouseMove);
+      container.removeEventListener('mousemove', onMouseMove, true);
     };
-  }, [halfSize, lightsOn]);
+  }, [halfSize, lightsOn, getContainer]);
 
   // eslint-disable-next-line consistent-return
   const turnLightsOn = useEvent((evt) => {
@@ -166,41 +165,19 @@ function LightsOut({ size = 300, darkColor = 'rgba(0,0,0,0.9)' }) {
   });
 
   return (
-    <>
-      <div ref={northRef} style={darkNorthStyle} />
+    <div ref={containerRef}>
+      <div ref={northRef} style={darkStyle} />
       <div ref={eastRef} style={darkStyle} />
       <div ref={southRef} style={darkStyle} />
       <div ref={westRef} style={darkStyle} />
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        xmlnsXlink="http://www.w3.org/1999/xlink"
-        viewBox="0 0 100 100"
-        version="1.1"
-        style={lightStyle}
+      <SpotLight
         ref={svgRef}
-        width={size}
-        height={size}
-        onClick={turnLightsOn}
-      >
-        <defs>
-          <radialGradient id={gradientUrl}>
-            <stop stopColor="transparent" offset="0%" />
-            <stop stopColor={`${darkColor}`} offset="100%" />
-          </radialGradient>
-        </defs>
-
-        <rect
-          id="r1"
-          x="0"
-          y="0"
-          width="100"
-          height="100"
-          stroke="black"
-          strokeWidth="0"
-          fill={`url('#${gradientUrl}')`}
-        />
-      </svg>
-    </>
+        size={size}
+        darkColor={darkColor}
+        onClick={clickToTurnOnLights ? turnLightsOn : null}
+        getContainer={getContainer}
+      />
+    </div>
   );
 }
 

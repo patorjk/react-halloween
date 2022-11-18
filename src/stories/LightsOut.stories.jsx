@@ -24,16 +24,19 @@ function Template(args) {
       style={{
         height: '100%',
         width: '100%',
-        padding: '300px',
+        padding: '100px',
         backgroundColor: 'white',
       }}
     >
-      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-      <LightsOut key={loKey} {...args} />
-      <button type="button">This button does nothing</button>
-      <button type="button" onClick={updateKey}>
-        Reset
-      </button>
+      <div style={{ padding: '100px' }}>This is a test</div>
+      <div>
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+        <LightsOut key={loKey} {...args} />
+        <button type="button">This button does nothing</button>
+        <button type="button" onClick={updateKey}>
+          Reset
+        </button>
+      </div>
     </div>
   );
 }
@@ -42,4 +45,16 @@ export const Simple = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 Simple.args = {
   size: 300,
+};
+
+export const NoLightsOn = Template.bind({});
+// More on args: https://storybook.js.org/docs/react/writing-stories/args
+NoLightsOn.args = {
+  clickToTurnOnLights: false,
+};
+
+export const NotFullscreen = Template.bind({});
+// More on args: https://storybook.js.org/docs/react/writing-stories/args
+NotFullscreen.args = {
+  fullscreen: false,
 };

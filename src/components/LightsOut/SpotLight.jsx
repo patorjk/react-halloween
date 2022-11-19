@@ -3,10 +3,10 @@ import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { useEvent } from '../../hooks/useEvent';
 
-const SpotLight = React.forwardRef(({ size, onClick, darkColor }, ref) => {
+const SpotLight = React.forwardRef(({ size, onClick, darkColor, zIndex }, ref) => {
   const [lightStyle] = useState({
     position: 'fixed',
-    zIndex: 10000,
+    zIndex,
     pointerEvents: onClick ? 'auto' : 'none',
     cursor: 'pointer',
   });

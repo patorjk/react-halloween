@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useEvent } from '../../hooks/useEvent';
 import { SpotLight } from './SpotLight';
 
-function LightsOut({ size = 300, darkColor = 'rgba(0,0,0,0.9)', clickToTurnOnLights = true }) {
+function LightsOut({ size = 300, darkColor = 'rgba(0,0,0,0.9)', clickToTurnOnLights = true, zIndex = 100000 }) {
   const containerRef = useRef(null);
   const svgRef = useRef(null);
   const northRef = useRef(null);
@@ -15,6 +15,7 @@ function LightsOut({ size = 300, darkColor = 'rgba(0,0,0,0.9)', clickToTurnOnLig
   const darkStyle = {
     position: 'fixed',
     backgroundColor: darkColor,
+    zIndex,
   };
   const halfSize = size / 2;
 
@@ -179,7 +180,13 @@ function LightsOut({ size = 300, darkColor = 'rgba(0,0,0,0.9)', clickToTurnOnLig
       <div ref={eastRef} style={darkStyle} />
       <div ref={southRef} style={darkStyle} />
       <div ref={westRef} style={darkStyle} />
-      <SpotLight ref={svgRef} size={size} darkColor={darkColor} onClick={clickToTurnOnLights ? turnLightsOn : null} />
+      <SpotLight
+        ref={svgRef}
+        size={size}
+        zIndex={zIndex}
+        darkColor={darkColor}
+        onClick={clickToTurnOnLights ? turnLightsOn : null}
+      />
     </div>
   );
 }
@@ -188,6 +195,7 @@ LightsOut.propTypes = {
   size: PropTypes.number,
   darkColor: PropTypes.string,
   clickToTurnOnLights: PropTypes.bool,
+  zIndex: PropTypes.number,
 };
 
 export { LightsOut };

@@ -78,10 +78,11 @@ Puts a website into darkness and creates a spotlight around the mouse. This shou
 This component accepts the following props:
 
 |           Name            | Type    | Default           | Description                             |
-| :-----------------------: | :------ | :---------------- | :-------------------------------------- | --- | ----------------------------------------- |
+| :-----------------------: | :------ | :---------------- | :-------------------------------------- |
 |        **`size`**         | number  | 300               | Size of the spotlight around the mouse. |
 |      **`darkColor`**      | string  | 'rgba(0,0,0,0.9)' | Color of the backdrop.                  |
-| **`clickToTurnOnLights`** | boolean | false             | true to turn off the effects.           |     | Style props to spread over the container. |
+| **`clickToTurnOnLights`** | boolean | false             | true to turn off the effects.           |
+|       **`zIndex`**        | number  | 100000            | z-index of overlay                      |
 
 ### &lt;MagicalText />
 

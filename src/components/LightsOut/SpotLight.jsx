@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import PropTypes from 'prop-types';
 import { useEvent } from '../../hooks/useEvent';
 
-// eslint-disable-next-line react/prop-types
-const SpotLight = React.forwardRef(({ size, onClick, darkColor, getContainer }, ref) => {
+const SpotLight = React.forwardRef(({ size, onClick, darkColor }, ref) => {
   const [lightStyle] = useState({
     position: 'fixed',
     zIndex: 10000,
@@ -25,11 +25,11 @@ const SpotLight = React.forwardRef(({ size, onClick, darkColor, getContainer }, 
   });
 
   useEffect(() => {
-    getContainer().addEventListener('mousemove', onMouseMove, true);
+    window.addEventListener('mousemove', onMouseMove, true);
     return () => {
-      getContainer().removeEventListener('mousemove', onMouseMove, true);
+      window.removeEventListener('mousemove', onMouseMove, true);
     };
-  }, [onMouseMove, getContainer]);
+  }, [onMouseMove]);
 
   const onSvgClick = useEvent((evt) => {
     if (spotLightState === 'lightsOn') return;
@@ -90,5 +90,11 @@ const SpotLight = React.forwardRef(({ size, onClick, darkColor, getContainer }, 
     </svg>
   );
 });
+
+SpotLight.propTypes = {
+  size: PropTypes.number,
+  onClick: PropTypes.func,
+  darkColor: PropTypes.string,
+};
 
 export { SpotLight };

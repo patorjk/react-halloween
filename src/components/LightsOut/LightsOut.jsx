@@ -1,10 +1,9 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useEvent } from '../../hooks/useEvent';
 import { SpotLight } from './SpotLight';
 
-// eslint-disable-next-line react/prop-types
-function LightsOut({ size = 300, darkColor = 'rgba(0,0,0,0.9)', clickToTurnOnLights = true, fullscreen = true }) {
+function LightsOut({ size = 300, darkColor = 'rgba(0,0,0,0.9)', clickToTurnOnLights = true }) {
   const containerRef = useRef(null);
   const svgRef = useRef(null);
   const northRef = useRef(null);
@@ -54,47 +53,29 @@ function LightsOut({ size = 300, darkColor = 'rgba(0,0,0,0.9)', clickToTurnOnLig
     setPositions();
   }, []);
 
-  const getContainer = useCallback(
-    () => (fullscreen ? window : containerRef.current || window),
-    [fullscreen, containerRef],
-  );
-
-  useEffect(() => {
-    if (lightsOn.current) return;
-    const onMouseMove = (evt) => {
-      if (lightsOn.current) return;
-
-      setPositions(evt.clientX, evt.clientY);
-    };
-    const container = getContainer();
-
-    container.addEventListener('mousemove', onMouseMove, true);
-    // eslint-disable-next-line consistent-return
-    return () => {
-      container.removeEventListener('mousemove', onMouseMove, true);
-    };
-  }, [halfSize, lightsOn, getContainer]);
-
   // eslint-disable-next-line consistent-return
   const turnLightsOn = useEvent((evt) => {
+    const cx = evt.clientX;
+    const cy = evt.clientY;
+
     if (lightsOn.current === true) return false;
     lightsOn.current = true;
 
     const pageWidth = document.documentElement.scrollWidth;
     const pageHeight = document.documentElement.scrollHeight;
 
-    let northHeight = evt.clientY - halfSize;
+    let northHeight = cy - halfSize;
 
-    let westWidth = evt.clientX - halfSize;
+    let westWidth = cx - halfSize;
 
-    let eastLeft = evt.clientX + halfSize;
-    let eastWidth = pageWidth - (evt.clientX + halfSize);
+    let eastLeft = cx + halfSize;
+    let eastWidth = pageWidth - (cx + halfSize);
 
-    let southTop = evt.clientY + halfSize;
-    let southHeight = pageHeight - (evt.clientY + halfSize);
+    let southTop = cy + halfSize;
+    let southHeight = pageHeight - (cy + halfSize);
 
-    let svgTop = evt.clientY - halfSize;
-    let svgLeft = evt.clientX - halfSize;
+    let svgTop = cy - halfSize;
+    let svgLeft = cx - halfSize;
     let svgWidth = size;
     let svgHeight = size;
 
@@ -164,19 +145,41 @@ function LightsOut({ size = 300, darkColor = 'rgba(0,0,0,0.9)', clickToTurnOnLig
     }, 10);
   });
 
+  useEffect(() => {
+    if (lightsOn.current) return;
+    const onMouseMove = (evt) => {
+      if (lightsOn.current) return;
+      setPositions(evt.clientX, evt.clientY);
+    };
+    const onKeyDown = (evt) => {
+      if (lightsOn.current) return;
+      if (evt.key === 'Escape') {
+        const clientX = document.documentElement.clientWidth / 2;
+        const clientY = document.documentElement.clientHeight / 2;
+        turnLightsOn({ clientX, clientY });
+      }
+    };
+
+    window.addEventListener('mousemove', onMouseMove, true);
+    if (clickToTurnOnLights) {
+      window.addEventListener('keydown', onKeyDown, true);
+    }
+    // eslint-disable-next-line consistent-return
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove, true);
+      if (clickToTurnOnLights) {
+        window.removeEventListener('keydown', onKeyDown, true);
+      }
+    };
+  }, [halfSize, lightsOn, turnLightsOn]);
+
   return (
     <div ref={containerRef}>
       <div ref={northRef} style={darkStyle} />
       <div ref={eastRef} style={darkStyle} />
       <div ref={southRef} style={darkStyle} />
       <div ref={westRef} style={darkStyle} />
-      <SpotLight
-        ref={svgRef}
-        size={size}
-        darkColor={darkColor}
-        onClick={clickToTurnOnLights ? turnLightsOn : null}
-        getContainer={getContainer}
-      />
+      <SpotLight ref={svgRef} size={size} darkColor={darkColor} onClick={clickToTurnOnLights ? turnLightsOn : null} />
     </div>
   );
 }
@@ -184,12 +187,7 @@ function LightsOut({ size = 300, darkColor = 'rgba(0,0,0,0.9)', clickToTurnOnLig
 LightsOut.propTypes = {
   size: PropTypes.number,
   darkColor: PropTypes.string,
+  clickToTurnOnLights: PropTypes.bool,
 };
-
-/*
-TODO:
-- Light goes on (circle expands)
-- Light goes out on no movement
- */
 
 export { LightsOut };

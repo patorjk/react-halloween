@@ -52,9 +52,3 @@ export const NoLightsOn = Template.bind({});
 NoLightsOn.args = {
   clickToTurnOnLights: false,
 };
-
-export const NotFullscreen = Template.bind({});
-// More on args: https://storybook.js.org/docs/react/writing-stories/args
-NotFullscreen.args = {
-  fullscreen: false,
-};

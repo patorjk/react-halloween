@@ -72,6 +72,17 @@ This component accepts the following props:
 |   **`glowOptions`**   | object    | [see here](https://github.com/patorjk/react-halloween/blob/main/src/components/Haunted/Haunted.jsx) | Options for the glow effect.                                      |
 |      **`style`**      | object    | {}                                                                                                  | Style props to spread over the container.                         |
 
+### &lt;LightsOut />
+
+Puts a website into darkness and creates a spotlight around the mouse. This should not be used for mobile/touch devices.
+This component accepts the following props:
+
+|           Name            | Type    | Default           | Description                             |
+| :-----------------------: | :------ | :---------------- | :-------------------------------------- | --- | ----------------------------------------- |
+|        **`size`**         | number  | 300               | Size of the spotlight around the mouse. |
+|      **`darkColor`**      | string  | 'rgba(0,0,0,0.9)' | Color of the backdrop.                  |
+| **`clickToTurnOnLights`** | boolean | false             | true to turn off the effects.           |     | Style props to spread over the container. |
+
 ### &lt;MagicalText />
 
 Not your granddaddy's color faded text, this component creates a gradient that moves and has (optional) sparkles or

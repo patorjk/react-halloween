@@ -82,12 +82,23 @@ function MagicalText({
   };
 
   const getColor = useEvent((pos) => {
-    let offsetPos = Math.round(200 - fadeOffset + pos * 100);
+    const position = pos || 0;
+    let offsetPos = Math.round(200 - fadeOffset + position * 100);
     if (offsetPos >= 200) {
       offsetPos -= 200;
     }
     const color = fadeReference[offsetPos];
-    return `rgb(${Math.round(color.r)},${Math.round(color.g)},${Math.round(color.b)})`;
+    if (color) {
+      return `rgb(${Math.round(color.r)},${Math.round(color.g)},${Math.round(color.b)})`;
+    }
+
+    // fail notes
+    console.log('fadeReference failed:');
+    console.dir(fadeReference);
+    console.log(`offsetPos:${offsetPos}`);
+    console.log(`fadeOffset:${fadeOffset}`);
+    console.log(`pos:${pos}`);
+    return colors[0];
   });
 
   const onUpdate = useEvent((param) => {
@@ -154,7 +165,7 @@ MagicalText.propTypes = {
   style: PropTypes.object,
   // true to disable the effect
   disableFun: PropTypes.bool,
-  adornmentType: PropTypes.oneOf([PropTypes.string, PropTypes.elementType]),
+  adornmentType: PropTypes.oneOfType([PropTypes.string, PropTypes.elementType]),
   // component to use as the adornment
   Adornment: PropTypes.elementType,
   // boolean variable that governs if the adornments should be shown

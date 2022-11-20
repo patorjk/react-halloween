@@ -94,17 +94,17 @@ look like [here](https://github.com/patorjk/react-halloween/tree/main/src/compon
 
 This component accepts the following props:
 
-|           Name           | Type                                | Default                  | Description                                                                     |
-| :----------------------: | :---------------------------------- | :----------------------- | :------------------------------------------------------------------------------ |
-|        **`text`**        | string                              | ''                       | The text to display.                                                            |
-|   **`animationTime`**    | number                              | 10                       | Length of the fade animation in seconds.                                        |
-|       **`colors`**       | Array<String>                       | ['darkorange', 'purple'] | Array of CSS colors to fade.                                                    |
-|     **`disableFun`**     | boolean                             | false                    | true to disable fade and adornment effects.                                     |
-|       **`style`**        | object                              | {}                       | Style props to spread over the container.                                       |
-|   **`adornmentType`**    | One of: 'sparkle', 'heart', 'ghost' | 'sparkle'                | Type of adornment to display around the text.                                   |
-|     **`Adornment`**      | Component                           | StarCrossSVG             | Component to use as the adornment. Several come from the library. See examples. |
-|   **`adornmentWidth`**   | number                              | 16                       | Width of adornment.                                                             |
-|  **`adornmentHeight`**   | number                              | 16                       | Height of adornment.                                                            |
-|  **`adornmentOpacity`**  | number                              | 0.7                      | Opacity of adornment.                                                           |
-| **`adornmentDuration`**  | number                              | 1                        | Duration of adornment in seconds.                                               |
-| **`numberOfAdornments`** | number                              | 3                        | Number of adornments.                                                           |
+|           Name           | Type                       | Default                  | Description                                                                     |
+| :----------------------: | :------------------------- | :----------------------- | :------------------------------------------------------------------------------ |
+|        **`text`**        | string                     | ''                       | The text to display.                                                            |
+|   **`animationTime`**    | number                     | 10                       | Length of the fade animation in seconds.                                        |
+|       **`colors`**       | Array<String>              | ['darkorange', 'purple'] | Array of CSS colors to fade.                                                    |
+|     **`disableFun`**     | boolean                    | false                    | true to disable fade and adornment effects.                                     |
+|       **`style`**        | object                     | {}                       | Style props to spread over the container.                                       |
+|   **`adornmentType`**    | One of: 'sparkle', 'scale' | 'sparkle'                | Type of adornment to display around the text.                                   |
+|     **`Adornment`**      | Component                  | StarCrossSVG             | Component to use as the adornment. Several come from the library. See examples. |
+|   **`adornmentWidth`**   | number                     | 16                       | Width of adornment.                                                             |
+|  **`adornmentHeight`**   | number                     | 16                       | Height of adornment.                                                            |
+|  **`adornmentOpacity`**  | number                     | 0.7                      | Opacity of adornment.                                                           |
+| **`adornmentDuration`**  | number                     | 1                        | Duration of adornment in seconds.                                               |
+| **`numberOfAdornments`** | number                     | 3                        | Number of adornments.                                                           |

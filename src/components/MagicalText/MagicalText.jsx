@@ -91,13 +91,7 @@ function MagicalText({
     if (color) {
       return `rgb(${Math.round(color.r)},${Math.round(color.g)},${Math.round(color.b)})`;
     }
-
-    // fail notes
-    console.log('fadeReference failed:');
-    console.dir(fadeReference);
-    console.log(`offsetPos:${offsetPos}`);
-    console.log(`fadeOffset:${fadeOffset}`);
-    console.log(`pos:${pos}`);
+    // if color not found, use first color
     return colors[0];
   });
 

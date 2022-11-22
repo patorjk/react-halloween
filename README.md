@@ -64,13 +64,19 @@ This component accepts the following props:
 A container which creatures (by default ghosts) will fly out of and which will glow when the cursor is hovered over it.
 This component accepts the following props:
 
-|         Name          | Type      | Default                                                                                             | Description                                                       |
-| :-------------------: | :-------- | :-------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------- |
-|    **`Creature`**     | component | [see here](https://github.com/patorjk/react-halloween/blob/main/src/stories/Haunted.stories.jsx)    | Prop for overriding the creature that flies out of the container. |
-| **`creatureOptions`** | object    | [see here](https://github.com/patorjk/react-halloween/blob/main/src/components/Haunted/Haunted.jsx) | Options for the creatures that fly out of the container.          |
-|   **`disableFun`**    | boolean   | false                                                                                               | true to turn off the effects.                                     |
-|   **`glowOptions`**   | object    | [see here](https://github.com/patorjk/react-halloween/blob/main/src/components/Haunted/Haunted.jsx) | Options for the glow effect.                                      |
-|      **`style`**      | object    | {}                                                                                                  | Style props to spread over the container.                         |
+|                Name                 | Type      | Default                                                                                             | Description                                                       |
+| :---------------------------------: | :-------- | :-------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------- |
+|           **`Creature`**            | component | [see here](https://github.com/patorjk/react-halloween/blob/main/src/stories/Haunted.stories.jsx)    | Prop for overriding the creature that flies out of the container. |
+|        **`creatureOptions`**        | object    | [see here](https://github.com/patorjk/react-halloween/blob/main/src/components/Haunted/Haunted.jsx) | Options for the creatures that fly out of the container.          |
+| **`creatureOptions.animationTime`** | number    | 1.5                                                                                                 | Fly-out time in seconds.                                          |
+|   **`creatureOptions.numberOf`**    | number    | 6                                                                                                   | Number of creatures/ghosts to fly out.                            |
+|   **`creatureOptions.distance`**    | number    | 200                                                                                                 | Distance creature should travel in pixels.                        |
+|          **`disableFun`**           | boolean   | false                                                                                               | true to turn off the effects.                                     |
+|          **`glowOptions`**          | object    | [see here](https://github.com/patorjk/react-halloween/blob/main/src/components/Haunted/Haunted.jsx) | Options for the glow effect.                                      |
+|   **`glowOptions.animationTime`**   | number    | 3                                                                                                   | Duration of glow in seconds.                                      |
+|   **`glowOptions.boxShadowOff`**    | string    | "0px 0px 0px rgba(255,0,0,0)"                                                                       | Box-shadow value when at glow lowest point.                       |
+|    **`glowOptions.boxShadowOn`**    | string    | "0px 0px 40px rgba(255,0,0,1)"                                                                      | Box-shadow value when at glow highest point.                      |
+|             **`style`**             | object    | {}                                                                                                  | Style props to spread over the container.                         |
 
 ### &lt;LightsOut />
 

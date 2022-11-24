@@ -32,6 +32,20 @@ const eyeLayoutVariants = {
       cy: 4.5,
     },
   },
+  neutral: {
+    left: {
+      opened: 'M 0 4 C 3 7 7 7 10 4 C 7 1 3 1 0 4',
+      closed: 'M 0 4 C 3 4 7 4 10 4 C 7 4 3 4 0 4',
+    },
+    right: {
+      opened: 'M 0 4 C 3 7 7 7 10 4 C 7 1 3 1 0 4',
+      closed: 'M 0 4 C 3 4 7 4 10 4 C 7 4 3 4 0 4',
+    },
+    pupil: {
+      cx: 5,
+      cy: 4,
+    },
+  },
 };
 
 function Eyes({

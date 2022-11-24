@@ -24,13 +24,16 @@ function Template(args) {
       style={{
         height: '100%',
         width: '100%',
-        padding: '300px',
         backgroundColor: 'black',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
       }}
     >
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <Eye open={open} {...args} />
-      <button type="button" onClick={toggleOpen}>
+      <button type="button" onClick={toggleOpen} style={{ margin: '20px' }}>
         {open ? 'Close' : 'Open'}
       </button>
     </div>

@@ -24,13 +24,18 @@ function Template(args) {
       style={{
         height: '100%',
         width: '100%',
-        padding: '300px',
+        padding: '10px',
         backgroundColor: 'black',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
       }}
     >
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <Eyes open={open} {...args} />
-      <button type="button" onClick={toggleOpen}>
+
+      <button type="button" onClick={toggleOpen} style={{ margin: '20px' }}>
         {open ? 'Close' : 'Open'}
       </button>
     </div>
@@ -52,6 +57,15 @@ MenacingLayout.args = {
   pupilColor: 'rgb(70,0,0)',
   pupilSize: 0.7,
   eyeLayout: 'menacing',
+};
+
+export const NeutralLayout = Template.bind({});
+// More on args: https://storybook.js.org/docs/react/writing-stories/args
+NeutralLayout.args = {
+  width: 200,
+  irisColor: 'steelblue',
+  pupilSize: 0.7,
+  eyeLayout: 'neutral',
 };
 
 export const CustomEyeLayout = Template.bind({});

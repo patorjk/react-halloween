@@ -106,10 +106,11 @@ This component accepts the following props:
 |        **`text`**        | string                     | ''                       | The text to display.                                                            |
 |   **`animationTime`**    | number                     | 10                       | Length of the fade animation in seconds.                                        |
 |       **`colors`**       | Array<String>              | ['darkorange', 'purple'] | Array of CSS colors to fade.                                                    |
+|      **`fadeText`**      | boolean                    | true                     | true if text should be color faded, false otherwise.                            |
 |     **`disableFun`**     | boolean                    | false                    | true to disable fade and adornment effects.                                     |
 |       **`style`**        | object                     | {}                       | Style props to spread over the container.                                       |
-|   **`adornmentType`**    | One of: 'sparkle', 'scale' | 'sparkle'                | Type of adornment to display around the text.                                   |
 |     **`Adornment`**      | Component                  | StarCrossSVG             | Component to use as the adornment. Several come from the library. See examples. |
+|   **`adornmentType`**    | One of: 'sparkle', 'scale' | 'sparkle'                | Type of adornment to display around the text.                                   |
 |   **`adornmentWidth`**   | number                     | 16                       | Width of adornment.                                                             |
 |  **`adornmentHeight`**   | number                     | 16                       | Height of adornment.                                                            |
 |  **`adornmentOpacity`**  | number                     | 0.7                      | Opacity of adornment.                                                           |

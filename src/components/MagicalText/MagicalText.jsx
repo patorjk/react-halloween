@@ -25,6 +25,7 @@ function MagicalText({
   colors = defaultColors,
   style = {},
   disableFun = false,
+  fadeText = true,
   adornmentType = 'sparkle',
   Adornment = StarCrossSVG,
   showAdornments = true,
@@ -116,9 +117,9 @@ function MagicalText({
         <span>{text}</span>
       ) : (
         <motion.div
-          style={divStyle}
+          style={fadeText ? divStyle : {}}
           variants={variants}
-          animate="on"
+          animate={fadeText ? 'on' : 'off'}
           onUpdate={adornmentType === 'sparkle' ? onUpdate : null}
         >
           {text}
@@ -169,6 +170,7 @@ MagicalText.propTypes = {
   adornmentOpacity: PropTypes.number,
   adornmentDuration: PropTypes.number,
   numberOfAdornments: PropTypes.number,
+  fadeText: PropTypes.bool,
 };
 
 export { MagicalText };

@@ -87,6 +87,14 @@ NoAdnornments.args = {
   numberOfAdornments: 0,
 };
 
+export const NoFadedText = Template.bind({});
+// More on args: https://storybook.js.org/docs/react/writing-stories/args
+NoFadedText.args = {
+  text: 'This is so magical! Except there are no sparkles.',
+  fadeText: false,
+  colors: ['gold'],
+};
+
 export const DisableFun = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 DisableFun.args = {

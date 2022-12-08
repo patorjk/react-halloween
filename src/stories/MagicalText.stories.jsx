@@ -74,7 +74,9 @@ export const VerySparkly = Template.bind({});
 VerySparkly.args = {
   text: 'This is so magical! Oh wow is this a lot of sparkles...',
   colors: ['red', 'orange', 'yellow', 'green', 'blue', 'purple', 'violet'],
-  numberOfAdornments: 10,
+  adornmentOptions: {
+    numberOf: 10,
+  },
   // eslint-disable-next-line max-len
   notes:
     'The more colors there are, the bigger the chance the sparkle color will clash with the text color. This is not that noticeable when there is just 2 colors.',
@@ -84,7 +86,9 @@ export const NoAdnornments = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 NoAdnornments.args = {
   text: 'This is so magical! Except there are no sparkles.',
-  numberOfAdornments: 0,
+  adornmentOptions: {
+    numberOf: 0,
+  },
 };
 
 export const NoFadedText = Template.bind({});
@@ -107,8 +111,10 @@ export const Ghost = Template.bind({});
 Ghost.args = {
   text: 'This is kind of spooky!',
   Adornment: GhostSVG,
-  adornmentType: 'scale',
-  adornmentDuration: 2,
+  adornmentOptions: {
+    animationType: 'scale',
+    duration: 2,
+  },
 };
 
 export const Heart = Template.bind({});
@@ -116,8 +122,10 @@ export const Heart = Template.bind({});
 Heart.args = {
   text: 'I feel so loved...',
   Adornment: HeartSVG,
-  adornmentType: 'scale',
-  adornmentDuration: 2,
-  adornmentWidth: 12,
-  adornmentHeight: 12,
+  adornmentOptions: {
+    animationType: 'scale',
+    duration: 2,
+    width: 12,
+    height: 12,
+  },
 };

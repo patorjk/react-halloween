@@ -9,6 +9,15 @@ import { multiColorFade, parseCSSColor } from '../utils';
 
 const defaultColors = ['darkorange', 'purple'];
 
+const defaultAdornmentOptions = {
+  animationType: 'sparkle',
+  width: 16,
+  height: 16,
+  opacity: 0.7,
+  duration: 1,
+  numberOf: 3,
+};
+
 /**
  * @component
  * This is a component that displays text in a faded fashion with optional adornments (such as sparkles or hearts).
@@ -26,15 +35,22 @@ function MagicalText({
   style = {},
   disableFun = false,
   fadeText = true,
-  adornmentType = 'sparkle',
-  Adornment = StarCrossSVG,
   showAdornments = true,
-  adornmentWidth = 16,
-  adornmentHeight = 16,
-  adornmentOpacity = 0.7,
-  adornmentDuration = 1,
-  numberOfAdornments = 3,
+  Adornment = StarCrossSVG,
+  adornmentOptions,
 }) {
+  const {
+    animationType,
+    width: adornmentWidth,
+    height: adornmentHeight,
+    opacity: adornmentOpacity,
+    duration: adornmentDuration,
+    numberOf: numberOfAdornments,
+  } = {
+    ...defaultAdornmentOptions,
+    ...adornmentOptions,
+  };
+
   const rgbColors = useMemo(
     () => colors.map((color) => parseCSSColor(color)).concat(parseCSSColor(colors[0])),
     [colors],
@@ -47,12 +63,12 @@ function MagicalText({
   const completeColors = [...colors, colors[0]];
   const [adornmentKey, setAdornmentKey] = useState(`_akey${Math.random()}`);
   let AdornmentAnimator = null;
-  if (typeof adornmentType === 'string') {
-    AdornmentAnimator = adornmentType === 'sparkle' ? MagicalTextSparkleAnimator : MagicalTextScaleAnimator;
-  } else if (typeof adornmentType === 'object') {
-    AdornmentAnimator = adornmentType;
+  if (typeof animationType === 'string') {
+    AdornmentAnimator = animationType === 'sparkle' ? MagicalTextSparkleAnimator : MagicalTextScaleAnimator;
+  } else if (typeof animationType === 'object') {
+    AdornmentAnimator = animationType;
   } else {
-    throw new Error('Invalid value for adornmentType');
+    throw new Error('Invalid value for animationType');
   }
 
   useEffect(() => {
@@ -120,7 +136,7 @@ function MagicalText({
           style={fadeText ? divStyle : {}}
           variants={variants}
           animate={fadeText ? 'on' : 'off'}
-          onUpdate={adornmentType === 'sparkle' ? onUpdate : null}
+          onUpdate={animationType === 'sparkle' ? onUpdate : null}
         >
           {text}
         </motion.div>
@@ -160,16 +176,18 @@ MagicalText.propTypes = {
   style: PropTypes.object,
   // true to disable the effect
   disableFun: PropTypes.bool,
-  adornmentType: PropTypes.oneOfType([PropTypes.string, PropTypes.elementType]),
   // component to use as the adornment
   Adornment: PropTypes.elementType,
   // boolean variable that governs if the adornments should be shown
   showAdornments: PropTypes.bool,
-  adornmentWidth: PropTypes.number,
-  adornmentHeight: PropTypes.number,
-  adornmentOpacity: PropTypes.number,
-  adornmentDuration: PropTypes.number,
-  numberOfAdornments: PropTypes.number,
+  adornmentOptions: PropTypes.shape({
+    animationType: PropTypes.oneOfType([PropTypes.string, PropTypes.elementType]),
+    width: PropTypes.number,
+    height: PropTypes.number,
+    opacity: PropTypes.number,
+    duration: PropTypes.number,
+    numberOf: PropTypes.number,
+  }),
   fadeText: PropTypes.bool,
 };
 

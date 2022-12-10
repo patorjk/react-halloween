@@ -1,6 +1,14 @@
 # react-halloween
 
-This is a repo with some fun Halloween-themed components. Currently its still in a 0.\* version so its APIs may change as I flesh things out.
+This is a repo with some fun Halloween-themed components.
+It was made to support the Halloween section of [patrickgillespie.com](https://patrickgillespie.com).
+If you scroll to the bottom of that page, you can see the Haunted and Eyes components in-action.
+You can see the LightsOut component on the Halloween Houses page, and the MagicalText
+component in the app's title bar.
+
+Currently this library is still in a 0.\* version, so its APIs may change.
+However, I feel pretty confident in what I have now, and I'm debating moving to version 1.0.0
+in my next release.
 
 ## Install
 

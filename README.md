@@ -110,6 +110,7 @@ This component accepts the following props:
 |           **`disableFun`**           | boolean                    | false                    | true to disable fade and adornment effects.                                     |
 |             **`style`**              | object                     | {}                       | Style props to spread over the container.                                       |
 |           **`Adornment`**            | Component                  | StarCrossSVG             | Component to use as the adornment. Several come from the library. See examples. |
+|         **`showAdornments`**         | boolean                    | true                     | If the adornments/sparkles should be shown.                                     |
 |        **`adornmentOptions`**        | Object                     |                          | Options to customize the adornment.                                             |
 | **`adornmentOptions.animationType`** | One of: 'sparkle', 'scale' | 'sparkle'                | How the adornment will be animated.                                             |
 |     **`adornmentOptions.width`**     | number                     | 16                       | Width of adornment.                                                             |

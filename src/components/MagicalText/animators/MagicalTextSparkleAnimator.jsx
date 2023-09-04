@@ -1,16 +1,17 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
-import { useEvent } from '../../../hooks/useEvent';
 import { randomIntFromInterval } from '../../utils';
 import { StarCrossSVG } from '../../svgs/StarCrossSVG';
+
+const defaultGetColor = () => null;
 
 function MagicalTextSparkleAnimator({
   Adornment = StarCrossSVG,
   container,
   delay = 0,
   duration = 1,
-  getColor = () => null,
+  getColor = defaultGetColor,
   width = 16,
   height = 16,
 }) {
@@ -61,22 +62,28 @@ function MagicalTextSparkleAnimator({
       setLeftMin(leftStart);
       setLeftMax(leftEnd);
     }
-  }, [container, starRef, pathRef]);
+  }, [container, starRef, width, height]);
 
-  const setup = useEvent((variant) => {
-    if (variant === 'on') {
-      setPosition();
-    }
-  });
+  const setup = useCallback(
+    (variant) => {
+      if (variant === 'on') {
+        setPosition();
+      }
+    },
+    [setPosition],
+  );
 
-  const onUpdate = useEvent((latest) => {
-    const { scale } = latest;
-    const color = getColor((leftPos - leftMin) / (leftMax - leftMin));
-    if (pathRef.current) pathRef.current.style.fill = color;
-    if (scale === 0) {
-      setPosition();
-    }
-  });
+  const onUpdate = useCallback(
+    (latest) => {
+      const { scale } = latest;
+      const color = getColor((leftPos - leftMin) / (leftMax - leftMin));
+      if (pathRef.current) pathRef.current.style.fill = color;
+      if (scale === 0) {
+        setPosition();
+      }
+    },
+    [setPosition, getColor, leftMax, leftMin, leftPos],
+  );
 
   return (
     <motion.div

@@ -1,10 +1,9 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { MagicalTextSparkleAnimator } from './animators/MagicalTextSparkleAnimator';
 import { StarCrossSVG } from '../svgs/StarCrossSVG';
 import { MagicalTextScaleAnimator } from './animators';
-import { useEvent } from '../../hooks/useEvent';
 import { multiColorFade, parseCSSColor } from '../utils';
 
 const defaultColors = ['darkorange', 'purple'];
@@ -98,27 +97,30 @@ function MagicalText({
     off: () => ({}),
   };
 
-  const getColor = useEvent((pos) => {
-    const position = pos || 0;
-    let offsetPos = Math.round(200 - fadeOffset + position * 100);
-    if (offsetPos >= 200) {
-      offsetPos -= 200;
-    }
-    const color = fadeReference[offsetPos];
-    if (color) {
-      return `rgb(${Math.round(color.r)},${Math.round(color.g)},${Math.round(color.b)})`;
-    }
-    // if color not found, use first color
-    return colors[0];
-  });
+  const getColor = useCallback(
+    (pos) => {
+      const position = pos || 0;
+      let offsetPos = Math.round(200 - fadeOffset + position * 100);
+      if (offsetPos >= 200) {
+        offsetPos -= 200;
+      }
+      const color = fadeReference[offsetPos];
+      if (color) {
+        return `rgb(${Math.round(color.r)},${Math.round(color.g)},${Math.round(color.b)})`;
+      }
+      // if color not found, use first color
+      return colors[0];
+    },
+    [colors, fadeOffset, fadeReference],
+  );
 
-  const onUpdate = useEvent((param) => {
+  const onUpdate = useCallback((param) => {
     const matches = param.backgroundPosition.match(/[0-9]+/);
     if (matches) {
       const val = parseInt(matches[0], 10);
       setFadeOffset(val);
     }
-  });
+  }, []);
 
   return (
     <div

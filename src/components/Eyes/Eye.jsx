@@ -68,7 +68,7 @@ function Eye({
     return () => {
       document.removeEventListener('mousemove', onMouseMove);
     };
-  }, [pupilRef, follow]);
+  }, [pupilRef, follow, width]);
 
   const variants = {
     opened: () => ({

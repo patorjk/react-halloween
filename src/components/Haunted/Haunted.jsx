@@ -1,7 +1,6 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
-import { useEvent } from '../../hooks/useEvent';
 import { GhostAnimator } from './GhostAnimator';
 
 const defaultGlowOptions = {
@@ -39,7 +38,7 @@ function Haunted({
   const container = useRef(null);
   const creatureRefs = useRef([]);
 
-  const onMouseEnter = useEvent(() => {
+  const onMouseEnter = useCallback(() => {
     const rect = container.current.getBoundingClientRect();
 
     const halfCreatureWidth = (fullCreatureOptions?.dimensions?.width || 0) / 2;
@@ -57,10 +56,10 @@ function Haunted({
     });
 
     setMouseOver(true);
-  });
-  const onMouseLeave = useEvent(() => {
+  }, [fullCreatureOptions?.dimensions?.width, fullCreatureOptions?.dimensions?.height]);
+  const onMouseLeave = useCallback(() => {
     setMouseOver(false);
-  });
+  }, []);
 
   const variants = {
     on: () => ({

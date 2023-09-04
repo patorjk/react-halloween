@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
-import { useEvent } from '../../hooks/useEvent';
 
 const SpotLight = React.forwardRef(({ size, onClick, darkColor, zIndex }, ref) => {
   const [lightStyle] = useState({
@@ -14,7 +13,7 @@ const SpotLight = React.forwardRef(({ size, onClick, darkColor, zIndex }, ref) =
   const [spotLightState, setSpotLightState] = useState('off'); // on, off, lightsOn
   const mouseMoveTimer = useRef(null);
 
-  const onMouseMove = useEvent(() => {
+  const onMouseMove = useCallback(() => {
     if (spotLightState === 'lightsOn') return;
     setSpotLightState('on');
     window.clearTimeout(mouseMoveTimer.current);
@@ -22,7 +21,7 @@ const SpotLight = React.forwardRef(({ size, onClick, darkColor, zIndex }, ref) =
       if (spotLightState === 'lightsOn') return;
       setSpotLightState('off');
     }, 3000);
-  });
+  }, [spotLightState]);
 
   useEffect(() => {
     window.addEventListener('mousemove', onMouseMove, true);
@@ -31,11 +30,14 @@ const SpotLight = React.forwardRef(({ size, onClick, darkColor, zIndex }, ref) =
     };
   }, [onMouseMove]);
 
-  const onSvgClick = useEvent((evt) => {
-    if (spotLightState === 'lightsOn') return;
-    setSpotLightState('lightsOn');
-    onClick(evt);
-  });
+  const onSvgClick = useCallback(
+    (evt) => {
+      if (spotLightState === 'lightsOn') return;
+      setSpotLightState('lightsOn');
+      onClick(evt);
+    },
+    [onClick, spotLightState],
+  );
 
   const variants = {
     lightsOn: () => ({
@@ -95,6 +97,7 @@ SpotLight.propTypes = {
   size: PropTypes.number,
   onClick: PropTypes.func,
   darkColor: PropTypes.string,
+  zIndex: PropTypes.number,
 };
 
 export { SpotLight };

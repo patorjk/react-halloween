@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { GhostSVG as GhostDefault } from '../svgs/GhostSVG';
@@ -9,11 +9,14 @@ import { randomIntFromInterval, randomNumber } from '../utils';
  */
 const GhostAnimator = React.forwardRef(
   ({ animationTimeMax, distance, container, mouseOver, Creature = null, index = 0, dimensions }, ref) => {
-    const basicStyles = {
-      position: 'absolute',
-      transformOrigin: 'center',
-      fontSize: '2em',
-    };
+    const basicStyles = useMemo(
+      () => ({
+        position: 'absolute',
+        transformOrigin: 'center',
+        fontSize: '2em',
+      }),
+      [],
+    );
     const [containerStyles, setContainerStyles] = useState(basicStyles);
     // eslint-disable-next-line max-len
     const animationTime = animationTimeMax === 0 ? 0 : randomNumber(animationTimeMax / 2, animationTimeMax);
@@ -86,7 +89,7 @@ const GhostAnimator = React.forwardRef(
         };
       }
       return undefined;
-    }, [mouseOver, setContainerStyles]);
+    }, [mouseOver, setContainerStyles, animationTime, basicStyles]);
 
     const GhostComponent = Creature || GhostDefault;
 

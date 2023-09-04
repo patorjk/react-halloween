@@ -1,7 +1,6 @@
 import React, { useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
-import { useEvent } from '../../../hooks/useEvent';
 import { randomIntFromInterval } from '../../utils';
 import { GhostSVG } from '../../svgs/GhostSVG';
 
@@ -42,20 +41,26 @@ function MagicalTextScaleAnimator({
       ghostRef.current.style.left = `${randomIntFromInterval(-halfWidth, rect.width - halfWidth)}px`;
       ghostRef.current.style.top = `${randomIntFromInterval(-halfHeight, rect.height - halfHeight)}px`;
     }
-  }, [ghostRef, container]);
+  }, [ghostRef, container, width, height]);
 
-  const setup = useEvent((variant) => {
-    if (variant === 'on') {
-      setPosition();
-    }
-  });
+  const setup = useCallback(
+    (variant) => {
+      if (variant === 'on') {
+        setPosition();
+      }
+    },
+    [setPosition],
+  );
 
-  const onUpdate = useEvent((latest) => {
-    const { scale } = latest;
-    if (scale === 0) {
-      setPosition();
-    }
-  });
+  const onUpdate = useCallback(
+    (latest) => {
+      const { scale } = latest;
+      if (scale === 0) {
+        setPosition();
+      }
+    },
+    [setPosition],
+  );
 
   return (
     <motion.div

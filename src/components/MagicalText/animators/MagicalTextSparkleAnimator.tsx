@@ -1,10 +1,19 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
-import PropTypes from 'prop-types';
+import { motion, Easing } from 'framer-motion';
 import { randomIntFromInterval } from '../../utils';
 import { StarCrossSVG } from '../../svgs/StarCrossSVG';
 
 const defaultGetColor = () => null;
+
+export interface MagicalTextSparkleAnimatorProps {
+  Adornment?: React.ElementType;
+  container?: React.RefObject<HTMLElement>;
+  delay?: number;
+  duration?: number;
+  getColor?: (pos: number) => string;
+  width?: number;
+  height?: number;
+}
 
 function MagicalTextSparkleAnimator({
   Adornment = StarCrossSVG,
@@ -14,7 +23,7 @@ function MagicalTextSparkleAnimator({
   getColor = defaultGetColor,
   width = 16,
   height = 16,
-}) {
+}: MagicalTextSparkleAnimatorProps) {
   const starRef = useRef(null);
   const pathRef = useRef(null);
   const [leftPos, setLeftPos] = useState(0);
@@ -30,7 +39,7 @@ function MagicalTextSparkleAnimator({
         rotate: {
           repeat: Infinity,
           duration,
-          ease: 'linear',
+          ease: 'linear' as Easing,
           delay,
         },
         scale: {
@@ -77,8 +86,9 @@ function MagicalTextSparkleAnimator({
     (latest) => {
       const { scale } = latest;
       const color = getColor((leftPos - leftMin) / (leftMax - leftMin));
+
       if (pathRef.current) pathRef.current.style.fill = color;
-      if (scale === 0) {
+      if (scale < 0.01) {
         setPosition();
       }
     },
@@ -102,20 +112,5 @@ function MagicalTextSparkleAnimator({
     </motion.div>
   );
 }
-
-MagicalTextSparkleAnimator.propTypes = {
-  Adornment: PropTypes.elementType,
-  container: PropTypes.oneOfType([
-    // Either a function
-    PropTypes.func,
-    // Or the instance of a DOM native element (see the note about SSR)
-    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
-  ]),
-  delay: PropTypes.number,
-  duration: PropTypes.number,
-  getColor: PropTypes.func,
-  width: PropTypes.number,
-  height: PropTypes.number,
-};
 
 export { MagicalTextSparkleAnimator };

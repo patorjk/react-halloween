@@ -1,9 +1,23 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { CSSProperties } from 'react';
 import { Eye } from './Eye';
 
+export interface EyeLayout {
+  left: {
+    opened: string;
+    closed: string;
+  };
+  right: {
+    opened: string;
+    closed: string;
+  };
+  pupil: {
+    cx: number;
+    cy: number;
+  };
+}
+
 // design path with: https://yqnn.github.io/svg-path-editor/
-const eyeLayoutVariants = {
+const eyeLayoutVariants: Record<string, EyeLayout> = {
   unfriendly: {
     left: {
       opened: 'M 0 4 C 3 6 6 7 10 4 C 6 3 3 3 0 4',
@@ -48,6 +62,21 @@ const eyeLayoutVariants = {
   },
 };
 
+export type EyeLayoutPresets = 'unfriendly' | 'menacing' | 'neutral';
+
+export interface EyesProps {
+  open?: boolean;
+  eyeLayout?: EyeLayoutPresets | EyeLayout;
+  animationTime?: number;
+  width?: number;
+  irisColor?: string;
+  eyeBallColor?: string;
+  pupilColor?: string;
+  style?: CSSProperties;
+  pupilSize?: number;
+  follow?: boolean;
+}
+
 function Eyes({
   open = true,
   eyeLayout = 'unfriendly',
@@ -59,11 +88,11 @@ function Eyes({
   style = {},
   pupilSize = 1,
   follow = true,
-}) {
+}: EyesProps) {
   if (typeof pupilSize !== 'number') throw new Error('pupilSize must be a number');
   if (pupilSize < 0 || pupilSize > 2) throw new Error('pupilSize must be between 0 and 2');
 
-  let eyeVariant;
+  let eyeVariant: EyeLayout;
   if (typeof eyeLayout === 'string') {
     eyeVariant = eyeLayoutVariants[eyeLayout];
   } else {
@@ -113,38 +142,5 @@ function Eyes({
     </div>
   );
 }
-
-Eyes.propTypes = {
-  open: PropTypes.bool,
-  eyeLayout: PropTypes.oneOfType([
-    PropTypes.oneOf(['unfriendly', 'menacing']),
-    PropTypes.shape({
-      left: PropTypes.shape({
-        opened: PropTypes.string,
-        closed: PropTypes.string,
-      }),
-      right: PropTypes.shape({
-        opened: PropTypes.string,
-        closed: PropTypes.string,
-      }),
-    }),
-  ]),
-  // time of the open/close animation in seconds
-  animationTime: PropTypes.number,
-  // CSS string for iris color
-  irisColor: PropTypes.string,
-  // CSS string for eyeball color
-  eyeBallColor: PropTypes.string,
-  // CSS string for pupil color
-  pupilColor: PropTypes.string,
-  // object styles to spread onto container
-  // eslint-disable-next-line react/forbid-prop-types
-  style: PropTypes.object,
-  // size of pupil - between 0 and 2
-  pupilSize: PropTypes.number,
-  // if the eyes should follow the cursor or not
-  follow: PropTypes.bool,
-  width: PropTypes.number,
-};
 
 export { Eyes };

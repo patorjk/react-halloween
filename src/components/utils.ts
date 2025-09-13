@@ -1,13 +1,13 @@
-export function randomNumber(min, max) {
+export function randomNumber(min: number, max: number): number {
   return Math.random() * (max - min) + min;
 }
 
-export function randomIntFromInterval(min, max) {
+export function randomIntFromInterval(min: number, max: number): number {
   // min and max included
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-const cssColorLookup = {
+const cssColorLookup: Record<string, string> = {
   aliceblue: '#f0f8ff',
   antiquewhite: '#faebd7',
   aqua: '#00ffff',
@@ -158,15 +158,21 @@ const cssColorLookup = {
   yellowgreen: '#9acd32',
 };
 
-function twoColorFade(color1, color2, length) {
+interface RGBColor {
+  r: number;
+  g: number;
+  b: number;
+}
+
+function twoColorFade(color1: RGBColor, color2: RGBColor, length: number): RGBColor[] {
   const rIncr = (color2.r - color1.r) / (length - 1);
   const gIncr = (color2.g - color1.g) / (length - 1);
   const bIncr = (color2.b - color1.b) / (length - 1);
-  const colors = [];
+  const colors: RGBColor[] = [];
   let { r } = color1;
   let { g } = color1;
   let { b } = color1;
-  let ii;
+  let ii: number;
 
   // eslint-disable-next-line no-plusplus
   for (ii = 0; ii < length; ii++) {
@@ -179,15 +185,15 @@ function twoColorFade(color1, color2, length) {
   return colors;
 }
 
-function multiColorFade(colors, length) {
+function multiColorFade(colors: RGBColor[], length: number): RGBColor[] {
   const colorIncr = (length - 1) / (colors.length - 1);
-  let ii;
+  let ii: number;
   const len = Math.min(colors.length - 1, length);
   let startPos = 0;
   let endPos = 1;
-  let retColors = [];
-  let tmpColors;
-  let dist;
+  let retColors: RGBColor[] = [];
+  let tmpColors: RGBColor[];
+  let dist: number;
 
   // eslint-disable-next-line no-plusplus
   for (ii = 0; ii < len; ii++) {
@@ -203,8 +209,8 @@ function multiColorFade(colors, length) {
   return retColors;
 }
 
-function parseCSSColor(color) {
-  const retColor = { r: 255, g: 255, b: 255 };
+function parseCSSColor(color: string) {
+  const retColor: RGBColor = { r: 255, g: 255, b: 255 };
   const lookup = cssColorLookup[color];
   if (lookup) {
     retColor.r = parseInt(lookup.substring(1, 3), 16);
@@ -225,7 +231,9 @@ function parseCSSColor(color) {
   } else if (color.indexOf('rgb') !== -1) {
     const matches = color.match(/^rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/i);
     if (matches) {
-      [, retColor.r, retColor.g, retColor.b] = matches;
+      retColor.r = parseInt(matches[1], 10);
+      retColor.g = parseInt(matches[2], 10);
+      retColor.b = parseInt(matches[3], 10);
     } else {
       // eslint-disable-next-line no-console
       console.warn(`Unknown rgb color: ${color}`);

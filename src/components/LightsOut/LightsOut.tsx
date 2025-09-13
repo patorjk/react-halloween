@@ -1,8 +1,19 @@
-import React, { useCallback, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
+import React, { CSSProperties, useCallback, useEffect, useRef } from 'react';
 import { SpotLight } from './SpotLight';
 
-function LightsOut({ size = 300, darkColor = 'rgba(0,0,0,0.9)', clickToTurnOnLights = true, zIndex = 100000 }) {
+export interface LightsOutProps {
+  size: number;
+  darkColor: string;
+  clickToTurnOnLights: boolean;
+  zIndex: number;
+}
+
+function LightsOut({
+  size = 300,
+  darkColor = 'rgba(0,0,0,0.9)',
+  clickToTurnOnLights = true,
+  zIndex = 100000,
+}: LightsOutProps) {
   const containerRef = useRef(null);
   const svgRef = useRef(null);
   const northRef = useRef(null);
@@ -11,7 +22,7 @@ function LightsOut({ size = 300, darkColor = 'rgba(0,0,0,0.9)', clickToTurnOnLig
   const westRef = useRef(null);
   const lightsOn = useRef(false);
 
-  const darkStyle = {
+  const darkStyle: CSSProperties = {
     position: 'fixed',
     backgroundColor: darkColor,
     zIndex,
@@ -194,12 +205,5 @@ function LightsOut({ size = 300, darkColor = 'rgba(0,0,0,0.9)', clickToTurnOnLig
     </div>
   );
 }
-
-LightsOut.propTypes = {
-  size: PropTypes.number,
-  darkColor: PropTypes.string,
-  clickToTurnOnLights: PropTypes.bool,
-  zIndex: PropTypes.number,
-};
 
 export { LightsOut };

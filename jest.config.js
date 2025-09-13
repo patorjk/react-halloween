@@ -1,3 +1,5 @@
 module.exports = {
-  testEnvironment: "jsdom",
+  "preset": "ts-jest",
+  "testEnvironment": "jsdom",
+  "moduleFileExtensions": ["ts", "tsx", "js", "jsx"]
 };

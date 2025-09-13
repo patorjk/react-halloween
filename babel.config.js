@@ -1,1 +1,9 @@
-module.exports = {presets: ['@babel/preset-env']}
+// babel.config.js
+export default {
+  presets: [
+    '@babel/preset-env',
+    '@babel/preset-react',
+    '@babel/preset-typescript'
+  ],
+  // other configuration options...
+};

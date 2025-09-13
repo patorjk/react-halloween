@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Haunted } from '../components';
-import { GhostAltSVG } from '../components/svgs/GhostAltSVG';
+import { GhostAltSVG } from '../components';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {

@@ -1,15 +1,30 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { GhostSVG as GhostDefault } from '../svgs/GhostSVG';
 import { randomIntFromInterval, randomNumber } from '../utils';
+
+export interface GhostAnimatorProps {
+  animationTimeMax: number;
+  distance: number;
+  container: React.RefObject<HTMLDivElement>;
+  mouseOver: boolean;
+  Creature?: React.ElementType;
+  index: number;
+  dimensions: {
+    width: number;
+    height: number;
+  };
+}
 
 /**
  * @component
  */
 const GhostAnimator = React.forwardRef(
-  ({ animationTimeMax, distance, container, mouseOver, Creature = null, index = 0, dimensions }, ref) => {
-    const basicStyles = useMemo(
+  (
+    { animationTimeMax, distance, container, mouseOver, Creature = null, index = 0, dimensions }: GhostAnimatorProps,
+    ref: React.RefObject<HTMLDivElement>,
+  ) => {
+    const basicStyles: Record<string, string> = useMemo(
       () => ({
         position: 'absolute',
         transformOrigin: 'center',
@@ -113,26 +128,4 @@ const GhostAnimator = React.forwardRef(
   },
 );
 
-GhostAnimator.propTypes = {
-  // length of animation
-  animationTimeMax: PropTypes.number.isRequired,
-  // distance to travel in pixels
-  distance: PropTypes.number.isRequired,
-  // Ref to the container
-  container: PropTypes.oneOfType([PropTypes.func, PropTypes.shape({ current: PropTypes.instanceOf(Element) })])
-    .isRequired,
-  // If true we run the animation
-  mouseOver: PropTypes.bool.isRequired,
-  // an override for the ghost component/svg
-  // eslint-disable-next-line react/forbid-prop-types
-  Creature: PropTypes.any,
-  // size of the ghost
-  dimensions: PropTypes.shape({
-    width: PropTypes.number,
-    height: PropTypes.number,
-  }).isRequired,
-  index: PropTypes.number,
-};
-
 export { GhostAnimator };
-export default GhostAnimator;

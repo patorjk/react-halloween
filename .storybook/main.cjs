@@ -9,12 +9,26 @@ module.exports = {
     // Make whatever fine-grained changes you need
     config.module.rules.push({
       type: 'javascript/auto',
-      test: /\.mjs$/,
+      test: /\.(js|mjs)$/,
       include: /node_modules/,
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: ['@babel/preset-env'],
+          plugins: ['@babel/plugin-proposal-optional-chaining'],
+        },
+      },
     });
 
     // Return the altered config
     return config;
   },
   framework: '@storybook/react',
+  core: {
+    builder: '@storybook/builder-webpack4',
+  },
+  // Add this to disable TypeScript docgen
+  typescript: {
+    reactDocgen: 'none', // This disables the problematic plugin
+  },
 };

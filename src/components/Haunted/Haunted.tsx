@@ -1,5 +1,5 @@
 import React, { CSSProperties, useCallback, useRef, useState } from 'react';
-import { Easing, motion } from 'framer-motion';
+import { Easing, motion } from 'motion/react';
 import { GhostAnimator } from './GhostAnimator';
 
 const defaultGlowOptions = {
@@ -132,7 +132,7 @@ function Haunted({
                   key={index}
                   index={index}
                   container={container}
-                  ref={(el) => {
+                  ref={(el: HTMLDivElement) => {
                     creatureRefs.current[index] = el;
                   }}
                   animationTimeMax={fullCreatureOptions.animationTime}

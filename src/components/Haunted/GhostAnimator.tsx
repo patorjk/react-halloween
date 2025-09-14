@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
-import { motion, useAnimation, Easing } from 'framer-motion';
+import { motion, useAnimation, Easing } from 'motion/react';
 import { GhostSVG as GhostDefault } from '../svgs/GhostSVG';
 import { randomIntFromInterval, randomNumber } from '../utils';
 
@@ -15,7 +15,7 @@ export interface GhostAnimatorProps {
     width: number;
     height: number;
   };
-  ref: React.RefObject<HTMLDivElement>;
+  ref: React.Ref<HTMLDivElement>;
 }
 
 /**

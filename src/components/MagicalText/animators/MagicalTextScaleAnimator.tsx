@@ -1,7 +1,7 @@
 import React, { useCallback, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { randomIntFromInterval } from '../../utils';
-import { GhostSVG } from '../../svgs/GhostSVG';
+import { GhostSVG } from '../../svgs';
 
 export interface MagicalTextScaleAnimatorProps {
   Adornment?: React.ElementType;

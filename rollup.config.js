@@ -7,7 +7,7 @@ import typescript from '@rollup/plugin-typescript';
 const packageJson = require('./package.json');
 
 export default [{
-  external: Object.keys(packageJson.peerDependencies),
+  external: [...Object.keys(packageJson.peerDependencies), 'motion/react', 'framer-motion'],
   input: './src/index.ts',
   output: [
     {

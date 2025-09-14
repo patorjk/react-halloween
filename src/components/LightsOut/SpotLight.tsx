@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState, useMemo, CSSProperties } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 
 export interface SpotLightProps {
   size: number;

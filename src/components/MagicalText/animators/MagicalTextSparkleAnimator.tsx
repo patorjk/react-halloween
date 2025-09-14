@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { motion, Easing } from 'framer-motion';
+import { motion, Easing } from 'motion/react';
 import { randomIntFromInterval } from '../../utils';
-import { StarCrossSVG } from '../../svgs/StarCrossSVG';
+import { StarCrossSVG } from '../../svgs';
 
 const defaultGetColor = () => null;
 

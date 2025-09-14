@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 
 // Useful tool for editing and creating paths (for things like the eye shape)
 // https://yqnn.github.io/svg-path-editor/

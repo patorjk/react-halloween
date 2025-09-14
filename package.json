@@ -17,8 +17,8 @@
     "lint:fix": "eslint --fix './src/**/*.{js,jsx,ts,tsx}'",
     "rollup": "rollup -c --bundleConfigAsCjs",
     "test": "jest",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
     "prepare": "husky install",
     "prettier": "prettier --write ."
   },
@@ -49,14 +49,11 @@
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-terser": "^0.1.0",
     "@rollup/plugin-typescript": "^12.1.4",
-    "@storybook/addon-actions": "^6.5.13",
-    "@storybook/addon-essentials": "^6.5.13",
-    "@storybook/addon-interactions": "^6.5.13",
-    "@storybook/addon-links": "^6.5.13",
+    "@storybook/addon-links": "^9.1.5",
     "@storybook/builder-webpack4": "^6.5.13",
     "@storybook/manager-webpack4": "^6.5.13",
     "@storybook/preset-typescript": "^3.0.0",
-    "@storybook/react": "^6.5.13",
+    "@storybook/react": "^9.1.5",
     "@storybook/react-docgen-typescript-plugin": "^1.0.2-canary.6.9d540b91e815f8fc2f8829189deb00553559ff63.0",
     "@storybook/testing-library": "^0.0.13",
     "@testing-library/react": "^13.4.0",
@@ -86,7 +83,9 @@
     "rollup-plugin-typescript2": "^0.36.0",
     "ts-jest": "^29.4.1",
     "tsconfig-paths-webpack-plugin": "^4.2.0",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "eslint-plugin-storybook": "9.1.5",
+    "@storybook/addon-docs": "9.1.5"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"

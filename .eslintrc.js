@@ -8,7 +8,8 @@ module.exports = {
     "plugin:react-hooks/recommended",
     "plugin:react/recommended",
     "airbnb",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:storybook/recommended"
   ],
   "overrides": [
   ],

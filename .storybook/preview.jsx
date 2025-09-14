@@ -11,7 +11,11 @@ const preview = {
       },
     },
     docs: {
-      theme: themes.dark, // or any other theme
+      theme: {
+        ...themes.dark,
+        brandTitle: 'React Halloween',
+        brandUrl: 'https://github.com/patorjk/react-halloween',
+      },
     },
     // This ensures any motion from framer-motion is properly handled
     viewport: {

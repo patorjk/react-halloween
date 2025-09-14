@@ -64,7 +64,6 @@ function LightsOut({
     setPositions();
   }, [setPositions]);
 
-  // eslint-disable-next-line consistent-return
   const turnLightsOn = useCallback(
     (evt) => {
       const cx = evt.clientX;
@@ -148,6 +147,7 @@ function LightsOut({
             westRef.current.style.opacity = opacity;
           }
         } catch (err) {
+          console.error(err);
           clearInterval(timer);
         }
 

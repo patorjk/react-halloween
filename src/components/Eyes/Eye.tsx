@@ -118,7 +118,6 @@ function Eye({
         <rect width="10" height="14" fill={eyeBallColor} />
         <circle cx={pupilCoords.cx} cy={pupilCoords.cy} r="2" fill={eyeBallColor} ref={eyeContainerRef} />
         <circle cx={pupilCoords.cx} cy={pupilCoords.cy} r="2" fill={irisColor} ref={irisRef} />
-        {/* eslint-disable-next-line max-len */}
         <circle cx={pupilCoords.cx} cy={pupilCoords.cy} r={pupilSize} fill={pupilColor} ref={pupilRef} />
       </motion.g>
     </svg>

@@ -235,12 +235,10 @@ function parseCSSColor(color: string) {
       retColor.g = parseInt(matches[2], 10);
       retColor.b = parseInt(matches[3], 10);
     } else {
-      // eslint-disable-next-line no-console
       console.warn(`Unknown rgb color: ${color}`);
       return retColor;
     }
   }
-  // eslint-disable-next-line no-console
   console.warn(`Unknown color: ${color}`);
   return retColor;
 }

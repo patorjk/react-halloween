@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useRef } from 'react';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { motion, useAnimation, Easing } from 'motion/react';
 import { GhostSVG as GhostDefault } from '../svgs/GhostSVG';
 import { randomIntFromInterval, randomNumber } from '../utils';
@@ -46,24 +46,25 @@ const GhostAnimator = ({
   const controls = useAnimation();
   const [animationStarted, setAnimationStarted] = useState(false);
 
-  // eslint-disable-next-line max-len
   const animationTime = animationTimeMax === 0 ? 0 : randomNumber(animationTimeMax / 2, animationTimeMax);
-  const waveAmount = randomIntFromInterval(5, 10);
-  const waves = [`${waveAmount}px`, `-${waveAmount}px`];
 
-  const waveKeyFrames = new Array(randomIntFromInterval(3, 5)).fill(0).reduce((prev) => [...prev, ...waves], []);
+  const waveKeyFrames = useMemo(() => {
+    const waveAmount = randomIntFromInterval(5, 10);
+    const waves = [`${waveAmount}px`, `-${waveAmount}px`];
+    return new Array(randomIntFromInterval(3, 5)).fill(0).reduce((prev) => [...prev, ...waves], []);
+  }, []);
 
   // Calculate initial Y position
-  const getInitY = () => {
+  const getInitY = useCallback(() => {
     const rect = container.current?.getBoundingClientRect() || {
       width: 0,
       height: 0,
     };
     return (Math.round(Math.min(rect.width, rect.height)) * -1) / 2;
-  };
+  }, [container]);
 
   // Define full animation sequence with proper fade-out timing
-  const getAnimationSequence = () => {
+  const getAnimationSequence = useCallback(() => {
     const initY = getInitY();
     const endY = distance * -1 + initY;
 
@@ -92,9 +93,9 @@ const GhostAnimator = ({
         },
       },
     };
-  };
+  }, [getInitY, waveKeyFrames, animationTime, distance]);
 
-  const getOffVariant = () => {
+  const getOffVariant = useCallback(() => {
     const initY = getInitY();
     return {
       x: 0,
@@ -104,7 +105,7 @@ const GhostAnimator = ({
         duration: 0.3,
       },
     };
-  };
+  }, [getInitY]);
 
   /*
     Handle animation start/stop and container visibility
@@ -136,12 +137,23 @@ const GhostAnimator = ({
       return () => {
         window.clearTimeout(timer);
       };
-    } else if (!mouseOver && !animationStarted) {
+    }
+    if (!mouseOver && !animationStarted) {
       // Only reset to off state if animation hasn't started
       controls.start(getOffVariant());
     }
     return undefined;
-  }, [mouseOver, canPlayAnimation, animationStarted, controls, animationTime, basicStyles]);
+  }, [
+    mouseOver,
+    canPlayAnimation,
+    animationStarted,
+    controls,
+    animationTime,
+    basicStyles,
+    getAnimationSequence,
+    getOffVariant,
+    repeat,
+  ]);
 
   useEffect(() => {
     if (!mouseOver) {

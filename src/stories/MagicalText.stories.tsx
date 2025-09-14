@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-
-import PropTypes from 'prop-types';
 import { GhostSVG, HeartSVG, MagicalText, MagicalTextProps } from '../components';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export

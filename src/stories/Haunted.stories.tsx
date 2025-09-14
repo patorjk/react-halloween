@@ -50,6 +50,14 @@ export const Simple = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 Simple.args = {};
 
+export const PlayOnce = Template.bind({});
+// More on args: https://storybook.js.org/docs/react/writing-stories/args
+PlayOnce.args = {
+  creatureOptions: {
+    repeat: false,
+  },
+};
+
 export const CustomGhost = Template.bind({});
 CustomGhost.args = {
   Creature: GhostAltSVG,

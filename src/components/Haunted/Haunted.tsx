@@ -1,5 +1,5 @@
 import React, { CSSProperties, useCallback, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { Easing, motion } from 'framer-motion';
 import { GhostAnimator } from './GhostAnimator';
 
 const defaultGlowOptions = {
@@ -11,6 +11,7 @@ const defaultCreatureOptions = {
   animationTime: 1.5,
   numberOf: 6,
   distance: 200,
+  repeat: true,
   dimensions: { width: 44, height: 44 },
 };
 
@@ -24,6 +25,7 @@ export interface HauntedProps {
     distance?: number;
     numberOf?: number;
     animationTime?: number;
+    repeat?: boolean;
     dimensions?: {
       width: number;
       height: number;
@@ -88,6 +90,7 @@ function Haunted({
         boxShadow: {
           repeat: Infinity,
           duration: fullGlowOptions?.animationTime || 0,
+          ease: 'easeInOut' as Easing,
         },
       },
     }),
@@ -137,6 +140,7 @@ function Haunted({
                   distance={fullCreatureOptions.distance}
                   Creature={Creature}
                   dimensions={fullCreatureOptions.dimensions}
+                  repeat={fullCreatureOptions.repeat}
                 />
               ))}
         </div>

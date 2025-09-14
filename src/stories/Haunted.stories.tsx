@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { Haunted } from '../components';
-import { GhostAltSVG } from '../components';
+import { Haunted, GhostAltSVG } from '../components';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
@@ -37,7 +36,7 @@ function Template(args) {
         </div>
       </Haunted>
       <div style={{ marginLeft: '40px', display: 'inline-block' }}>
-        {/* eslint-disable-next-line react/jsx-props-no-spreading,max-len */}
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Haunted {...args}>
           <div style={{ backgroundColor: 'red', display: 'inline-block' }}>This is a test</div>
         </Haunted>

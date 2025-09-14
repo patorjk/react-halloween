@@ -77,7 +77,6 @@ VerySparkly.args = {
       numberOf: 10,
     },
   },
-  // eslint-disable-next-line max-len
   notes:
     'The more colors there are, the bigger the chance the sparkle color will clash with the text color. This is not that noticeable when there is just 2 colors.',
 };

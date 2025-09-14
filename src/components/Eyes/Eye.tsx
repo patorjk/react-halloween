@@ -1,12 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
-import PropTypes from 'prop-types';
+import { motion } from 'motion/react';
 
 // Useful tool for editing and creating paths (for things like the eye shape)
 // https://yqnn.github.io/svg-path-editor/
 
 const simpleOpenedPath = 'M 0 4 C 3 7 7 7 10 4 C 7 1 3 1 0 4';
 const simpleClosedPath = 'M 0 4 C 3 4 7 4 10 4 C 7 4 3 4 0 4';
+
+export interface EyeProps {
+  animationTime?: number;
+  open?: boolean;
+  openedClipPath?: string;
+  closedClipPath?: string;
+  irisColor?: string;
+  eyeBallColor?: string;
+  pupilColor?: string;
+  pupilSize?: number;
+  follow?: boolean;
+  pupilCoords?: { cx: number; cy: number };
+  width?: number;
+}
 
 /**
  * @Component
@@ -24,7 +37,7 @@ function Eye({
   follow = true,
   pupilCoords = { cx: 5, cy: 4 },
   width = 50,
-}) {
+}: EyeProps) {
   const pupilRef = useRef(null);
   const eyeContainerRef = useRef(null);
   const irisRef = useRef(null);
@@ -111,22 +124,5 @@ function Eye({
     </svg>
   );
 }
-
-Eye.propTypes = {
-  animationTime: PropTypes.number,
-  open: PropTypes.bool,
-  openedClipPath: PropTypes.string,
-  closedClipPath: PropTypes.string,
-  irisColor: PropTypes.string,
-  eyeBallColor: PropTypes.string,
-  pupilColor: PropTypes.string,
-  pupilSize: PropTypes.number,
-  follow: PropTypes.bool,
-  pupilCoords: PropTypes.shape({
-    cx: PropTypes.number,
-    cy: PropTypes.number,
-  }),
-  width: PropTypes.number,
-};
 
 export { Eye };

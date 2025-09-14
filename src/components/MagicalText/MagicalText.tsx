@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import PropTypes from 'prop-types';
-import { MagicalTextSparkleAnimator } from './animators/MagicalTextSparkleAnimator';
-import { StarCrossSVG } from '../svgs/StarCrossSVG';
+import { AnimatePresence, motion, Easing } from 'motion/react';
+import { MagicalTextSparkleAnimator } from './animators';
+import { StarCrossSVG } from '../svgs';
 import { MagicalTextScaleAnimator } from './animators';
 import { multiColorFade, parseCSSColor } from '../utils';
 
@@ -13,9 +12,23 @@ const defaultAdornmentOptions = {
   width: 16,
   height: 16,
   opacity: 0.7,
-  duration: 1,
+  duration: 1.25,
   numberOf: 3,
 };
+
+export interface MagicalTextProps {
+  text: string;
+  animationTime?: number;
+  colors?: string[];
+  style?: React.CSSProperties;
+  disableFun?: boolean;
+  fadeText?: boolean;
+  Adornment?: React.ElementType;
+  showAdornments?: boolean;
+  adornmentOptions?: {
+    animationType?: string | React.ElementType;
+  };
+}
 
 /**
  * @component
@@ -37,7 +50,7 @@ function MagicalText({
   showAdornments = true,
   Adornment = StarCrossSVG,
   adornmentOptions,
-}) {
+}: MagicalTextProps) {
   const {
     animationType,
     width: adornmentWidth,
@@ -89,7 +102,7 @@ function MagicalText({
       transition: {
         backgroundPosition: {
           repeat: Infinity,
-          ease: 'linear',
+          ease: 'linear' as Easing,
           duration: animationTime,
         },
       },
@@ -168,30 +181,4 @@ function MagicalText({
   );
 }
 
-MagicalText.propTypes = {
-  // the text to display
-  text: PropTypes.string,
-  // duration for the fading of the text
-  animationTime: PropTypes.number,
-  colors: PropTypes.arrayOf(PropTypes.string),
-  // CSS styles to spread onto the containing div
-  style: PropTypes.object,
-  // true to disable the effect
-  disableFun: PropTypes.bool,
-  // component to use as the adornment
-  Adornment: PropTypes.elementType,
-  // boolean variable that governs if the adornments should be shown
-  showAdornments: PropTypes.bool,
-  adornmentOptions: PropTypes.shape({
-    animationType: PropTypes.oneOfType([PropTypes.string, PropTypes.elementType]),
-    width: PropTypes.number,
-    height: PropTypes.number,
-    opacity: PropTypes.number,
-    duration: PropTypes.number,
-    numberOf: PropTypes.number,
-  }),
-  fadeText: PropTypes.bool,
-};
-
 export { MagicalText };
-export default MagicalText;

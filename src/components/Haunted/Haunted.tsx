@@ -1,6 +1,5 @@
-import React, { useCallback, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import { motion } from 'framer-motion';
+import React, { CSSProperties, useCallback, useRef, useState } from 'react';
+import { Easing, motion } from 'motion/react';
 import { GhostAnimator } from './GhostAnimator';
 
 const defaultGlowOptions = {
@@ -12,8 +11,31 @@ const defaultCreatureOptions = {
   animationTime: 1.5,
   numberOf: 6,
   distance: 200,
+  repeat: true,
   dimensions: { width: 44, height: 44 },
 };
+
+export interface HauntedProps {
+  glowOptions?: {
+    animationTime?: number;
+    boxShadowOff?: string;
+    boxShadowOn?: string;
+  };
+  creatureOptions?: {
+    distance?: number;
+    numberOf?: number;
+    animationTime?: number;
+    repeat?: boolean;
+    dimensions?: {
+      width: number;
+      height: number;
+    };
+  };
+  disableFun?: boolean;
+  Creature?: React.ElementType;
+  style?: CSSProperties;
+  children?: React.ReactNode;
+}
 
 /**
  * @component
@@ -25,7 +47,7 @@ function Haunted({
   Creature = null,
   style = {},
   children,
-}) {
+}: HauntedProps) {
   const fullGlowOptions = {
     ...defaultGlowOptions,
     ...glowOptions,
@@ -68,6 +90,7 @@ function Haunted({
         boxShadow: {
           repeat: Infinity,
           duration: fullGlowOptions?.animationTime || 0,
+          ease: 'easeInOut' as Easing,
         },
       },
     }),
@@ -109,12 +132,15 @@ function Haunted({
                   key={index}
                   index={index}
                   container={container}
-                  ref={(el) => (creatureRefs.current[index] = el)}
+                  ref={(el: HTMLDivElement) => {
+                    creatureRefs.current[index] = el;
+                  }}
                   animationTimeMax={fullCreatureOptions.animationTime}
                   mouseOver={mouseOver}
                   distance={fullCreatureOptions.distance}
                   Creature={Creature}
                   dimensions={fullCreatureOptions.dimensions}
+                  repeat={fullCreatureOptions.repeat}
                 />
               ))}
         </div>
@@ -123,35 +149,5 @@ function Haunted({
     </motion.div>
   );
 }
-
-Haunted.propTypes = {
-  glowOptions: PropTypes.shape({
-    // glow animation time
-    animationTime: PropTypes.number,
-    // the box shadow at full glow
-    boxShadowOn: PropTypes.string,
-    // the box shadow when its off
-    boxShadowOff: PropTypes.string,
-  }),
-  creatureOptions: PropTypes.shape({
-    // distance the creature/ghost should travel
-    distance: PropTypes.number,
-    // number of creatures/ghosts
-    numberOf: PropTypes.number,
-    animationTime: PropTypes.number,
-    // the size of the ghost svg
-    dimensions: PropTypes.shape({
-      width: PropTypes.number.isRequired,
-      height: PropTypes.number.isRequired,
-    }),
-  }),
-  // Override for the ghost icon
-  Creature: PropTypes.any,
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
-  // turn off halloween decorations
-  disableFun: PropTypes.bool,
-  // eslint-disable-next-line react/forbid-prop-types
-  style: PropTypes.object,
-};
 
 export { Haunted };

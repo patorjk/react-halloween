@@ -7,22 +7,22 @@ You can see the LightsOut component on the Halloween Houses page, and the Magica
 component in the app's title bar.
 
 Currently this library is still in a 0.\* version, so its APIs may change.
-However, I feel pretty confident in what I have now, and I'm debating moving to version 1.0.0
-in my next release.
+However, I feel pretty confident in what I have now, so I don't anticipate any huge changes.
 
 ## Install
 
-framer-motion is a peer-dependency.
+motion is a peer-dependency.
 
 ```
-  npm install framer-motion react-halloween
+  npm install motion react-halloween
 ```
 
 ## Demo
 
 ### Storybook
 
-To see a storybook, which contains demos of all of the components do the following: Clone the repo, install the deps, and then run the storybook.
+To see a storybook, which contains demos of all of the components do the following: Clone the repo, install the deps,
+and then run the storybook.
 
 ```
   npm ci
@@ -79,6 +79,7 @@ This component accepts the following props:
 | **`creatureOptions.animationTime`** | number    | 1.5                                                                                                 | Fly-out time in seconds.                                          |
 |   **`creatureOptions.numberOf`**    | number    | 6                                                                                                   | Number of creatures/ghosts to fly out.                            |
 |   **`creatureOptions.distance`**    | number    | 200                                                                                                 | Distance creature should travel in pixels.                        |
+|    **`creatureOptions.repeat`**     | boolean   | true                                                                                                | false if you only want creatures to come out once.                |
 |  **`creatureOptions.dimensions`**   | object    | { width: 44, height: 44 }                                                                           | The height and width of the creature/ghost.                       |
 |          **`disableFun`**           | boolean   | false                                                                                               | true to turn off the effects.                                     |
 |          **`glowOptions`**          | object    | [see here](https://github.com/patorjk/react-halloween/blob/main/src/components/Haunted/Haunted.jsx) | Options for the glow effect.                                      |
@@ -102,7 +103,8 @@ This component accepts the following props:
 ### &lt;MagicalText />
 
 Not your granddaddy's color faded text, this component creates a gradient that moves and has (optional) sparkles or
-other adornments (such as ghosts or hearts). Initial idea was inspired by a [Hyperplexed](https://www.youtube.com/watch?v=yu0Cm4BqQv0) video.
+other adornments (such as ghosts or hearts). Initial idea was inspired by
+a [Hyperplexed](https://www.youtube.com/watch?v=yu0Cm4BqQv0) video.
 The adornments which appear around the text are simple SVG components. This library
 contains several which can be used with this component. You can see what these
 look like [here](https://github.com/patorjk/react-halloween/tree/main/src/components/svgs).

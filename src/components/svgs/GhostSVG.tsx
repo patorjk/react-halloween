@@ -1,12 +1,37 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
+export interface GhostSVGProps {
+  width: number;
+  height: number;
+  style?: React.CSSProperties;
+  className?: string;
+  onClick?: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
+  onKeyDown?: (event: React.KeyboardEvent<SVGSVGElement>) => void;
+  ref: React.RefObject<SVGSVGElement> | null;
+}
 
 /**
  * @component
  * A component that returns an SVG component that can be used with several of the components in this library.
  * Original SVG was CC0 (source: https://www.svgrepo.com/svg/400277/ghost)
  */
-const GhostSVG = React.forwardRef(({ width, height, style = {} }, ref) => {
+const GhostSVG = ({
+  width,
+  height,
+  style = {},
+  className = '',
+  onClick,
+  onMouseEnter,
+  onMouseLeave,
+  onFocus,
+  onBlur,
+  onKeyDown,
+  ref = null,
+}: GhostSVGProps) => {
   const ghostStyle = {
     enableBackground: 'new 0 0 512 512',
     ...style,
@@ -17,6 +42,7 @@ const GhostSVG = React.forwardRef(({ width, height, style = {} }, ref) => {
       ref={ref}
       width={`${width}`}
       height={`${height}`}
+      className={className}
       version="1.1"
       id="Layer_1"
       xmlns="http://www.w3.org/2000/svg"
@@ -26,6 +52,12 @@ const GhostSVG = React.forwardRef(({ width, height, style = {} }, ref) => {
       viewBox="0 0 512 512"
       style={ghostStyle}
       xmlSpace="preserve"
+      onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      onFocus={onFocus}
+      onBlur={onBlur}
+      onKeyDown={onKeyDown}
     >
       <path
         style={{ fill: '#E6E6E6' }}
@@ -59,13 +91,6 @@ c-17.838,0-32.288-14.463-32.288-32.301S299.078,114.487,316.916,114.487z"
       />
     </svg>
   );
-});
-
-GhostSVG.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
-  style: PropTypes.object,
 };
 
 export { GhostSVG };
-export default GhostSVG;

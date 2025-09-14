@@ -1,12 +1,35 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
+export interface GhostAltSVGProps {
+  width: number;
+  height: number;
+  style?: React.CSSProperties;
+  className?: string;
+  onClick?: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
+  onKeyDown?: (event: React.KeyboardEvent<SVGSVGElement>) => void;
+}
 
 /**
  * @component
  * A component that returns an SVG component that can be used with several of the components in this library.
  * Original SVG was CC0 (source: https://www.svgrepo.com/svg/400277/ghost)
  */
-function GhostAltSVG({ width, height, style = {} }) {
+function GhostAltSVG({
+  width,
+  height,
+  style = {},
+  className = '',
+  onClick,
+  onMouseEnter,
+  onMouseLeave,
+  onFocus,
+  onBlur,
+  onKeyDown,
+}: GhostAltSVGProps) {
   return (
     <svg
       width={`${width}`}
@@ -17,8 +40,14 @@ function GhostAltSVG({ width, height, style = {} }) {
       xmlnsXlink="http://www.w3.org/1999/xlink"
       aria-hidden="true"
       role="img"
-      className="iconify iconify--fxemoji"
+      className={`iconify iconify--fxemoji ${className}`}
       preserveAspectRatio="xMidYMid meet"
+      onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      onFocus={onFocus}
+      onBlur={onBlur}
+      onKeyDown={onKeyDown}
     >
       <path
         fill="#D1CFC3"
@@ -44,11 +73,4 @@ function GhostAltSVG({ width, height, style = {} }) {
   );
 }
 
-GhostAltSVG.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
-  style: PropTypes.object,
-};
-
 export { GhostAltSVG };
-export default GhostAltSVG;

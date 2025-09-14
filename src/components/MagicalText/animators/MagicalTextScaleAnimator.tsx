@@ -1,8 +1,17 @@
 import React, { useCallback, useRef } from 'react';
-import { motion } from 'framer-motion';
-import PropTypes from 'prop-types';
+import { motion } from 'motion/react';
 import { randomIntFromInterval } from '../../utils';
-import { GhostSVG } from '../../svgs/GhostSVG';
+import { GhostSVG } from '../../svgs';
+
+export interface MagicalTextScaleAnimatorProps {
+  Adornment?: React.ElementType;
+  container?: React.RefObject<HTMLElement>;
+  delay?: number;
+  duration?: number;
+  opacity?: number;
+  width?: number;
+  height?: number;
+}
 
 function MagicalTextScaleAnimator({
   Adornment = GhostSVG,
@@ -12,7 +21,7 @@ function MagicalTextScaleAnimator({
   opacity = 0.7,
   width = 16,
   height = 16,
-}) {
+}: MagicalTextScaleAnimatorProps) {
   const ghostRef = useRef(null);
 
   const variants = {
@@ -69,39 +78,13 @@ function MagicalTextScaleAnimator({
       initial={{ opacity: 0 }}
       exit={{ opacity: 0, scale: 0, transition: { duration: 1 } }}
       animate="on"
-      width={`${width}`}
-      height={`${height}`}
-      version="1.1"
-      id="Layer_1"
-      xmlns="http://www.w3.org/2000/svg"
-      xmlnsXlink="http://www.w3.org/1999/xlink"
-      x="0px"
-      y="0px"
-      viewBox="0 0 512 512"
-      style={{ position: 'absolute', pointerEvents: 'none' }}
+      style={{ position: 'absolute', pointerEvents: 'none', width: `${width}px`, height: `${height}px` }}
       onUpdate={onUpdate}
       onAnimationStart={setup}
-      xmlSpace="preserve"
     >
       <Adornment width={width} height={height} />
     </motion.div>
   );
 }
 
-MagicalTextScaleAnimator.propTypes = {
-  Adornment: PropTypes.elementType,
-  container: PropTypes.oneOfType([
-    // Either a function
-    PropTypes.func,
-    // Or the instance of a DOM native element (see the note about SSR)
-    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
-  ]),
-  delay: PropTypes.number,
-  duration: PropTypes.number,
-  opacity: PropTypes.number,
-  width: PropTypes.number,
-  height: PropTypes.number,
-};
-
 export { MagicalTextScaleAnimator };
-export default MagicalTextScaleAnimator;

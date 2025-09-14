@@ -1,14 +1,24 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
-import PropTypes from 'prop-types';
+import React, { useCallback, useEffect, useRef, useState, useMemo, CSSProperties } from 'react';
+import { motion } from 'motion/react';
 
-const SpotLight = React.forwardRef(({ size, onClick, darkColor, zIndex }, ref) => {
-  const [lightStyle] = useState({
-    position: 'fixed',
-    zIndex,
-    pointerEvents: onClick ? 'auto' : 'none',
-    cursor: 'pointer',
-  });
+export interface SpotLightProps {
+  size: number;
+  onClick: (evt: React.MouseEvent<SVGSVGElement, MouseEvent>) => void;
+  darkColor: string;
+  zIndex: number;
+  ref: React.RefObject<SVGSVGElement>;
+}
+
+const SpotLight = ({ size, onClick, darkColor, zIndex, ref }: SpotLightProps) => {
+  const lightStyle: CSSProperties = useMemo(
+    () => ({
+      position: 'fixed',
+      zIndex,
+      pointerEvents: onClick ? 'auto' : 'none',
+      cursor: 'pointer',
+    }),
+    [zIndex, onClick],
+  );
   const [gradientUrl] = useState(`gradientUrl_${Math.random()}`);
   const [spotLightState, setSpotLightState] = useState('off'); // on, off, lightsOn
   const mouseMoveTimer = useRef(null);
@@ -91,13 +101,6 @@ const SpotLight = React.forwardRef(({ size, onClick, darkColor, zIndex }, ref) =
       />
     </svg>
   );
-});
-
-SpotLight.propTypes = {
-  size: PropTypes.number,
-  onClick: PropTypes.func,
-  darkColor: PropTypes.string,
-  zIndex: PropTypes.number,
 };
 
 export { SpotLight };

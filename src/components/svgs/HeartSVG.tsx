@@ -1,11 +1,36 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
+export interface HeartSVGProps {
+  width: number;
+  height: number;
+  style?: React.CSSProperties;
+  className?: string;
+  onClick?: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
+  onKeyDown?: (event: React.KeyboardEvent<SVGSVGElement>) => void;
+  ref: React.RefObject<SVGSVGElement> | null;
+}
 
 /**
  * A component that returns an SVG component that can be used with several of the components in this library.
  * Original SVG was CC0 (source: https://www.svgrepo.com/svg/165566/heart)
  */
-const HeartSVG = React.forwardRef(({ width, height, style = {} }, ref) => {
+const HeartSVG = ({
+  width,
+  height,
+  style = {},
+  className = '',
+  onClick,
+  onMouseEnter,
+  onMouseLeave,
+  onFocus,
+  onBlur,
+  onKeyDown,
+  ref = null,
+}: HeartSVGProps) => {
   const svgStyle = {
     enableBackground: '0 0 230 230',
     ...style,
@@ -14,6 +39,7 @@ const HeartSVG = React.forwardRef(({ width, height, style = {} }, ref) => {
     <svg
       version="1.1"
       ref={ref}
+      className={className}
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
       x="0px"
@@ -23,6 +49,12 @@ const HeartSVG = React.forwardRef(({ width, height, style = {} }, ref) => {
       xmlSpace="preserve"
       width={width}
       height={height}
+      onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      onFocus={onFocus}
+      onBlur={onBlur}
+      onKeyDown={onKeyDown}
     >
       <path
         fill="#f00"
@@ -32,12 +64,6 @@ const HeartSVG = React.forwardRef(({ width, height, style = {} }, ref) => {
       />
     </svg>
   );
-});
-
-HeartSVG.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
-  style: PropTypes.object,
 };
 
 export { HeartSVG };

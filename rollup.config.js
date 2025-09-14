@@ -1,13 +1,14 @@
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
-import { babel } from '@rollup/plugin-babel';
+import {babel} from '@rollup/plugin-babel';
 import terser from '@rollup/plugin-terser';
+import typescript from '@rollup/plugin-typescript';
 
 const packageJson = require('./package.json');
 
 export default [{
-  external: Object.keys(packageJson.peerDependencies),
-  input: './src/index.js',
+  external: [...Object.keys(packageJson.peerDependencies), 'motion/react', 'framer-motion'],
+  input: './src/index.ts',
   output: [
     {
       file: packageJson.main,
@@ -21,12 +22,19 @@ export default [{
     }
   ],
   plugins: [
+    typescript({
+      tsconfig: './tsconfig.json',
+      // IMPORTANT: Override the declarationDir to match output directories
+      outputToFilesystem: true, // This can help with directory conflicts
+    }),
     resolve({
-      extensions: ['.mjs', '.js', '.jsx', '.json', '.node']
+      extensions: ['.ts', '.tsx', '.mjs', '.js', '.jsx', '.json', '.node']
     }),
     babel({
       exclude: 'node_modules/**',
-      presets: ['@babel/env', '@babel/preset-react']
+      presets: ['@babel/env', '@babel/preset-react', '@babel/preset-typescript'],
+      extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      babelHelpers: 'bundled'
     }),
     commonjs(),
     terser(),

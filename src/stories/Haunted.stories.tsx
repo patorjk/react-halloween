@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Haunted } from '../components';
-import { GhostAltSVG } from '../components/svgs/GhostAltSVG';
+import { GhostAltSVG } from '../components';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
@@ -49,6 +49,14 @@ function Template(args) {
 export const Simple = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 Simple.args = {};
+
+export const PlayOnce = Template.bind({});
+// More on args: https://storybook.js.org/docs/react/writing-stories/args
+PlayOnce.args = {
+  creatureOptions: {
+    repeat: false,
+  },
+};
 
 export const CustomGhost = Template.bind({});
 CustomGhost.args = {

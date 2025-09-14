@@ -89,8 +89,8 @@ function Eyes({
   pupilSize = 1,
   follow = true,
 }: EyesProps) {
-  if (typeof pupilSize !== 'number') throw new Error('pupilSize must be a number');
-  if (pupilSize < 0 || pupilSize > 2) throw new Error('pupilSize must be between 0 and 2');
+  if (typeof pupilSize !== 'number') console.error('pupilSize must be a number');
+  if (pupilSize < 0 || pupilSize > 2) console.error('pupilSize must be between 0 and 2');
 
   let eyeVariant: EyeLayout;
   if (typeof eyeLayout === 'string') {

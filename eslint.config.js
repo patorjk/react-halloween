@@ -55,6 +55,7 @@ export default defineConfig([{
     "no-return-assign": ["error", "except-parens"],
     "object-curly-newline": "off",
     "operator-linebreak": "off",
+    "no-plusplus": "off",
     "import/extensions": [
       "error",
       "ignorePackages",

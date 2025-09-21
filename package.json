@@ -100,5 +100,8 @@
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
+  },
+  "dependencies": {
+    "color-fader": "/Library/WebServer/Documents/oss/color-fader"
   }
 }

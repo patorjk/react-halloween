@@ -174,7 +174,6 @@ function twoColorFade(color1: RGBColor, color2: RGBColor, length: number): RGBCo
   let { b } = color1;
   let ii: number;
 
-  // eslint-disable-next-line no-plusplus
   for (ii = 0; ii < length; ii++) {
     colors.push({ r, b, g });
     r += rIncr;
@@ -195,7 +194,6 @@ function multiColorFade(colors: RGBColor[], length: number): RGBColor[] {
   let tmpColors: RGBColor[];
   let dist: number;
 
-  // eslint-disable-next-line no-plusplus
   for (ii = 0; ii < len; ii++) {
     endPos = Math.max(startPos + 2, endPos + colorIncr);
     dist = Math.round(endPos) - Math.round(startPos);

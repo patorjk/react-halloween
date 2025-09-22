@@ -100,5 +100,8 @@
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
+  },
+  "dependencies": {
+    "color-fader": "0.2.0"
   }
 }

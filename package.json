@@ -102,6 +102,6 @@
     "**/*": "prettier --write --ignore-unknown"
   },
   "dependencies": {
-    "color-fader": "/Library/WebServer/Documents/oss/color-fader"
+    "color-fader": "0.2.0"
   }
 }

@@ -31,6 +31,19 @@ and then run the storybook.
 
 ## Components
 
+### &lt;DoomFire />
+
+A fire effect. This component accepts the following props:
+
+|        Name        | Type     | Default                 | Description                                                           |
+| :----------------: | :------- | :---------------------- | :-------------------------------------------------------------------- |
+|    **`height`**    | number   | 300                     | Height of the canvas containing the fire.                             |
+|    **`width`**     | number   | 400                     | Width of the canvas containing the fire.                              |
+|  **`pixelSize`**   | number   | 1                       | How big a pixel should be in the output. Larger means more pixelated. |
+|  **`fireColors`**  | string[] | A default set of colors | Array of CSS color values.                                            |
+| **`fireEnabled`**  | boolean  | true                    | CSS color for the iris.                                               |
+| **`fireStrength`** | number   | 0.75                    | Number between 0 and 1, represents the "strength" of the fire.        |
+
 ### &lt;Eyes />
 
 A set of eyes which open and close and follow the cursor. This component accepts the following props:

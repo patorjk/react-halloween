@@ -2,10 +2,10 @@ import React, { CSSProperties, useCallback, useEffect, useRef } from 'react';
 import { SpotLight } from './SpotLight';
 
 export interface LightsOutProps {
-  size: number;
-  darkColor: string;
-  clickToTurnOnLights: boolean;
-  zIndex: number;
+  size?: number;
+  darkColor?: string;
+  clickToTurnOnLights?: boolean;
+  zIndex?: number;
 }
 
 function LightsOut({
@@ -62,6 +62,18 @@ function LightsOut({
 
   useEffect(() => {
     setPositions();
+  }, [setPositions]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setPositions(-1000, -1000);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, [setPositions]);
 
   const turnLightsOn = useCallback(

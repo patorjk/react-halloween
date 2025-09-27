@@ -10,23 +10,15 @@ const packageJson = JSON.parse(readFileSync('./package.json', 'utf8'));
 export default [{
   external: [...Object.keys(packageJson.peerDependencies), 'motion/react', 'framer-motion'],
   input: './src/index.ts',
-  output: [
-    {
-      file: packageJson.main,
-      format: "cjs",
-      sourcemap: true,
-    },
-    {
-      file: packageJson.module,
-      format: 'esm',
-      sourcemap: true,
-    }
-  ],
+  output: [{
+    file: packageJson.module,
+    format: 'esm',
+    sourcemap: true,
+  }],
   plugins: [
     typescript({
       tsconfig: './tsconfig.json',
-      // IMPORTANT: Override the declarationDir to match output directories
-      outputToFilesystem: true, // This can help with directory conflicts
+      outputToFilesystem: true,
     }),
     resolve({
       extensions: ['.ts', '.tsx', '.mjs', '.js', '.jsx', '.json', '.node']

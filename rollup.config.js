@@ -19,6 +19,9 @@ export default [{
     typescript({
       tsconfig: './tsconfig.json',
       outputToFilesystem: true,
+      declaration: true,
+      declarationDir: './dist',
+      rootDir: './src'
     }),
     resolve({
       extensions: ['.ts', '.tsx', '.mjs', '.js', '.jsx', '.json', '.node']

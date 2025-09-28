@@ -4,7 +4,7 @@
   "description": "Halloween themed components for React",
   "type": "module",
   "module": "./dist/index.js",
-  "main": "./dist/index.js",
+  "main": "./dist/index.cjs",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
@@ -14,9 +14,11 @@
     }
   },
   "scripts": {
+    "clean": "rm -rf dist",
     "lint": "eslint './src/**/*.{js,jsx,ts,tsx}'",
     "lint:fix": "eslint --fix './src/**/*.{js,jsx,ts,tsx}'",
-    "rollup": "rollup -c",
+    "build-types": "npm run clean",
+    "build": "npm run build-types && rollup -c",
     "test": "jest",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
@@ -35,8 +37,8 @@
   "homepage": "https://github.com/patorjk/react-halloween#readme",
   "peerDependencies": {
     "motion": "^12.23.12",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react": ">=19.0.0",
+    "react-dom": ">=19.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.28.4",
@@ -92,6 +94,7 @@
     "react-docgen-typescript-loader": "^3.7.2",
     "react-dom": "^19.1.1",
     "rollup": "^4.52.2",
+    "rollup-plugin-dts": "^6.2.3",
     "rollup-plugin-typescript2": "^0.36.0",
     "storybook": "^9.1.5",
     "ts-jest": "^29.4.1",

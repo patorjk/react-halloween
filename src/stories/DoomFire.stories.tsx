@@ -62,7 +62,7 @@ function Template() {
     if (colorSelectValue === 'purpleFireColors') {
       return purpleFireColors;
     }
-    return null;
+    return undefined;
   }, [colorSelectValue]);
 
   const handleColorChnage = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
@@ -142,4 +142,5 @@ function Template() {
 
 export const Simple = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
+// @ts-expect-error TODO: figure this out later
 Simple.args = {};

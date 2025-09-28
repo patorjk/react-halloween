@@ -27,12 +27,14 @@ const getPixelIndex = (x: number, y: number, width: number) => y * width + x;
  * @param fireEnabled {boolean} Toggling on/off leads to a mini animation.
  */
 function updateFire(
-  fireBuffer: number[],
+  fireBuffer: number[] | null,
   width: number,
   height: number,
   maxIntensity: number,
   fireEnabled: boolean = true,
 ) {
+  if (!fireBuffer) return [];
+
   const newFireBuffer = Array.from(fireBuffer);
   for (let y = 0; y < height - 1; y++) {
     for (let x = 0; x < width; x++) {
@@ -85,13 +87,15 @@ function updateFire(
  * @param fireHeight {number} Height of fire.
  */
 function renderFire(
-  canvas: HTMLCanvasElement,
-  ctx: CanvasRenderingContext2D,
+  canvas: HTMLCanvasElement | null,
+  ctx: CanvasRenderingContext2D | null,
   fireBuffer: number[],
   firePalette: RgbaColor[],
   fireWidth: number,
   fireHeight: number,
 ) {
+  if (!canvas || !ctx) return;
+
   const imageData = ctx.createImageData(fireWidth, fireHeight);
 
   for (let y = 0; y < fireHeight; y++) {
@@ -115,6 +119,8 @@ function renderFire(
   tempCanvas.width = fireWidth;
   tempCanvas.height = fireHeight;
 
+  if (!tempCtx) return;
+
   tempCtx.putImageData(imageData, 0, 0);
 
   // Scale up the image with pixelated rendering
@@ -135,7 +141,7 @@ function initFire(width: number, height: number, maxIntensity: number = 36): num
 
 const defaultFireColors = ['#771f0700', '#771f07', '#DF4F07', '#cf770f', '#BF9F1F', '#B7B72F', '#ffffff'];
 
-function usePrevious(value) {
+function usePrevious(value: number) {
   const ref = useRef<number>(undefined);
 
   useEffect(() => {
@@ -181,7 +187,7 @@ const DoomFire = ({
   const prevFireWidth = usePrevious(fireWidth);
   const prevFireHeight = usePrevious(fireHeight);
 
-  const fireBufferRef = useRef(null);
+  const fireBufferRef = useRef<number[]>(null);
 
   const flamePalette: RgbaColor[] = useMemo(() => {
     const fadedColors = fadeColors(fireColors ?? defaultFireColors, fireHeight * fireStrength);
@@ -195,7 +201,7 @@ const DoomFire = ({
    * This effect governs the animation.
    */
   useEffect(() => {
-    let animationFrameId;
+    let animationFrameId: number;
 
     const animate = () => {
       fireBufferRef.current = updateFire(
@@ -207,16 +213,16 @@ const DoomFire = ({
       );
       renderFire(
         canvasRef.current,
-        canvasRef.current.getContext('2d'),
+        canvasRef.current?.getContext('2d') || null,
         fireBufferRef.current,
         flamePalette,
         fireWidth,
         fireHeight,
       );
-      animationFrameId = requestAnimationFrame(animate);
+      animationFrameId = window.requestAnimationFrame(animate);
     };
 
-    animationFrameId = requestAnimationFrame(animate);
+    animationFrameId = window.requestAnimationFrame(animate);
 
     // Cleanup
     return () => {

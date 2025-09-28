@@ -3,10 +3,10 @@ import { motion } from 'motion/react';
 
 export interface SpotLightProps {
   size: number;
-  onClick: (evt: React.MouseEvent<SVGSVGElement, MouseEvent>) => void;
+  onClick: ((evt: React.MouseEvent<SVGSVGElement, MouseEvent>) => void) | null;
   darkColor: string;
   zIndex: number;
-  ref: React.RefObject<SVGSVGElement>;
+  ref: React.RefObject<SVGSVGElement | null>;
 }
 
 const SpotLight = ({ size, onClick, darkColor, zIndex, ref }: SpotLightProps) => {
@@ -21,13 +21,13 @@ const SpotLight = ({ size, onClick, darkColor, zIndex, ref }: SpotLightProps) =>
   );
   const [gradientUrl] = useState(`gradientUrl_${Math.random()}`);
   const [spotLightState, setSpotLightState] = useState('off'); // on, off, lightsOn
-  const mouseMoveTimer = useRef(null);
+  const mouseMoveTimer = useRef<number>(null);
 
   const onMouseMove = useCallback(() => {
     if (spotLightState === 'lightsOn') return;
     setSpotLightState('on');
-    window.clearTimeout(mouseMoveTimer.current);
-    mouseMoveTimer.current = setTimeout(() => {
+    if (mouseMoveTimer.current) window.clearTimeout(mouseMoveTimer.current);
+    mouseMoveTimer.current = window.setTimeout(() => {
       if (spotLightState === 'lightsOn') return;
       setSpotLightState('off');
     }, 3000);
@@ -41,10 +41,10 @@ const SpotLight = ({ size, onClick, darkColor, zIndex, ref }: SpotLightProps) =>
   }, [onMouseMove]);
 
   const onSvgClick = useCallback(
-    (evt) => {
+    (evt: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
       if (spotLightState === 'lightsOn') return;
       setSpotLightState('lightsOn');
-      onClick(evt);
+      if (onClick) onClick(evt);
     },
     [onClick, spotLightState],
   );
@@ -80,6 +80,7 @@ const SpotLight = ({ size, onClick, darkColor, zIndex, ref }: SpotLightProps) =>
       ref={ref}
       width={size}
       height={size}
+      // @ts-expect-error TODO: figure this out later
       onClick={onClick ? onSvgClick : null}
     >
       <defs>

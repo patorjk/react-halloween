@@ -32,7 +32,7 @@ export interface HauntedProps {
     };
   };
   disableFun?: boolean;
-  Creature?: React.ElementType;
+  Creature?: React.ElementType | null;
   style?: CSSProperties;
   children?: React.ReactNode;
 }
@@ -57,10 +57,12 @@ function Haunted({
     ...creatureOptions,
   };
   const [mouseOver, setMouseOver] = useState(false);
-  const container = useRef(null);
-  const creatureRefs = useRef([]);
+  const container = useRef<HTMLDivElement>(null);
+  const creatureRefs = useRef<HTMLElement[]>([]);
 
   const onMouseEnter = useCallback(() => {
+    if (!container.current) return;
+
     const rect = container.current.getBoundingClientRect();
 
     const halfCreatureWidth = (fullCreatureOptions?.dimensions?.width || 0) / 2;

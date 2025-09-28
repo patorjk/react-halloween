@@ -6,9 +6,9 @@ import { randomIntFromInterval, randomNumber } from '../utils';
 export interface GhostAnimatorProps {
   animationTimeMax: number;
   distance: number;
-  container: React.RefObject<HTMLDivElement>;
+  container: React.RefObject<HTMLDivElement | null>;
   mouseOver: boolean;
-  Creature?: React.ElementType;
+  Creature?: React.ElementType | null;
   index: number;
   repeat: boolean;
   dimensions: {

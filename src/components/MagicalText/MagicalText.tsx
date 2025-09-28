@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion, Easing } from 'motion/react';
+import { ResolvedValues } from 'motion';
 import { MagicalTextSparkleAnimator, MagicalTextScaleAnimator } from './animators';
 import { StarCrossSVG } from '../svgs';
 import { multiColorFade, parseCSSColor } from '../utils';
@@ -69,7 +70,7 @@ function MagicalText({
   const fadeReference = useMemo(() => multiColorFade(rgbColors, 200), [rgbColors]);
   const [fadeOffset, setFadeOffset] = useState(0);
 
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const backgroundSize = '200%';
   const completeColors = [...colors, colors[0]];
   const [adornmentKey, setAdornmentKey] = useState(`_akey${Math.random()}`);
@@ -110,7 +111,7 @@ function MagicalText({
   };
 
   const getColor = useCallback(
-    (pos) => {
+    (pos: number) => {
       const position = pos || 0;
       let offsetPos = Math.round(200 - fadeOffset + position * 100);
       if (offsetPos >= 200) {
@@ -126,7 +127,8 @@ function MagicalText({
     [colors, fadeOffset, fadeReference],
   );
 
-  const onUpdate = useCallback((param) => {
+  const onUpdate = useCallback((param: ResolvedValues) => {
+    if (typeof param.backgroundPosition !== 'string') return;
     const matches = param.backgroundPosition.match(/[0-9]+/);
     if (matches) {
       const val = parseInt(matches[0], 10);
@@ -150,7 +152,7 @@ function MagicalText({
           style={fadeText ? divStyle : {}}
           variants={variants}
           animate={fadeText ? 'on' : 'off'}
-          onUpdate={animationType === 'sparkle' ? onUpdate : null}
+          onUpdate={animationType === 'sparkle' ? onUpdate : undefined}
         >
           {text}
         </motion.div>

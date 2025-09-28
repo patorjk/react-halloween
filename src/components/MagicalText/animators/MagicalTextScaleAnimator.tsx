@@ -1,16 +1,18 @@
 import React, { useCallback, useRef } from 'react';
 import { motion } from 'motion/react';
+import { ResolvedValues } from 'motion';
 import { randomIntFromInterval } from '../../utils';
 import { GhostSVG } from '../../svgs';
 
 export interface MagicalTextScaleAnimatorProps {
   Adornment?: React.ElementType;
-  container?: React.RefObject<HTMLElement>;
+  container?: React.RefObject<HTMLElement | null>;
   delay?: number;
   duration?: number;
   opacity?: number;
   width?: number;
   height?: number;
+  colors?: string[];
 }
 
 function MagicalTextScaleAnimator({
@@ -21,8 +23,9 @@ function MagicalTextScaleAnimator({
   opacity = 0.7,
   width = 16,
   height = 16,
+  colors = [] /* eslint-disable-line */,
 }: MagicalTextScaleAnimatorProps) {
-  const ghostRef = useRef(null);
+  const ghostRef = useRef<HTMLDivElement>(null);
 
   const variants = {
     on: () => ({
@@ -47,13 +50,15 @@ function MagicalTextScaleAnimator({
       const halfWidth = width / 2;
       const halfHeight = height / 2;
 
+      if (!ghostRef.current) return;
+
       ghostRef.current.style.left = `${randomIntFromInterval(-halfWidth, rect.width - halfWidth)}px`;
       ghostRef.current.style.top = `${randomIntFromInterval(-halfHeight, rect.height - halfHeight)}px`;
     }
   }, [ghostRef, container, width, height]);
 
   const setup = useCallback(
-    (variant) => {
+    (variant: string) => {
       if (variant === 'on') {
         setPosition();
       }
@@ -62,7 +67,7 @@ function MagicalTextScaleAnimator({
   );
 
   const onUpdate = useCallback(
-    (latest) => {
+    (latest: ResolvedValues) => {
       const { scale } = latest;
       if (scale === 0) {
         setPosition();

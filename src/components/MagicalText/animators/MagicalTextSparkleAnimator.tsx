@@ -1,5 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { motion, Easing } from 'motion/react';
+import { ResolvedValues } from 'motion';
 import { randomIntFromInterval } from '../../utils';
 import { StarCrossSVG } from '../../svgs';
 
@@ -7,12 +8,13 @@ const defaultGetColor = () => null;
 
 export interface MagicalTextSparkleAnimatorProps {
   Adornment?: React.ElementType;
-  container?: React.RefObject<HTMLElement>;
+  container?: React.RefObject<HTMLElement | null>;
   delay?: number;
   duration?: number;
-  getColor?: (pos: number) => string;
+  getColor?: (pos: number) => string | null;
   width?: number;
   height?: number;
+  colors?: string[];
 }
 
 function MagicalTextSparkleAnimator({
@@ -23,9 +25,10 @@ function MagicalTextSparkleAnimator({
   getColor = defaultGetColor,
   width = 16,
   height = 16,
+  colors = [] /* eslint-disable-line */,
 }: MagicalTextSparkleAnimatorProps) {
-  const starRef = useRef(null);
-  const pathRef = useRef(null);
+  const starRef = useRef<HTMLDivElement>(null);
+  const pathRef = useRef<SVGSVGElement>(null);
   const [leftPos, setLeftPos] = useState(0);
   const [leftMax, setLeftMax] = useState(0);
   const [leftMin, setLeftMin] = useState(0);
@@ -54,7 +57,7 @@ function MagicalTextSparkleAnimator({
   };
 
   const setPosition = useCallback(() => {
-    if (container.current) {
+    if (container?.current) {
       const rect = container.current.getBoundingClientRect();
 
       const halfWidth = width / 2;
@@ -63,6 +66,8 @@ function MagicalTextSparkleAnimator({
       const leftEnd = rect.width - halfWidth;
       const left = randomIntFromInterval(leftStart, leftEnd);
       const top = randomIntFromInterval(-halfHeight, rect.height - halfHeight);
+
+      if (!starRef.current) return;
 
       starRef.current.style.left = `${left}px`;
       starRef.current.style.top = `${top}px`;
@@ -74,7 +79,7 @@ function MagicalTextSparkleAnimator({
   }, [container, starRef, width, height]);
 
   const setup = useCallback(
-    (variant) => {
+    (variant: string) => {
       if (variant === 'on') {
         setPosition();
       }
@@ -83,12 +88,12 @@ function MagicalTextSparkleAnimator({
   );
 
   const onUpdate = useCallback(
-    (latest) => {
+    (latest: ResolvedValues) => {
       const { scale } = latest;
-      const color = getColor((leftPos - leftMin) / (leftMax - leftMin));
+      const color = getColor((leftPos - leftMin) / (leftMax - leftMin)) || '';
 
       if (pathRef.current) pathRef.current.style.fill = color;
-      if (scale < 0.01) {
+      if (typeof scale === 'number' && scale < 0.01) {
         setPosition();
       }
     },

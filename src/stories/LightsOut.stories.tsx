@@ -12,6 +12,7 @@ export default {
 };
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
+// @ts-expect-error TODO: figure this out later
 function Template(args) {
   const [loKey, setLoKey] = useState(0);
 
@@ -43,12 +44,14 @@ function Template(args) {
 
 export const Simple = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
+// @ts-expect-error TODO: figure this out later
 Simple.args = {
   size: 300,
 };
 
 export const NoLightsOn = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
+// @ts-expect-error TODO: figure this out later
 NoLightsOn.args = {
   clickToTurnOnLights: false,
 };

@@ -38,22 +38,24 @@ function Eye({
   pupilCoords = { cx: 5, cy: 4 },
   width = 50,
 }: EyeProps) {
-  const pupilRef = useRef(null);
-  const eyeContainerRef = useRef(null);
-  const irisRef = useRef(null);
-  const groupRef = useRef(null);
+  const pupilRef = useRef<SVGCircleElement>(null);
+  const eyeContainerRef = useRef<SVGCircleElement>(null);
+  const irisRef = useRef<SVGCircleElement>(null);
+  const groupRef = useRef<SVGGElement>(null);
   const [eyeMaskId] = useState(`eyemask_${Math.random()}`);
 
   useEffect(() => {
     if (follow === false) return undefined;
 
     // based on https://buipalsulich.com/post/gopher-eyes/
-    const onMouseMove = (evt) => {
+    const onMouseMove = (evt: MouseEvent) => {
       const pupil = pupilRef.current;
       const iris = irisRef.current;
       if (!pupil) return;
 
       const eyeBall = eyeContainerRef.current;
+
+      if (!eyeBall) return;
 
       const pupilR = pupil.r.baseVal.value;
       const eyeR = eyeBall.r.baseVal.value;
@@ -73,6 +75,8 @@ function Eye({
 
       pupil.style.transform = `translate(${`${t}px`}) rotate(${`${angle}deg`})`;
       pupil.style.transformOrigin = `${`${eyeBall.cx.baseVal.value - t}px`} ${`${eyeBall.cy.baseVal.value}px`}`;
+
+      if (!iris) return;
 
       iris.style.transform = `translate(${`${t}px`}) rotate(${`${angle}deg`})`;
       iris.style.transformOrigin = `${`${eyeBall.cx.baseVal.value - t}px`} ${`${eyeBall.cy.baseVal.value}px`}`;

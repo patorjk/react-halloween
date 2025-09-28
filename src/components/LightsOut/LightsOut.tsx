@@ -14,13 +14,13 @@ function LightsOut({
   clickToTurnOnLights = true,
   zIndex = 100000,
 }: LightsOutProps) {
-  const containerRef = useRef(null);
-  const svgRef = useRef(null);
-  const northRef = useRef(null);
-  const eastRef = useRef(null);
-  const southRef = useRef(null);
-  const westRef = useRef(null);
-  const lightsOn = useRef(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+  const northRef = useRef<HTMLDivElement>(null);
+  const eastRef = useRef<HTMLDivElement>(null);
+  const southRef = useRef<HTMLDivElement>(null);
+  const westRef = useRef<HTMLDivElement>(null);
+  const lightsOn = useRef<boolean>(false);
 
   const darkStyle: CSSProperties = {
     position: 'fixed',
@@ -34,18 +34,20 @@ function LightsOut({
       const pageWidth = document.documentElement.scrollWidth;
       const pageHeight = document.documentElement.scrollHeight;
 
-      northRef.current.style.top = 0;
-      northRef.current.style.left = 0;
+      if (!northRef.current || !eastRef.current || !southRef.current || !westRef.current) return;
+
+      northRef.current.style.top = '0';
+      northRef.current.style.left = '0';
       northRef.current.style.width = `${pageWidth}px`;
       northRef.current.style.height = `${Math.max(0, clientY - halfSize)}px`;
 
       southRef.current.style.top = `${clientY + halfSize}px`;
-      southRef.current.style.left = 0;
+      southRef.current.style.left = '0';
       southRef.current.style.width = `${pageWidth}px`;
       southRef.current.style.height = `${Math.max(0, pageHeight - (clientY + halfSize))}px`;
 
       westRef.current.style.top = `${clientY - halfSize}px`;
-      westRef.current.style.left = 0;
+      westRef.current.style.left = '0';
       westRef.current.style.width = `${Math.max(0, clientX - halfSize)}px`;
       westRef.current.style.height = `${size}px`;
 
@@ -53,6 +55,8 @@ function LightsOut({
       eastRef.current.style.top = `${clientY - halfSize}px`;
       eastRef.current.style.width = `${Math.max(0, pageWidth - (clientX + halfSize))}px`;
       eastRef.current.style.height = `${size}px`;
+
+      if (!svgRef.current) return;
 
       svgRef.current.style.left = `${clientX - halfSize}px`;
       svgRef.current.style.top = `${clientY - halfSize}px`;
@@ -77,11 +81,11 @@ function LightsOut({
   }, [setPositions]);
 
   const turnLightsOn = useCallback(
-    (evt) => {
+    (evt: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
       const cx = evt.clientX;
       const cy = evt.clientY;
 
-      if (lightsOn.current === true) return false;
+      if (lightsOn.current === true) return;
       lightsOn.current = true;
 
       const pageWidth = document.documentElement.scrollWidth;
@@ -103,11 +107,11 @@ function LightsOut({
       let svgHeight = size;
 
       // disable pointer-events
-      svgRef.current.style.pointerEvents = 'none';
-      northRef.current.style.pointerEvents = 'none';
-      eastRef.current.style.pointerEvents = 'none';
-      southRef.current.style.oppointerEventsacity = 'none';
-      westRef.current.style.pointerEvents = 'none';
+      if (svgRef.current) svgRef.current.style.pointerEvents = 'none';
+      if (northRef.current) northRef.current.style.pointerEvents = 'none';
+      if (eastRef.current) eastRef.current.style.pointerEvents = 'none';
+      if (southRef.current) southRef.current.style.pointerEvents = 'none';
+      if (westRef.current) westRef.current.style.pointerEvents = 'none';
 
       let count = 0;
       const countMax = 200;
@@ -132,6 +136,8 @@ function LightsOut({
 
         try {
           if (count < opacityBreakPoint) {
+            if (!northRef.current || !eastRef.current || !southRef.current || !westRef.current) return;
+
             northRef.current.style.height = `${Math.max(0, northHeight)}px`;
 
             eastRef.current.style.top = `${svgTop}px`;
@@ -146,17 +152,23 @@ function LightsOut({
             southRef.current.style.top = `${southTop}px`;
             southRef.current.style.height = `${Math.max(0, southHeight)}px`;
 
+            if (!svgRef.current) return;
+
             svgRef.current.style.top = `${svgTop}px`;
             svgRef.current.style.left = `${svgLeft}px`;
             svgRef.current.style.width = `${svgWidth}px`;
             svgRef.current.style.height = `${svgHeight}px`;
           } else {
             const opacity = 1 - (count - opacityBreakPoint) / (countMax - opacityBreakPoint);
-            svgRef.current.style.opacity = opacity;
-            northRef.current.style.opacity = opacity;
-            eastRef.current.style.opacity = opacity;
-            southRef.current.style.opacity = opacity;
-            westRef.current.style.opacity = opacity;
+
+            if (!northRef.current || !eastRef.current || !southRef.current || !westRef.current) return;
+            if (!svgRef.current) return;
+
+            svgRef.current.style.opacity = `${opacity}`;
+            northRef.current.style.opacity = `${opacity}`;
+            eastRef.current.style.opacity = `${opacity}`;
+            southRef.current.style.opacity = `${opacity}`;
+            westRef.current.style.opacity = `${opacity}`;
           }
         } catch (err) {
           console.error(err);
@@ -167,24 +179,22 @@ function LightsOut({
           clearInterval(timer);
         }
       }, 10);
-
-      return null;
     },
     [halfSize, size],
   );
 
   useEffect(() => {
     if (lightsOn.current) return;
-    const onMouseMove = (evt) => {
+    const onMouseMove = (evt: MouseEvent) => {
       if (lightsOn.current) return;
       setPositions(evt.clientX, evt.clientY);
     };
-    const onKeyDown = (evt) => {
+    const onKeyDown = (evt: KeyboardEvent) => {
       if (lightsOn.current) return;
       if (evt.key === 'Escape') {
         const clientX = document.documentElement.clientWidth / 2;
         const clientY = document.documentElement.clientHeight / 2;
-        turnLightsOn({ clientX, clientY });
+        turnLightsOn({ clientX, clientY } as React.MouseEvent<SVGSVGElement, MouseEvent>);
       }
     };
 

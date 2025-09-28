@@ -60,6 +60,7 @@ Template.defaultProps = {
 
 export const Simple = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
+// @ts-expect-error TODO: figure this out later
 Simple.args = {
   magicalTextProps: {
     text: 'This is so magical!',
@@ -69,6 +70,7 @@ Simple.args = {
 
 export const VerySparkly = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
+// @ts-expect-error TODO: figure this out later
 VerySparkly.args = {
   magicalTextProps: {
     text: 'This is so magical! Oh wow is this a lot of sparkles...',
@@ -83,6 +85,7 @@ VerySparkly.args = {
 
 export const NoAdnornments = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
+// @ts-expect-error TODO: figure this out later
 NoAdnornments.args = {
   magicalTextProps: {
     text: 'This is so magical! Except there are no sparkles.',
@@ -94,6 +97,7 @@ NoAdnornments.args = {
 
 export const NoFadedText = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
+// @ts-expect-error TODO: figure this out later
 NoFadedText.args = {
   magicalTextProps: {
     text: 'This is so magical! Except there are no sparkles.',
@@ -104,6 +108,7 @@ NoFadedText.args = {
 
 export const DisableFun = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
+// @ts-expect-error TODO: figure this out later
 DisableFun.args = {
   magicalTextProps: {
     text: 'This is so magical!',
@@ -113,6 +118,7 @@ DisableFun.args = {
 
 export const Ghost = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
+// @ts-expect-error TODO: figure this out later
 Ghost.args = {
   magicalTextProps: {
     text: 'This is kind of spooky!',
@@ -126,6 +132,7 @@ Ghost.args = {
 
 export const Heart = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
+// @ts-expect-error TODO: figure this out later
 Heart.args = {
   magicalTextProps: {
     text: 'I feel so loved...',

@@ -1,6 +1,6 @@
 {
   "name": "react-halloween",
-  "version": "0.3.1-beta.0",
+  "version": "0.3.1",
   "description": "Halloween themed components for React",
   "type": "module",
   "module": "./dist/index.js",

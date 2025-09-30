@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { AnimatePresence, motion, Easing } from 'motion/react';
-import { ResolvedValues } from 'motion';
+import { AnimatePresence, motion, type Easing } from 'motion/react';
+import { type ResolvedValues } from 'motion';
 import { MagicalTextSparkleAnimator, MagicalTextScaleAnimator } from './animators';
 import { StarCrossSVG } from '../svgs';
 import { multiColorFade, parseCSSColor } from '../utils';

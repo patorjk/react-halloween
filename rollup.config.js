@@ -24,10 +24,6 @@ export default [
   {
     input: "src/index.ts",
     external,
-    globals: {
-      react: 'React',
-      'react-dom': 'ReactDOM',
-    },
     output: [
       {
         file: packageJson.main,

@@ -1,4 +1,4 @@
-import React, { CSSProperties, useCallback, useEffect, useRef } from 'react';
+import React, { type CSSProperties, useCallback, useEffect, useRef } from 'react';
 import { SpotLight } from './SpotLight';
 
 export interface LightsOutProps {

@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react';
+import React, { type CSSProperties } from 'react';
 import { Eye } from './Eye';
 
 export interface EyeLayout {

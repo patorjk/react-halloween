@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { motion, Easing } from 'motion/react';
-import { ResolvedValues } from 'motion';
+import { motion, type Easing } from 'motion/react';
+import { type ResolvedValues } from 'motion';
 import { randomIntFromInterval } from '../../utils';
 import { StarCrossSVG } from '../../svgs';
 

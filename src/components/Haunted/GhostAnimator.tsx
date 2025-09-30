@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
-import { motion, useAnimation, Easing } from 'motion/react';
+import { motion, useAnimation, type Easing } from 'motion/react';
 import { GhostSVG as GhostDefault } from '../svgs/GhostSVG';
 import { randomIntFromInterval, randomNumber } from '../utils';
 

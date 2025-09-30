@@ -1,5 +1,5 @@
-import React, { CSSProperties, useCallback, useRef, useState } from 'react';
-import { Easing, motion } from 'motion/react';
+import React, { type CSSProperties, useCallback, useRef, useState } from 'react';
+import { type Easing, motion } from 'motion/react';
 import { GhostAnimator } from './GhostAnimator';
 
 const defaultGlowOptions = {

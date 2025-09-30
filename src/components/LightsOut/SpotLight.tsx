@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState, useMemo, CSSProperties } from 'react';
+import React, { useCallback, useEffect, useRef, useState, useMemo, type CSSProperties } from 'react';
 import { motion } from 'motion/react';
 
 export interface SpotLightProps {

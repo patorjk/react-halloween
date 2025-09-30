@@ -47,6 +47,8 @@ export const Simple = Template.bind({});
 // @ts-expect-error TODO: figure this out later
 Simple.args = {
   size: 300,
+  onLightsOnStart: () => console.log('onLightsOnStart'),
+  onLightsOnEnd: () => console.log('onLightsOnEnd'),
 };
 
 export const NoLightsOn = Template.bind({});

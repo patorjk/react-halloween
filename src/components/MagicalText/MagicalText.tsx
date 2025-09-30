@@ -62,26 +62,25 @@ function MagicalText({
     ...defaultAdornmentOptions,
     ...adornmentOptions,
   };
+  const fadeOffsetRef = useRef<number>(0);
 
-  const rgbColors = useMemo(
-    () => colors.map((color) => parseCSSColor(color)).concat(parseCSSColor(colors[0])),
-    [colors],
-  );
+  const colorsStr = colors.join('█');
+  const rgbColors = useMemo(() => {
+    const parsedColors = colorsStr.split('█');
+    return parsedColors.map((color) => parseCSSColor(color)).concat(parseCSSColor(parsedColors[0]));
+  }, [colorsStr]);
   const fadeReference = useMemo(() => multiColorFade(rgbColors, 200), [rgbColors]);
-  const [fadeOffset, setFadeOffset] = useState(0);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const backgroundSize = '200%';
   const completeColors = [...colors, colors[0]];
   const [adornmentKey, setAdornmentKey] = useState(`_akey${Math.random()}`);
-  let AdornmentAnimator = null;
-  if (typeof animationType === 'string') {
-    AdornmentAnimator = animationType === 'sparkle' ? MagicalTextSparkleAnimator : MagicalTextScaleAnimator;
-  } else if (typeof animationType === 'object') {
-    AdornmentAnimator = animationType;
-  } else {
-    throw new Error('Invalid value for animationType');
-  }
+  const AdornmentAnimator: React.ElementType =
+    animationType === 'sparkle'
+      ? MagicalTextSparkleAnimator
+      : typeof animationType === 'object'
+        ? animationType
+        : MagicalTextScaleAnimator;
 
   useEffect(() => {
     setAdornmentKey(`_akey${Math.random()}`);
@@ -113,7 +112,7 @@ function MagicalText({
   const getColor = useCallback(
     (pos: number) => {
       const position = pos || 0;
-      let offsetPos = Math.round(200 - fadeOffset + position * 100);
+      let offsetPos = Math.round(200 - fadeOffsetRef.current + position * 100);
       if (offsetPos >= 200) {
         offsetPos -= 200;
       }
@@ -124,15 +123,14 @@ function MagicalText({
       // if color not found, use first color
       return colors[0];
     },
-    [colors, fadeOffset, fadeReference],
+    [colors, fadeReference],
   );
 
   const onUpdate = useCallback((param: ResolvedValues) => {
     if (typeof param.backgroundPosition !== 'string') return;
     const matches = param.backgroundPosition.match(/[0-9]+/);
     if (matches) {
-      const val = parseInt(matches[0], 10);
-      setFadeOffset(val);
+      fadeOffsetRef.current = parseInt(matches[0], 10);
     }
   }, []);
 

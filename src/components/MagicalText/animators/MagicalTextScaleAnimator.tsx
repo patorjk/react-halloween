@@ -69,7 +69,7 @@ function MagicalTextScaleAnimator({
   const onUpdate = useCallback(
     (latest: ResolvedValues) => {
       const { scale } = latest;
-      if (scale === 0) {
+      if (typeof scale === 'number' && scale < 0.01) {
         setPosition();
       }
     },

@@ -6,6 +6,8 @@ export interface LightsOutProps {
   darkColor?: string;
   clickToTurnOnLights?: boolean;
   zIndex?: number;
+  onLightsOnStart?: (() => void) | undefined;
+  onLightsOnEnd?: (() => void) | undefined;
 }
 
 function LightsOut({
@@ -13,6 +15,8 @@ function LightsOut({
   darkColor = 'rgba(0,0,0,0.9)',
   clickToTurnOnLights = true,
   zIndex = 100000,
+  onLightsOnStart,
+  onLightsOnEnd,
 }: LightsOutProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
@@ -82,6 +86,8 @@ function LightsOut({
 
   const turnLightsOn = useCallback(
     (evt: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+      if (onLightsOnStart) onLightsOnStart();
+
       const cx = evt.clientX;
       const cy = evt.clientY;
 
@@ -173,14 +179,16 @@ function LightsOut({
         } catch (err) {
           console.error(err);
           clearInterval(timer);
+          if (onLightsOnEnd) onLightsOnEnd();
         }
 
         if (count >= countMax) {
           clearInterval(timer);
+          if (onLightsOnEnd) onLightsOnEnd();
         }
       }, 10);
     },
-    [halfSize, size],
+    [halfSize, size, onLightsOnStart, onLightsOnEnd],
   );
 
   useEffect(() => {

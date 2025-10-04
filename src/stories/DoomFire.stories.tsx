@@ -28,7 +28,8 @@ const yellowRedFireColors = ['#FF634700', '#FF6347', '#FFD700'];
 const purpleFireColors = ['#FF69B400', '#FF69B4', '#BA55D3'];
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-function Template() {
+// @ts-expect-error TODO: figure this out later
+function Template(args) {
   const [loKey, setLoKey] = useState(0);
   const [enabled, setEnabled] = useState(true);
 
@@ -75,7 +76,8 @@ function Template() {
         height: '100%',
         width: '100%',
         marginTop: '1rem',
-        backgroundColor: 'white',
+        backgroundColor: 'black',
+        color: 'white',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -83,12 +85,14 @@ function Template() {
         gap: '1rem',
       }}
     >
+      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <DoomFire
         key={loKey}
         fireEnabled={enabled}
         fireColors={colors}
         pixelSize={firePixelation}
         fireStrength={fireStrength}
+        mode={args.mode}
       />
       <div style={{ display: 'flex', gap: '1rem' }}>
         <button type="button" onClick={updateKey}>
@@ -143,4 +147,11 @@ function Template() {
 export const Simple = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 // @ts-expect-error TODO: figure this out later
-Simple.args = {};
+Simple.args = {
+  mode: 'ground',
+};
+
+export const Freeform = Template.bind({});
+// More on args: https://storybook.js.org/docs/react/writing-stories/args
+// @ts-expect-error TODO: figure this out later
+Freeform.args = { mode: 'freeform' };

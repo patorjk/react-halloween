@@ -1,11 +1,11 @@
 import React, { type ChangeEvent, useCallback, useMemo, useState } from 'react';
 
-import { DoomFire } from '../components';
+import { DoomFireTorch } from '../components';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: 'SpecialEffects/DoomFire',
-  component: DoomFire,
+  title: 'SpecialEffects/DoomFireTorch',
+  component: DoomFireTorch,
   parameters: {
     layout: 'fullscreen',
   },
@@ -86,7 +86,7 @@ function Template(args) {
       }}
     >
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-      <DoomFire
+      <DoomFireTorch
         key={loKey}
         fireEnabled={enabled}
         fireColors={colors}

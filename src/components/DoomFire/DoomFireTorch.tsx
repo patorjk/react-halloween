@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { fadeColors, type RgbaColor } from 'color-fader';
 
 /**
@@ -25,6 +25,8 @@ const getPixelIndex = (x: number, y: number, width: number) => y * width + x;
  * @param maxIntensity {number} Number indicating the intensity. Higher the number, higher the intensity. Max height of
  *   the fire is the max intensity.
  * @param fireEnabled {boolean} Toggling on/off leads to a mini animation.
+ * @param mousePos {{ x: number; y: number } | null} Mouse position in fire coordinates
+ * @param fireRadius {number} Size of the fire source
  */
 function updateFire(
   fireBuffer: number[] | null,
@@ -32,39 +34,78 @@ function updateFire(
   height: number,
   maxIntensity: number,
   fireEnabled: boolean = true,
+  mousePos: { x: number; y: number } | null = null,
+  fireRadius: number,
 ) {
   if (!fireBuffer) return [];
 
   const newFireBuffer = Array.from(fireBuffer);
+
+  /**
+   * We do averages here because without taking average the fire will
+   * drift slightly to the left. This is because pixels are processed
+   * left-to-right and each pixels writes to a target position.
+   * When multiple pixels write to the same position, the last writes
+   * wins. So the average approach is aimed at getting rid of this bias.
+   */
+
+  // Track contributions for averaging
+  const contributionCounts = new Array(width * height).fill(0);
+  const contributionSums = new Array(width * height).fill(0);
+
   for (let y = 0; y < height - 1; y++) {
     for (let x = 0; x < width; x++) {
-      const pixelIndex = getPixelIndex(x, y, width);
       const belowPixelIndex = getPixelIndex(x, y + 1, width);
-
       const fireIntensity = fireBuffer[belowPixelIndex];
 
-      // Add randomness to create flickering effect
-      const randomDecay = Math.floor(Math.random() * 3); // 0, 1, or 2
-      const randomWind = Math.floor(Math.random() * 3) - 1; // -1, 0, or 1
+      const randomDecay = Math.floor(Math.random() * 3);
+      const randomWind = Math.floor(Math.random() * 3) - 1;
 
-      const newIntensity = fireIntensity - randomDecay;
+      const newIntensity = Math.max(0, fireIntensity - randomDecay);
       const targetX = Math.max(0, Math.min(width - 1, x + randomWind));
       const targetIndex = getPixelIndex(targetX, y, width);
 
-      newFireBuffer[targetIndex] = Math.max(0, newIntensity);
+      // Accumulate values for averaging
+      contributionSums[targetIndex] += newIntensity;
+      contributionCounts[targetIndex]++;
     }
   }
 
-  for (let x = 0; x < width; x++) {
-    if (fireEnabled) {
-      // Maintain fire source at bottom if fire is enabled
-      newFireBuffer[getPixelIndex(x, height - 1, width)] = maxIntensity;
-    } else {
-      // extinguish the fire by killing the bottom source
-      newFireBuffer[getPixelIndex(x, height - 1, width)] = Math.max(
-        0,
-        newFireBuffer[getPixelIndex(x, height - 1, width)] - Math.floor(Math.random() * 3),
-      );
+  // Average out all contributions
+  for (let i = 0; i < height - 1; i++) {
+    for (let j = 0; j < width; j++) {
+      const index = getPixelIndex(j, i, width);
+      if (contributionCounts[index] > 0) {
+        newFireBuffer[index] = Math.round(contributionSums[index] / contributionCounts[index]);
+      }
+    }
+  }
+
+  // Fire source follows mouse - ensure the fire remains strong around it
+  // Point of this section is to create a fire source that emanates from the mouse position
+  if (fireEnabled && mousePos) {
+    for (let dy = -fireRadius; dy <= fireRadius; dy++) {
+      for (let dx = -fireRadius; dx <= fireRadius; dx++) {
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance <= fireRadius) {
+          const x = Math.round(mousePos.x + dx);
+          const y = Math.round(mousePos.y + dy);
+
+          if (x >= 0 && x < width && y >= 0 && y < height) {
+            // Use exponential falloff for more natural decay
+            const normalizedDistance = distance / fireRadius;
+            const falloff = Math.pow(1 - normalizedDistance, 2); // Quadratic falloff
+
+            // Add randomness to create more natural-looking fire
+            const randomVariation = 0.5 + Math.random() * 0.5; // 0.7 to 1.0
+            const intensity = maxIntensity * falloff * randomVariation;
+
+            const index = getPixelIndex(x, y, width);
+            // Use Math.max to blend with existing fire
+            newFireBuffer[index] = Math.max(newFireBuffer[index], Math.floor(intensity));
+          }
+        }
+      }
     }
   }
 
@@ -126,13 +167,7 @@ function renderFire(
 }
 
 function initFire(width: number, height: number, maxIntensity: number = 36): number[] {
-  const fireBuffer = Array(width * height).fill(0);
-
-  // While fire is on, bottom row should be at maximum fire intensity
-  for (let x = 0; x < width; x++) {
-    fireBuffer[getPixelIndex(x, height - 1, width)] = maxIntensity;
-  }
-  return fireBuffer;
+  return Array(width * height).fill(0);
 }
 
 const defaultFireColors = ['#771f0700', '#771f07', '#DF4F07', '#cf770f', '#BF9F1F', '#B7B72F', '#ffffff'];
@@ -141,19 +176,20 @@ function usePrevious(value: number) {
   const ref = useRef<number>(undefined);
 
   useEffect(() => {
-    ref.current = value; // Update the ref's current value after every render
-  }, [value]); // Rerun this effect only when 'value' changes
+    ref.current = value;
+  }, [value]);
 
-  return ref.current; // Return the value from the previous render
+  return ref.current;
 }
 
-export interface DoomFireProps {
+export interface DoomFireTorchProps {
   height?: number;
   width?: number;
   pixelSize?: number;
   fireColors?: string[];
   fireEnabled?: boolean;
   fireStrength?: number;
+  fireRadius?: number;
 }
 
 /**
@@ -164,17 +200,20 @@ export interface DoomFireProps {
  * @param fireColors {string[]} Array of CSS color values.
  * @param fireEnabled {boolean} If the fire is on.
  * @param fireStrength {number} Number between 0 and 1, represents the "strength" of the fire.
+ * @param fireRadius {number} Radius of fire.
  * @constructor
  */
-const DoomFire = ({
+const DoomFireTorch = ({
   height = 300,
   width = 400,
   pixelSize = 2,
   fireColors = defaultFireColors,
   fireEnabled = true,
   fireStrength = 0.75,
-}: DoomFireProps) => {
+  fireRadius = 7,
+}: DoomFireTorchProps) => {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
+  const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
 
   const fireWidth = Math.ceil(width / pixelSize);
   const fireHeight = Math.ceil(height / pixelSize);
@@ -193,6 +232,52 @@ const DoomFire = ({
     return fadedColors;
   }, [fireColors, fireWidth, fireHeight, fireStrength, prevStrength, prevFireWidth, prevFireHeight]);
 
+  // Handle mouse/touch movement
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const updateMousePosition = (clientX: number, clientY: number) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = Math.floor((clientX - rect.left) / pixelSize);
+      const y = Math.floor((clientY - rect.top) / pixelSize);
+
+      setMousePos({ x, y });
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      updateMousePosition(e.clientX, e.clientY);
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      e.preventDefault();
+      if (e.touches.length > 0) {
+        const touch = e.touches[0];
+        updateMousePosition(touch.clientX, touch.clientY);
+      }
+    };
+
+    const handleMouseLeave = () => {
+      setMousePos(null);
+    };
+
+    const handleTouchEnd = () => {
+      setMousePos(null);
+    };
+
+    canvas.addEventListener('mousemove', handleMouseMove);
+    canvas.addEventListener('mouseleave', handleMouseLeave);
+    canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+    canvas.addEventListener('touchend', handleTouchEnd);
+
+    return () => {
+      canvas.removeEventListener('mousemove', handleMouseMove);
+      canvas.removeEventListener('mouseleave', handleMouseLeave);
+      canvas.removeEventListener('touchmove', handleTouchMove);
+      canvas.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [pixelSize]);
+
   /**
    * This effect governs the animation.
    */
@@ -206,6 +291,8 @@ const DoomFire = ({
         fireHeight,
         flamePalette.length - 1,
         fireEnabled,
+        mousePos,
+        fireRadius,
       );
       renderFire(
         canvasRef.current,
@@ -224,9 +311,17 @@ const DoomFire = ({
     return () => {
       cancelAnimationFrame(animationFrameId);
     };
-  }, [fireWidth, fireHeight, flamePalette, fireEnabled]);
+  }, [fireWidth, fireHeight, flamePalette, fireEnabled, mousePos, fireRadius]);
 
-  return <canvas id="doomfire" width={`${width}px`} height={`${height}px`} ref={canvasRef} />;
+  return (
+    <canvas
+      id="doomfire"
+      width={`${width}px`}
+      height={`${height}px`}
+      ref={canvasRef}
+      style={{ touchAction: 'none', cursor: 'none' }}
+    />
+  );
 };
 
-export { DoomFire };
+export { DoomFireTorch };

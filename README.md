@@ -31,7 +31,7 @@ and then run the storybook.
 
 ## Components
 
-### &lt;DoomFire />
+### &lt;DoomFireTorch />
 
 A fire effect. This component accepts the following props:
 

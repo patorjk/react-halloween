@@ -512,7 +512,7 @@ function updateFire(
       const belowPixelIndex = getPixelIndex(x, y + 1, width);
       const fireIntensity = fireBuffer[belowPixelIndex];
 
-      const randomDecay = Math.floor(Math.random() * 7);
+      const randomDecay = Math.floor(Math.random() * 3);
       const randomWind = Math.floor(Math.random() * 3) - 1;
 
       const newIntensity = Math.max(0, fireIntensity - randomDecay);
@@ -550,7 +550,7 @@ function updateFire(
   } else if (mode === 'freeform') {
     // Freeform mode: fire source follows mouse
     if (fireEnabled && mousePos) {
-      // Create a small circular area around the mouse position
+      // Create a fire source that emanates from the mouse position
       for (let dy = -fireRadius; dy <= fireRadius; dy++) {
         for (let dx = -fireRadius; dx <= fireRadius; dx++) {
           const distance = Math.sqrt(dx * dx + dy * dy);
@@ -559,8 +559,18 @@ function updateFire(
             const y = Math.round(mousePos.y + dy);
 
             if (x >= 0 && x < width && y >= 0 && y < height) {
-              const intensity = maxIntensity * (1 - distance / fireRadius);
+              // Use exponential falloff for more natural decay
+              const normalizedDistance = distance / fireRadius;
+              const falloff = Math.pow(1 - normalizedDistance, 2); // Quadratic falloff
+
+              // Add randomness to create more natural-looking fire
+              const randomVariation = 0.5 + Math.random() * 0.5; // 0.7 to 1.0
+
+              // Calculate intensity with falloff and randomness
+              const intensity = maxIntensity * falloff * randomVariation;
+
               const index = getPixelIndex(x, y, width);
+              // Use Math.max to blend with existing fire
               newFireBuffer[index] = Math.max(newFireBuffer[index], Math.floor(intensity));
             }
           }
@@ -681,7 +691,7 @@ const DoomFire = ({
   fireEnabled = true,
   fireStrength = 0.75,
   mode = 'ground',
-  fireRadius = 5,
+  fireRadius = 7,
 }: DoomFireProps) => {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);

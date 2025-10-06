@@ -43,19 +43,15 @@ function updateFire(
 
       const fireIntensity = fireBuffer[belowPixelIndex];
 
-      if (fireIntensity === 0) {
-        newFireBuffer[pixelIndex] = 0;
-      } else {
-        // Add randomness to create flickering effect
-        const randomDecay = Math.floor(Math.random() * 3); // 0, 1, or 2
-        const randomWind = Math.floor(Math.random() * 3) - 1; // -1, 0, or 1
+      // Add randomness to create flickering effect
+      const randomDecay = Math.floor(Math.random() * 3); // 0, 1, or 2
+      const randomWind = Math.floor(Math.random() * 3) - 1; // -1, 0, or 1
 
-        const newIntensity = fireIntensity - randomDecay;
-        const targetX = Math.max(0, Math.min(width - 1, x + randomWind));
-        const targetIndex = getPixelIndex(targetX, y, width);
+      const newIntensity = fireIntensity - randomDecay;
+      const targetX = Math.max(0, Math.min(width - 1, x + randomWind));
+      const targetIndex = getPixelIndex(targetX, y, width);
 
-        newFireBuffer[targetIndex] = Math.max(0, newIntensity);
-      }
+      newFireBuffer[targetIndex] = Math.max(0, newIntensity);
     }
   }
 
@@ -95,6 +91,7 @@ function renderFire(
   fireHeight: number,
 ) {
   if (!canvas || !ctx) return;
+  if (!fireWidth || !fireHeight) return;
 
   const imageData = ctx.createImageData(fireWidth, fireHeight);
 
@@ -104,6 +101,7 @@ function renderFire(
       const fireIntensity = Math.min(fireBuffer[pixelIndex], firePalette.length - 1);
 
       const color = firePalette[fireIntensity];
+      if (!color) continue;
 
       const imageIndex = (y * fireWidth + x) * 4;
       imageData.data[imageIndex] = color.r;
@@ -120,6 +118,8 @@ function renderFire(
   tempCanvas.height = fireHeight;
 
   if (!tempCtx) return;
+  if (!canvas.width || !canvas.height) return;
+  if (!tempCanvas.width || !tempCanvas.height) return;
 
   tempCtx.putImageData(imageData, 0, 0);
 

@@ -91,6 +91,7 @@ function renderFire(
   fireHeight: number,
 ) {
   if (!canvas || !ctx) return;
+  if (!fireWidth || !fireHeight) return;
 
   const imageData = ctx.createImageData(fireWidth, fireHeight);
 
@@ -100,6 +101,7 @@ function renderFire(
       const fireIntensity = Math.min(fireBuffer[pixelIndex], firePalette.length - 1);
 
       const color = firePalette[fireIntensity];
+      if (!color) continue;
 
       const imageIndex = (y * fireWidth + x) * 4;
       imageData.data[imageIndex] = color.r;
@@ -116,6 +118,8 @@ function renderFire(
   tempCanvas.height = fireHeight;
 
   if (!tempCtx) return;
+  if (!canvas.width || !canvas.height) return;
+  if (!tempCanvas.width || !tempCanvas.height) return;
 
   tempCtx.putImageData(imageData, 0, 0);
 

@@ -24,18 +24,23 @@ const getPixelIndex = (x: number, y: number, width: number) => y * width + x;
  * @param height {number} Height of hte fire in pixels.
  * @param maxIntensity {number} Number indicating the intensity. Higher the number, higher the intensity. Max height of
  *   the fire is the max intensity.
+ * @param fireDecay
  * @param fireEnabled {boolean} Toggling on/off leads to a mini animation.
  * @param mousePos {{ x: number; y: number } | null} Mouse position in fire coordinates
  * @param fireRadius {number} Size of the fire source
+ * @param burningPixels
+ * @oaram burningPixels {Set<string>}
  */
 function updateFire(
   fireBuffer: number[] | null,
   width: number,
   height: number,
   maxIntensity: number,
+  fireDecay: number,
   fireEnabled: boolean = true,
   mousePos: { x: number; y: number } | null = null,
   fireRadius: number,
+  burningPixels: Set<string>,
 ) {
   if (!fireBuffer) return [];
 
@@ -44,7 +49,7 @@ function updateFire(
   /**
    * We do averages here because without taking average the fire will
    * drift slightly to the left. This is because pixels are processed
-   * left-to-right and each pixels writes to a target position.
+   * left-to-right and each pixel writes to a target position.
    * When multiple pixels write to the same position, the last writes
    * wins. So the average approach is aimed at getting rid of this bias.
    */
@@ -58,7 +63,7 @@ function updateFire(
       const belowPixelIndex = getPixelIndex(x, y + 1, width);
       const fireIntensity = fireBuffer[belowPixelIndex];
 
-      const randomDecay = Math.floor(Math.random() * 3);
+      const randomDecay = Math.floor(Math.random() * fireDecay);
       const randomWind = Math.floor(Math.random() * 3) - 1;
 
       const newIntensity = Math.max(0, fireIntensity - randomDecay);
@@ -81,6 +86,21 @@ function updateFire(
     }
   }
 
+  // Bottom row
+  for (let i = height - 1; i < height; i++) {
+    for (let j = 0; j < width; j++) {
+      const index = getPixelIndex(j, i, width);
+      newFireBuffer[index] = 0;
+    }
+  }
+
+  // Ensure burning pixels stay burning
+  for (const pixel of burningPixels) {
+    const [x, y] = pixel.split(',').map(Number);
+    const index = getPixelIndex(x, y, width);
+    newFireBuffer[index] = maxIntensity;
+  }
+
   // Fire source follows mouse - ensure the fire remains strong around it
   // Point of this section is to create a fire source that emanates from the mouse position
   if (fireEnabled && mousePos) {
@@ -97,11 +117,11 @@ function updateFire(
             const falloff = Math.pow(1 - normalizedDistance, 2); // Quadratic falloff
 
             // Add randomness to create more natural-looking fire
-            const randomVariation = 0.5 + Math.random() * 0.5; // 0.7 to 1.0
+            const randomVariation = 0.5 + Math.random() * 0.5;
             const intensity = maxIntensity * falloff * randomVariation;
 
             const index = getPixelIndex(x, y, width);
-            // Use Math.max to blend with existing fire
+            // blend with existing fire
             newFireBuffer[index] = Math.max(newFireBuffer[index], Math.floor(intensity));
           }
         }
@@ -141,6 +161,7 @@ function renderFire(
       const fireIntensity = Math.min(fireBuffer[pixelIndex], firePalette.length - 1);
 
       const color = firePalette[fireIntensity];
+      if (!color) continue;
 
       const imageIndex = (y * fireWidth + x) * 4;
       imageData.data[imageIndex] = color.r;
@@ -150,7 +171,6 @@ function renderFire(
     }
   }
 
-  // Create temporary canvas for scaling
   const tempCanvas = document.createElement('canvas');
   const tempCtx = tempCanvas.getContext('2d');
   tempCanvas.width = fireWidth;
@@ -190,6 +210,8 @@ export interface DoomFireTorchProps {
   fireEnabled?: boolean;
   fireStrength?: number;
   fireRadius?: number;
+  flammable?: Set<string>;
+  fireDecay?: number;
 }
 
 /**
@@ -201,6 +223,8 @@ export interface DoomFireTorchProps {
  * @param fireEnabled {boolean} If the fire is on.
  * @param fireStrength {number} Number between 0 and 1, represents the "strength" of the fire.
  * @param fireRadius {number} Radius of fire.
+ * @param flammable {String<string>} Pixels that can catch fire.
+ * @param fireDecay {number} How fast the fire decays
  * @constructor
  */
 const DoomFireTorch = ({
@@ -211,6 +235,8 @@ const DoomFireTorch = ({
   fireEnabled = true,
   fireStrength = 0.75,
   fireRadius = 7,
+  flammable = new Set(),
+  fireDecay = 3,
 }: DoomFireTorchProps) => {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
@@ -223,6 +249,7 @@ const DoomFireTorch = ({
   const prevFireHeight = usePrevious(fireHeight);
 
   const fireBufferRef = useRef<number[]>(null);
+  const burningPixelsRef = useRef<Set<string>>(new Set());
 
   const flamePalette: RgbaColor[] = useMemo(() => {
     const fadedColors = fadeColors(fireColors ?? defaultFireColors, fireHeight * fireStrength);
@@ -241,6 +268,24 @@ const DoomFireTorch = ({
       const rect = canvas.getBoundingClientRect();
       const x = Math.floor((clientX - rect.left) / pixelSize);
       const y = Math.floor((clientY - rect.top) / pixelSize);
+
+      const pixelSets = [
+        `${x},${y}`,
+        `${x - 1},${y}`,
+        `${x},${y - 1}`,
+        `${x + 1},${y}`,
+        `${x},${y + 1}`,
+        `${x - 1},${y - 1}`,
+        `${x + 1},${y + 1}`,
+        `${x - 1},${y + 1}`,
+        `${x + 1},${y - 1}`,
+      ];
+
+      pixelSets.forEach((pixelSet) => {
+        if (flammable.has(pixelSet)) {
+          burningPixelsRef.current.add(pixelSet);
+        }
+      });
 
       setMousePos({ x, y });
     };
@@ -285,14 +330,18 @@ const DoomFireTorch = ({
     let animationFrameId: number;
 
     const animate = () => {
+      if (!fireBufferRef.current) return;
+
       fireBufferRef.current = updateFire(
         fireBufferRef.current,
         fireWidth,
         fireHeight,
         flamePalette.length - 1,
+        fireDecay,
         fireEnabled,
         mousePos,
         fireRadius,
+        burningPixelsRef.current,
       );
       renderFire(
         canvasRef.current,
@@ -311,7 +360,7 @@ const DoomFireTorch = ({
     return () => {
       cancelAnimationFrame(animationFrameId);
     };
-  }, [fireWidth, fireHeight, flamePalette, fireEnabled, mousePos, fireRadius]);
+  }, [fireWidth, fireHeight, flamePalette, fireEnabled, mousePos, fireRadius, fireDecay]);
 
   return (
     <canvas

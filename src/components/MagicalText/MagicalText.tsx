@@ -21,6 +21,7 @@ export interface MagicalTextProps {
   animationTime?: number;
   colors?: string[];
   style?: React.CSSProperties;
+  textStyle?: React.CSSProperties;
   disableFun?: boolean;
   fadeText?: boolean;
   Adornment?: React.ElementType;
@@ -45,6 +46,7 @@ function MagicalText({
   animationTime = 10,
   colors = defaultColors,
   style = {},
+  textStyle = {},
   disableFun = false,
   fadeText = true,
   showAdornments = true,
@@ -92,7 +94,9 @@ function MagicalText({
     WebkitBackgroundClip: 'text',
     backgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
+    paddingBottom: '0.1em',
     backgroundSize,
+    ...textStyle,
   };
 
   const variants = {
@@ -147,7 +151,7 @@ function MagicalText({
         <span>{text}</span>
       ) : (
         <motion.div
-          style={fadeText ? divStyle : {}}
+          style={fadeText ? divStyle : textStyle}
           variants={variants}
           animate={fadeText ? 'on' : 'off'}
           onUpdate={animationType === 'sparkle' ? onUpdate : undefined}

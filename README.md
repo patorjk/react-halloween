@@ -31,7 +31,7 @@ and then run the storybook.
 
 ## Components
 
-### &lt;DoomFireTorch />
+### &lt;DoomFire />
 
 A fire effect. This component accepts the following props:
 
@@ -134,6 +134,7 @@ This component accepts the following props:
 |            **`fadeText`**            | boolean                    | true                     | true if text should be color faded, false otherwise.                            |
 |           **`disableFun`**           | boolean                    | false                    | true to disable fade and adornment effects.                                     |
 |             **`style`**              | object                     | {}                       | Style props to spread over the container.                                       |
+|           **`textStyle`**            | object                     | {}                       | Style object applied directly to div containing text.                           |
 |           **`Adornment`**            | Component                  | StarCrossSVG             | Component to use as the adornment. Several come from the library. See examples. |
 |         **`showAdornments`**         | boolean                    | true                     | If the adornments/sparkles should be shown.                                     |
 |        **`adornmentOptions`**        | Object                     |                          | Options to customize the adornment.                                             |

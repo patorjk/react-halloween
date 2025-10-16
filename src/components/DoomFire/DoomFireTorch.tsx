@@ -259,6 +259,12 @@ const DoomFireTorch = ({
     return fadedColors;
   }, [fireColors, fireWidth, fireHeight, fireStrength, prevStrength, prevFireWidth, prevFireHeight]);
 
+  useEffect(() => {
+    if (!fireEnabled) {
+      burningPixelsRef.current = new Set<string>();
+    }
+  }, [fireEnabled]);
+
   // Handle mouse/touch movement
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -368,7 +374,7 @@ const DoomFireTorch = ({
       width={`${width}px`}
       height={`${height}px`}
       ref={canvasRef}
-      style={{ touchAction: 'none', cursor: 'none' }}
+      style={{ touchAction: 'none', cursor: fireEnabled ? 'none' : 'default' }}
     />
   );
 };
